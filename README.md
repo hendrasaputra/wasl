@@ -5,7 +5,7 @@
 *waṣl* — "the link, the joining". Every link in this tree is joined to a page of a printed
 critical edition, and the join is checked by machine, not by trust.
 
-**All five phases are complete: 1,607 persons, 2,262 sourced claims, 1,609 links, drawn from
+**Six phases complete: 3,979 persons, 5,289 sourced claims, 3,981 links, drawn from
 7 primary works — every Arabic quotation re-read out of the source text at the cited page
 before the page was written.**
 
@@ -16,6 +16,7 @@ before the page was written.**
 | 3 | Banū Hāshim and the Prophet's household | 24 |
 | 4 | The Ṣaḥāba, from the two companion dictionaries | 653 |
 | 5 | Qaḥṭān and the tribes, down to al-Aws and al-Khazraj | 812 |
+| 6 | The Anṣār clans and the companions that could not anchor before | 2,394 |
 
 Open [`index.html`](index.html) in any browser. No server, no build step, no network.
 
@@ -206,6 +207,37 @@ index.html       generated, committed, self-contained
 `fetch.sh` needs the network once; nothing else ever does. `validate.py` is the gate — if it
 fails, the data is wrong, not the checker.
 
+## Why bands and not centuries
+
+A reasonable request: cut the tree into eras — Ādam to Ibrāhīm, Ibrāhīm to Mūsā, Mūsā to ʿĪsā,
+ʿĪsā to the Prophet's birth, during his life, after it. The instinct is right — 3,979 names need
+slicing into something digestible. The **axis** is the problem, and three things rule it out:
+
+1. **These books give no years above the Prophet.** Not one ancestor has an attested birth date
+   in any of the seven. A band label would therefore be computed from generation depth, and a
+   band label *looks like a fact* — it would be the project's own rule broken in the most
+   visible place possible.
+2. **Mūsā and ʿĪsā are not in this tree.** The Prophet's line runs Ibrāhīm → **Ismāʿīl**; Moses
+   and Jesus descend through Isḥāq, a branch these nasab works do not carry. (There are men
+   named Mūsā and ʿĪsā in the file — ordinary Arabs, much later.) Two of the six boundaries have
+   no node to anchor on.
+3. **Depth is not date across branches.** Generation 47 on the ʿAbbāsid line is the 8th century
+   CE; generation 47 on a Tamīmī line is not. One depth-based cut would put contemporaries in
+   different bands and strangers in the same one.
+
+**What the sources do supply is their own partition**, and it does the same work honestly. Four
+bands, each defensible in one sentence, each carrying its basis in a tooltip:
+
+| Band | Count | Basis |
+|---|---|---|
+| beyond the attested chain | 29 | At or above ʿAdnān and Qaḥṭān — the stretch these books decline to vouch for (*kadhaba al-nassābūn*; Ibn Ḥazm: nothing above Qaḥṭān is sound) |
+| the Arab genealogy | 3,236 | Below ʿAdnān or Qaḥṭān, no companion recorded above them |
+| companions | 544 | Carries an entry in al-Istīʿāb or Usd al-Ghāba — a fact about the sources, not a judgement |
+| recorded below a companion | 170 | Largely the Umayyad, ʿAbbāsid and ʿAlid lines Ibn Ḥazm carries forward |
+
+The first band is the one worth having. It is not a period; it is the sources telling you where
+their own evidence stops, and it is the single most important thing a reader can know here.
+
 ## The interface
 
 **Why an indented tree and not something prettier.** The data is *deep and narrow*: 54
@@ -215,6 +247,14 @@ graph throws away the one thing a lineage has, which is direction. The problem h
 seeing breadth — it was **reaching** a name fifty levels down. So the tree stays, and the work
 went into navigation.
 
+- **A Who's who** lists the 36 people a reader actually arrives looking for — the four caliphs,
+  the household, the ten, Anṣār leaders, the landmarks of the chain — resolved at build time
+  from the chain that identifies each, so a link can never point nowhere.
+- **Search finds the name you know, not the name in the file.** Abū Bakr is recorded under his
+  given name, ʿAbd Allāh; searching "abu bakr", or even "siddiq", now reaches him, because the
+  directory label, note, kunya and laqab fold into the index. Results are ranked so a name the
+  directory knows outranks its own forty descendants — "umar" returns ʿUmar b. al-Khaṭṭāb first,
+  starred.
 - **Search returns a list, not a count.** Ninety-one men in these books are called ʿAbd Allāh.
   Telling you "91 matches" and leaving you to scroll is useless, so every hit is a row carrying
   its own line of descent — `Jaʿfar ‹ Abū Ṭālib ‹ ʿAbd al-Muṭṭalib` against
