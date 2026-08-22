@@ -1,0 +1,20 @@
+name: verify
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Fetch the pinned source texts
+        run: ./fetch.sh
+      - name: Prove every quote against the corpus
+        run: python3 validate.py
+      - name: Independent checks
+        run: python3 test_wasl.py
+      - name: Rebuild and confirm the committed page is current
+        run: |
+          python3 build.py
+          git diff --exit-code index.html \
+            || (echo "index.html is stale - run python3 build.py and commit"; exit 1)
