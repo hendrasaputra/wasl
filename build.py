@@ -91,6 +91,7 @@ def main():
             if uniq:
                 al = f'<i class="alias">= {" / ".join(html.escape(u) for u in uniq)}</i>'
         summary = (f'<summary data-id="{pid}" data-gen="{gen}" data-search="{html.escape((p["name_lat"]+" "+p["name_ar"]+" "+p.get("kunya_lat","")+" "+p.get("kunya_ar","")+" "+" ".join(a.get("value_lat","")+" "+a.get("value_ar","") for a in alias)).lower())}">'
+                   f'<span class="tw{"" if children else " leaf"}"></span>'
                    f'<span class="gen">{gen}</span>'
                    f'<span class="ar" dir="rtl" lang="ar">{html.escape(p["name_ar"])}</span>'
                    f'<span class="lat">{html.escape(p["name_lat"])}{al}</span>'

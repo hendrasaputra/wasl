@@ -7,7 +7,7 @@
 <style>
 :root{{{CSSVARS}}
   --ink:#F2EADB; --ink-dim:#B9C9BC; --line:rgba(201,165,95,.22);
-  --panel:#0A3A27; --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --panel:#0A3A27; --rule:rgba(201,165,95,.34); --rule-s:rgba(201,165,95,.55); --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --arabic:"Amiri","Scheherazade New","Noto Naskh Arabic","Geeza Pro","Traditional Arabic",serif;
 }
 *{box-sizing:border-box}
@@ -50,16 +50,31 @@ main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,430px);gap:0;alig
 #tree{padding:20px 26px 90px;overflow-x:auto;min-width:0}
 
 /* ---------- tree ---------- */
+/* Windows-Explorer chrome: a [+] box where there is more to open, [-] where there is not,
+   joined by dotted rules. The line zone is 19px of padding on .kids; a linear run pulls that
+   back with a negative margin so a lineage that never forks stays a flat readable column. */
 details{margin:0}
-.kids{margin-left:6px;padding-left:12px;border-left:1px solid var(--line)}
-.kids.linear{margin-left:0;padding-left:0;border-left:0}
-summary{display:flex;align-items:baseline;gap:11px;cursor:pointer;list-style:none;
-  padding:4px 10px;border-radius:8px;margin:1px 0;white-space:nowrap}
+.kids{position:relative;margin-left:9px;padding-left:19px}
+.kids.linear{margin-left:-19px}
+.kids>details{position:relative}
+.kids>details::before{content:"";position:absolute;left:-19px;top:0;bottom:0;
+  border-left:1px dotted var(--rule)}
+.kids>details:last-child::before{bottom:auto;height:14px}
+.kids.linear>details::before{bottom:0;height:auto}
+.kids>details::after{content:"";position:absolute;left:-19px;top:14px;width:13px;
+  border-top:1px dotted var(--rule)}
+summary{display:flex;align-items:baseline;gap:9px;cursor:pointer;list-style:none;
+  padding:3px 10px 3px 0;border-radius:6px;margin:0;white-space:nowrap}
 summary::-webkit-details-marker{display:none}
-summary::before{content:"";flex:0 0 7px;height:7px;margin-top:6px;border-radius:2px;
-  background:var(--grn-1);transform:rotate(45deg);transition:.15s}
-details:not(:has(>.kids))>summary::before{background:transparent;border:1px solid var(--grn-1)}
-details[open]>summary::before{background:var(--gold);transform:rotate(0)}
+/* the twisty: a boxed + or - , sitting on the rule the way Explorer draws it */
+.tw{flex:0 0 11px;width:11px;height:11px;position:relative;align-self:center;
+  border:1px solid var(--rule-s);background:var(--grn-4);border-radius:1px;
+  font:700 10px/9px var(--sans);text-align:center;color:var(--gold-lt);
+  -webkit-user-select:none;user-select:none}
+.tw::before{content:"+";position:absolute;inset:0}
+details[open]>summary .tw::before{content:"\2212"}
+.tw.leaf{border-style:solid;border-color:var(--rule);color:var(--grn-1)}
+.tw.leaf::before{content:"\2212"}
 summary:hover{background:rgba(59,122,92,.22)}
 summary.sel{background:rgba(169,139,66,.2);box-shadow:inset 0 0 0 1px var(--gold)}
 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--grn-1);
