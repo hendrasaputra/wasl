@@ -228,6 +228,32 @@ EXTRA = [
    "note":"Ibn al-Kalbi gives Udad a father, Zayd, whom the Ibn Hisham chain does not name.",
    "chain_label":"Udad son of Zayd"}),
 
+ # --- dates. These four books date by event, not by year: no ancestor above the
+ # Prophet has an attested birth year anywhere in them. Recorded as given.
+ ("birth","p.muhammad",None,"IbnSad",
+  "ولد رسول الله صلى الله عليه وسلم عام الفيل",
+  "the Messenger of God, God bless him and grant him peace, was born in the Year of the Elephant",
+  {"date_basis":"attested_relative","event_ar":"عام الفيل","event_lat":"ʿĀm al-Fīl (the Year of the Elephant)",
+   "born_ad_conventional":570,"born_ah":-53,
+   "note":"The source dates by event only. 570 CE / 53 BH is the conventional modern equation, not a figure in the text."}),
+ ("birth","p.muhammad",None,"IbnAbdAlBarr",
+  "ولا خلاف أنه ولد عام الفيل",
+  "there is no disagreement that he was born in the Year of the Elephant",
+  {"date_basis":"attested_relative","event_ar":"عام الفيل","event_lat":"ʿĀm al-Fīl"}),
+ ("birth","p.muhammad",None,"IbnAbdAlBarr",
+  "وقيل. إنه ولد أول اثنين من ربيع الأول، وقيل: لاثنتي عشرة ليلة خلت منه عام الفيل",
+  "it is said he was born on the first Monday of Rabīʿ al-Awwal, and it is said on the twelfth night elapsed of it, in the Year of the Elephant",
+  {"date_basis":"attested_relative","event_ar":"ربيع الأول","grade":"dissent",
+   "note":"Two readings of the day within the month, both reported."}),
+ ("birth","p.muhammad",None,"IbnAbdAlBarr",
+  "وقيل: ولد رسول الله صلى الله عليه وآله وسلم بعد قدوم الفيل بشهر. وقيل: بأربعين يوما. وقيل بخمسين",
+  "and it is said the Messenger of God, God bless him and his family and grant peace, was born a month after the coming of the Elephant; and it is said forty days; and it is said fifty",
+  {"date_basis":"attested_relative","grade":"dissent","note":"Three further readings of the interval."}),
+ ("age_at_death","p.muhammad",None,"IbnSad",
+  "وتوفي صلوات الله عليه، وهو ابن ثلاث وستين سنة",
+  "and he died, God's blessings upon him, at sixty-three years of age",
+  {"date_basis":"attested","age_years":63}),
+
  # --- names of the mother, the one female link Phase 1 can source
  ("mother_of","p.amina","p.muhammad","IbnAbdAlBarr",
   "أم رسول الله صلى الله عليه وآله وسلم آمنة بنت وهب ابن عبد مناف بن زهرة بن كلاب بن مرة، قرشية زهرية",

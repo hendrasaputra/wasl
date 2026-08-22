@@ -10,7 +10,8 @@ import nasab
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REQUIRED = ("cid", "type", "subject", "work", "vol", "page", "ar", "en")
 EDGE = ("father_of", "mother_of")
-DATE_BASIS = {"attested", "derived_from_age_at_death", "generation_estimate", "unknown"}
+DATE_BASIS = {"attested", "attested_relative", "derived_from_age_at_death",
+              "generation_estimate", "unknown"}
 
 
 def jsonl(name):
