@@ -280,3 +280,13 @@ def slug(latin):
 if __name__ == "__main__":
     for t in ["عمرو","عبد المطلب","الحارث","بلداس","أبو طالب","زهرة"]:
         print(t, "->", translit(t))
+
+
+# words that only ever appear inside a compound name or kunya
+NAMES.update({
+ "الله": "Allāh", "الرحمن": "al-Raḥmān", "الرحيم": "al-Raḥīm", "العزيز": "al-ʿAzīz",
+ "الملك": "al-Malik", "الوهاب": "al-Wahhāb", "الأعلى": "al-Aʿlā", "الجبار": "al-Jabbār",
+ "الدار": "al-Dār", "العزى": "al-ʿUzzā", "مناف": "Manāf", "مناة": "Manāt", "شمس": "Shams",
+ "يغوث": "Yaghūth", "ياليل": "Yālīl", "كلال": "Kulāl", "المطلب": "al-Muṭṭalib",
+ "الكعبة": "al-Kaʿba", "الأشهل": "al-Ashhal", "قيس": "Qays", "ود": "Wudd",
+})

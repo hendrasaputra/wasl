@@ -132,6 +132,7 @@ summary.sel{background:rgba(169,139,66,.2);box-shadow:inset 0 0 0 1px var(--gold
 .ar{font-family:var(--arabic);font-size:21px;line-height:1.25;color:var(--ink)}
 .lat{color:var(--ink-dim);font-size:13.5px}
 .alias{color:var(--grn-1);font-style:normal;font-size:12.5px;margin-left:7px}
+.kunya{color:var(--gold);font-style:normal;font-size:12.5px;margin-left:8px;opacity:.85}
 .badges{margin-left:14px;display:flex;gap:5px;flex-shrink:0}
 .badges b{font:600 10.5px/1.6 var(--sans);padding:0 7px;border-radius:999px;letter-spacing:.4px}
 .bp{background:rgba(169,139,66,.22);color:var(--gold-lt)}
@@ -239,12 +240,12 @@ $('#foot').innerHTML = 'Sources — ' + Object.entries(D.works).map(([k,w]) =>
 
 /* ---------- claim panel ---------- */
 const TYPES = {
-  father_of:'Descent', mother_of:'Mother', chain:'Full chain as given',
+  father_of:'Descent', mother_of:'Mother', chain:'Full chain as given', kunya:'Kunya',
   alias:'Second names and epithets', dissent:'Where the sources object',
   variant_chain:'Competing chains', isnad:'Transmission', birth:'Birth',
   age_at_death:'Age at death'
 };
-const ORDER = ['father_of','mother_of','alias','birth','age_at_death','chain','variant_chain','dissent','isnad'];
+const ORDER = ['father_of','mother_of','kunya','alias','birth','age_at_death','chain','variant_chain','dissent','isnad'];
 
 function claimHTML(c){
   const w = D.works[c.work] || {};
@@ -270,7 +271,10 @@ function show(pid){
   const p = D.people[pid];
   const cs = D.claims.filter(c => c.subject === pid || c.object === pid);
   const meta = [];
-  if (p.kunya_lat) meta.push(`kunya · ${esc(p.kunya_lat)} <span dir="rtl" lang="ar">${esc(p.kunya_ar||'')}</span>`);
+  const kunyas = [...new Set(cs.filter(c => c.type==='kunya' && c.subject===pid)
+                              .map(c => c.value_lat).filter(Boolean))];
+  if (p.kunya_lat) kunyas.unshift(p.kunya_lat);
+  kunyas.slice(0,4).forEach(k => meta.push(`kunya · ${esc(k)}`));
   if (p.laqab_lat) meta.push(`laqab · ${esc(p.laqab_lat)}`);
   if (p.tribe) meta.push(esc(p.tribe));
   meta.push(p.sex === 'F' ? 'female' : 'male');
@@ -326,7 +330,11 @@ $('#tree').addEventListener('click', e => {
 const fold = s => s.normalize('NFD').replace(/[\u0300-\u036f\u0610-\u061a\u064b-\u065f\u0670\u0640]/g,'')
   .replace(/[\u0623\u0625\u0622\u0671]/g,'\u0627').replace(/\u0629/g,'\u0647')
   .replace(/\u0649/g,'\u064a').replace(/\u0626/g,'\u064a').replace(/\u0624/g,'\u0648')
-  .replace(/[\u02bf\u02be'\u2018\u2019]/g,'').toLowerCase().trim();
+  .replace(/[\u02bf\u02be'\u2018\u2019]/g,'')
+  // a kunya is quoted in whatever case the sentence needed - Aba Hafs, Abi Hafs - but it is
+  // one kunya, so fold them onto the nominative before matching
+  .replace(/\u0627\u0628[\u0627\u064a](?=\s)/g,'\u0627\u0628\u0648')
+  .toLowerCase().trim();
 const sums = [...document.querySelectorAll('summary')];
 const byId = {};
 sums.forEach(s => { s.dataset.search = fold(s.dataset.search); byId[s.dataset.id] = s; });

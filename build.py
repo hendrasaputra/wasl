@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Wasl - generate index.html from people.jsonl + claims.jsonl. Run validate.py first."""
 import json, math, os, re, sys, html, collections
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools"))
 import nasab
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -143,6 +144,11 @@ def main():
             badges.append(f'<b class="bs" title="{" ".join(edge_srcs)}">{len(edge_srcs)}&#8239;src</b>')
         if p.get("sahabi"):
             badges.append('<b class="bc">ṣaḥābī</b>')
+        kun = []
+        for c in cs:
+            if c["type"] == "kunya" and c["subject"] == pid and c.get("value_lat") \
+               and c["value_lat"] not in kun:
+                kun.append(c["value_lat"])
         alias = [c for c in cs if c["type"] == "alias" and c["subject"] == pid]
         al = ""
         if alias:
@@ -153,7 +159,10 @@ def main():
                     uniq.append(v)
             if uniq:
                 al = f'<i class="alias">= {" / ".join(html.escape(u) for u in uniq)}</i>'
-        summary = (f'<summary data-id="{pid}" data-gen="{gen}" data-band="{band.get(pid,"")}" data-search="{html.escape((p["name_lat"]+" "+p["name_ar"]+" "+p.get("kunya_lat","")+" "+p.get("kunya_ar","")+" "+" ".join(a.get("value_lat","")+" "+a.get("value_ar","") for a in alias)).lower())}">'
+        if kun:
+            al += f'<i class="kunya">{html.escape(" · ".join(kun[:2]))}</i>'
+        summary = (f'<summary data-id="{pid}" data-gen="{gen}" data-band="{band.get(pid,"")}" data-search="{html.escape((p["name_lat"]+" "+p["name_ar"]+" "+p.get("kunya_lat","")+" "+p.get("kunya_ar","")+" "+" ".join(kun)+" "
+                   +" ".join(c.get("value_ar","") for c in cs if c["type"]=="kunya")+" "+" ".join(a.get("value_lat","")+" "+a.get("value_ar","") for a in alias)).lower())}">'
                    f'<span class="tw{"" if children else " leaf"}" data-n="{below.get(pid,0)}"></span>'
                    f'<span class="gen">{gen}</span>'
                    f'<span class="ar" dir="rtl" lang="ar">{html.escape(p["name_ar"])}</span>'
@@ -212,44 +221,8 @@ def main():
                 hits.append(cur)
         return hits[0] if len(set(hits)) == 1 else None
 
-    DIRECTORY = [
-      ("The four caliphs", [
-        ("Abū Bakr al-Ṣiddīq", ["عبد الله","عثمان","عامر","عمرو","كعب"]),
-        ("ʿUmar b. al-Khaṭṭāb", ["عمر","الخطاب","نفيل"]),
-        ("ʿUthmān b. ʿAffān", ["عثمان","عفان","أبو العاص"]),
-        ("ʿAlī b. Abī Ṭālib", ["علي","أبو طالب","عبد المطلب"])]),
-      ("The Prophet's household", [
-        ("Muḥammad ﷺ", ["محمد","عبد الله","عبد المطلب"]),
-        ("Khadīja", ["خديجة","خويلد","أسد"]),
-        ("Fāṭima", ["فاطمة","محمد","عبد الله"]),
-        ("al-Ḥasan", ["الحسن","علي","أبو طالب"]),
-        ("al-Ḥusayn", ["الحسين","علي","أبو طالب"]),
-        ("Ḥamza", ["حمزة","عبد المطلب","هاشم"]),
-        ("al-ʿAbbās", ["العباس","عبد المطلب","هاشم"]),
-        ("Jaʿfar b. Abī Ṭālib", ["جعفر","أبو طالب","عبد المطلب"]),
-        ("Zaynab", ["زينب","محمد","عبد الله"]),
-        ("Ibrāhīm", ["إبراهيم","محمد","عبد الله"])]),
-      ("Among the ten", [
-        ("Ṭalḥa b. ʿUbayd Allāh", ["طلحة","عبيد الله","عثمان"]),
-        ("al-Zubayr b. al-ʿAwwām", ["الزبير","العوام","خويلد"]),
-        ("ʿAbd al-Raḥmān b. ʿAwf", ["عبد الرحمن","عوف","عبد عوف"]),
-        ("Saʿīd b. Zayd", ["سعيد","زيد","عمرو","نفيل"]),
-        ("Abū ʿUbayda b. al-Jarrāḥ", ["عامر","عبد الله","الجراح"])]),
-      ("Anṣār", [
-        ("Saʿd b. Muʿādh", ["سعد","معاذ","النعمان"]),
-        ("Muʿādh b. Jabal", ["معاذ","جبل","عمرو"]),
-        ("Ubayy b. Kaʿb", ["أبي","كعب","قيس","عبيد"]),
-        ("Usayd b. Ḥuḍayr", ["أسيد","حضير","سماك"]),
-        ("Anas b. Mālik", ["أنس","مالك","النضر"]),
-        ("al-Aws", ["الأوس","حارثة","ثعلبة"]),
-        ("al-Khazraj", ["الخزرج","حارثة","ثعلبة"])]),
-      ("Landmarks of the chain", [
-        ("Ādam", ["آدم","__root__"]), ("Nūḥ", ["نوح","لمك"]), ("Ibrāhīm", ["إبراهيم","تارح"]),
-        ("Ismāʿīl", ["إسماعيل","إبراهيم"]), ("ʿAdnān", ["عدنان","أدد"]),
-        ("Qaḥṭān", ["قحطان"]), ("Quraysh (Fihr)", ["فهر","مالك","النضر"]),
-        ("Quṣayy", ["قصي","كلاب","مرة"]), ("Hāshim", ["هاشم","عبد مناف","قصي"]),
-        ("ʿAbd al-Muṭṭalib", ["عبد المطلب","هاشم","عبد مناف"])]),
-    ]
+    from directory import DIRECTORY
+
     directory = []
     missing = []
     for group, items in DIRECTORY:
