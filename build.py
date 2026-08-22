@@ -56,8 +56,14 @@ def main():
                 kids[c["subject"]].append(c["object"])
         if c["type"] == "mother_of":
             mother[c["object"]] = c["subject"]
+    # a child whose father these books never name still belongs in the tree - hang it on the
+    # mother rather than leaving it floating at the root
+    for child, mum in mother.items():
+        if child not in father and child not in kids[mum]:
+            kids[mum].append(child)
 
     roots = [p for p in people if p not in father and p not in mother]
+    via_mother = {c for c in mother if c not in father}
     spine = set()
     n = "p.muhammad"
     while n:
@@ -76,6 +82,8 @@ def main():
             badges.append('<b class="bp">nabī</b>')
         if p["sex"] == "F":
             badges.append('<b class="bf">f</b>')
+        if pid in via_mother:
+            badges.append('<b class="bm">via mother</b>')
         if disputed:
             badges.append('<b class="bd">ikhtilāf</b>')
         if edge_srcs:

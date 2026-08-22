@@ -166,3 +166,27 @@
 {"id": "p.al-qim", "name_ar": "العقيم", "name_lat": "al-ʿqīm", "sex": "M", "translit_provisional": true}
 {"id": "p.al-harith-8", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
 {"id": "p.muhammad-5", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.khuwaylid", "name_ar": "خويلد", "name_lat": "Khuwaylid", "sex": "M"}
+{"id": "p.khadija", "name_ar": "خديجة", "name_lat": "Khadīja", "sex": "F", "id_alias": "p.khadija"}
+{"id": "p.al-qasim", "name_ar": "القاسم", "name_lat": "al-Qāsim", "sex": "M"}
+{"id": "p.zaynab", "name_ar": "زينب", "name_lat": "Zaynab", "sex": "F"}
+{"id": "p.ruqayya", "name_ar": "رقية", "name_lat": "Ruqayya", "sex": "F"}
+{"id": "p.fatima", "name_ar": "فاطمة", "name_lat": "Fāṭima", "sex": "F"}
+{"id": "p.umm-kulthum", "name_ar": "أم كلثوم", "name_lat": "Umm Kulthūm", "sex": "F"}
+{"id": "p.abd-allah-12", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.hajl-2", "name_ar": "حجل", "name_lat": "Ḥajl", "sex": "M"}
+{"id": "p.dirar", "name_ar": "ضرار", "name_lat": "Ḍirār", "sex": "M"}
+{"id": "p.abu-lahab", "name_ar": "أبو لهب", "name_lat": "Abū Lahab", "sex": "M"}
+{"id": "p.safiyya", "name_ar": "صفية", "name_lat": "Ṣafiyya", "sex": "F"}
+{"id": "p.umm-hakim-al-bayda", "name_ar": "أم حكيم البيضاء", "name_lat": "Umm Ḥakīm al-Bayḍāʾ", "sex": "F"}
+{"id": "p.atika", "name_ar": "عاتكة", "name_lat": "ʿĀtika", "sex": "F"}
+{"id": "p.umayma", "name_ar": "أميمة", "name_lat": "Umayma", "sex": "F"}
+{"id": "p.arwa", "name_ar": "أروى", "name_lat": "Arwā", "sex": "F"}
+{"id": "p.barra", "name_ar": "برة", "name_lat": "Barra", "sex": "F"}
+{"id": "p.al-husayn", "name_ar": "الحسين", "name_lat": "al-Ḥusayn", "sex": "M"}
+{"id": "p.al-muhsin", "name_ar": "المحسن", "name_lat": "al-Muḥsin", "sex": "M"}
+{"id": "p.zaynab-2", "name_ar": "زينب", "name_lat": "Zaynab", "sex": "F"}
+{"id": "p.umm-kulthum-2", "name_ar": "أم كلثوم", "name_lat": "Umm Kulthūm", "sex": "F"}
+{"id": "p.ibrahim-2", "name_ar": "إبراهيم", "name_lat": "Ibrāhīm", "sex": "M"}
+{"id": "p.mariya-al-qibtiyya", "name_ar": "مارية القبطية", "name_lat": "Māriya al-Qibṭiyya", "sex": "F"}
+{"id": "p.utba", "name_ar": "عتبة", "name_lat": "ʿUtba", "sex": "M"}
