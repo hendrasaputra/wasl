@@ -144,6 +144,47 @@ summary.sel{background:rgba(169,139,66,.2);box-shadow:inset 0 0 0 1px var(--gold
 summary.hide{display:none}
 summary.hit .lat{color:var(--gold-lt)}
 
+/* ---------- the unbranching prologue, as a ribbon rather than 28 levels of scroll ---------- */
+.ribbon{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:2px 0 14px;padding:10px 12px;
+  border:1px dotted var(--rule);border-radius:10px;background:rgba(10,58,39,.5)}
+.ribbon .rl{font:600 10px/1 var(--sans);letter-spacing:.9px;text-transform:uppercase;
+  color:var(--grn-1);margin-right:6px}
+.ribbon b{font:500 12.5px/1.7 var(--sans);color:var(--gold-lt);cursor:pointer;padding:0 6px;
+  border-radius:5px;border:1px solid transparent}
+.ribbon b:hover{background:rgba(169,139,66,.2);border-color:var(--rule)}
+.ribbon b::after{content:"›";color:var(--grn-1);margin-left:7px}
+.ribbon b:last-of-type::after{content:""}
+.ribbon i{color:var(--grn-1);font-style:normal}
+
+/* ---------- columns: one generation per column, only the path you are on ----------
+   A left-to-right dendrogram of this data would be 8,400px wide, because it is 56 levels deep.
+   Miller columns are bounded by the viewport instead: you see the branch you are following and
+   nothing else, which is what "collapse the unnecessary tree" actually means here. */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:8px 12px;background:transparent;color:var(--ink-dim);
+  font:13px var(--sans);cursor:pointer}
+.seg button.on{background:rgba(169,139,66,.24);color:var(--gold-lt)}
+#cols{display:flex;gap:0;overflow-x:auto;height:calc(100vh - 118px);padding:0 0 0 12px;
+  scroll-behavior:smooth}
+.col{flex:0 0 212px;border-right:1px dotted var(--rule);overflow-y:auto;padding:8px 6px 40px}
+.col:last-child{border-right:0}
+.col.back{flex:0 0 138px;opacity:.62;background:rgba(8,48,31,.45)}
+.col.back .ci{padding:3px 9px;font-size:12px}
+.col.back .ch{background:transparent;color:var(--gold)}
+.col .ch{font:600 10px/1 var(--sans);letter-spacing:.9px;text-transform:uppercase;
+  color:var(--grn-1);padding:4px 10px 9px;position:sticky;top:0;background:var(--grn-4)}
+.ci{display:flex;align-items:baseline;gap:7px;padding:5px 9px;border-radius:7px;cursor:pointer;
+  white-space:nowrap}
+.ci:hover{background:rgba(59,122,92,.22)}
+.ci.on{background:rgba(169,139,66,.22);box-shadow:inset 0 0 0 1px var(--gold)}
+.ci .ar{font-size:17px}
+.ci .lat{font-size:12px}
+.ci .more{margin-left:auto;color:var(--grn-1);font:500 10.5px/1.6 var(--sans);
+  font-variant-numeric:tabular-nums}
+.ci.leafdot .more::after{content:"·"}
+.ci .kunya,.ci .alias{display:none}
+.col .empty{color:var(--grn-1);font-size:12px;padding:10px}
+
 /* ---------- citation panel ---------- */
 #panel{position:sticky;top:110px;height:calc(100vh - 110px);overflow-y:auto;
   padding:22px;background:var(--panel);border-left:1px solid var(--line)}
@@ -200,6 +241,7 @@ footer b{color:var(--gold-lt);font-weight:600}
     <div id="results" hidden></div>
   </div>
   <span class="hits" id="hits"></span>
+  <span class="seg"><button id="vTree" class="on">Tree</button><button id="vCols">Columns</button></span>
   <button id="none">Collapse</button>
 </div>
 <div class="bar bar2">
@@ -212,6 +254,7 @@ footer b{color:var(--gold-lt);font-weight:600}
 
 <main>
   <div id="tree">{{TREE}}</div>
+  <div id="cols" hidden></div>
   <aside id="panel"><div class="empty">Select a name to see every source that attests it.</div></aside>
 </main>
 
@@ -320,6 +363,8 @@ document.addEventListener('click', e => {
 });
 
 $('#tree').addEventListener('click', e => {
+  const b = e.target.closest('.ribbon [data-go]');
+  if (b) { show(b.dataset.go); return; }
   const s = e.target.closest('summary');
   if (s) show(s.dataset.id);
 });
@@ -339,6 +384,20 @@ const sums = [...document.querySelectorAll('summary')];
 const byId = {};
 sums.forEach(s => { s.dataset.search = fold(s.dataset.search); byId[s.dataset.id] = s; });
 
+/* The index must cover EVERY person, not only those with a row. The 28 names of the
+   unbranching prologue live in the ribbon and have no summary, and building the index from
+   rows quietly made Nuh unsearchable. */
+const kunyaOf = {}, aliasOf = {};
+D.claims.forEach(c => {
+  if (c.type === 'kunya' && c.value_ar)
+    (kunyaOf[c.subject] = kunyaOf[c.subject] || []).push(c.value_lat + ' ' + c.value_ar);
+  if (c.type === 'alias' && c.value_ar)
+    (aliasOf[c.subject] = aliasOf[c.subject] || []).push(c.value_lat + ' ' + c.value_ar);
+});
+const IDX = Object.entries(D.people).map(([id, p]) => [id, fold([
+  p.name_lat, p.name_ar, p.kunya_lat, p.kunya_ar, p.laqab_lat, p.note,
+  ...(kunyaOf[id] || []), ...(aliasOf[id] || [])].filter(Boolean).join(' '))]);
+
 /* Abu Bakr's node is recorded under his given name, Abd Allah, so a reader searching the name
    they know would never reach him. Fold the directory label and the note into his index, and
    rank the people the directory names above their own descendants. */
@@ -347,6 +406,10 @@ D.directory.forEach(([, rows]) => rows.forEach(([label, id]) => notable.set(id, 
 Object.entries(D.people).forEach(([id, p]) => {
   const extra = [notable.get(id), p.note, p.kunya_lat, p.laqab_lat].filter(Boolean).join(' ');
   if (extra && byId[id]) byId[id].dataset.search += ' ' + fold(extra);
+});
+notable.forEach((label, id) => {
+  const row = IDX.find(r => r[0] === id);
+  if (row) row[1] += ' ' + fold(label);
 });
 
 /* The tree is 54 levels deep, so a match is useless unless you can reach it. Every hit is a
@@ -362,8 +425,24 @@ function openTo(pid){
   while (c) { const el = document.getElementById(c); if (el) el.open = true; c = D.father[c] || D.mother[c]; }
 }
 function jump(pid){
-  openTo(pid); show(pid);
+  show(pid);
+  if (view === 'cols') {
+    colPath = pathTo(pid); renderCols();
+    window.scrollTo({top: document.querySelector('.bar').offsetTop, behavior: 'instant'});
+    return;
+  }
+  // In the tree, close everything first and open only the line to this name. Opening ancestors
+  // on top of an already-expanded tree left the result buried in what was there before.
+  document.querySelectorAll('#tree details[open]').forEach(d => d.open = false);
+  openTo(pid);
   const s = byId[pid];
+  if (!s) {   // a name in the unbranching prologue: highlight it in the ribbon
+    const r = document.querySelector(`.ribbon [data-go="${pid}"]`);
+    if (r) { r.scrollIntoView({block:'center', behavior:'smooth'});
+             r.style.background = 'rgba(169,139,66,.35)';
+             setTimeout(()=>r.style.background='', 2400); }
+    return;
+  }
   if (s) { s.scrollIntoView({block:'center', behavior:'smooth'});
            s.classList.add('flash'); setTimeout(()=>s.classList.remove('flash'), 2400); }
 }
@@ -386,7 +465,7 @@ function renderResults(){
 $('#q').addEventListener('input', e => {
   const q = fold(e.target.value);
   if (!q) { hits=[]; cursor=-1; RES.hidden=true; $('#hits').textContent=''; return; }
-  hits = sums.filter(s => s.dataset.search.includes(q)).map(s => s.dataset.id);
+  hits = IDX.filter(([, t]) => t.includes(q)).map(([id]) => id);
   // exact-ish matches first, then by how shallow they sit - the famous men are nearer the top
   // rank: exact name first, then companions, then the shortest lineage - otherwise the man
   // everyone is looking for sits behind forty of his own descendants
@@ -395,6 +474,11 @@ $('#q').addEventListener('input', e => {
                   + (D.people[p].sahabi ? 0 : 3)
                   + (D.band[p] === 'descendant' ? 3 : 0);
   hits.sort((a,b) => rank(a) - rank(b) || (D.below[b]||0) - (D.below[a]||0));
+  // collapse everything, then open only the lines that lead to a hit
+  if (view === 'tree' && hits.length <= 60) {
+    document.querySelectorAll('#tree details[open]').forEach(d => d.open = false);
+    hits.forEach(openTo);
+  }
   cursor = -1;
   $('#hits').textContent = `${hits.length} match${hits.length===1?'':'es'}`;
   renderResults();
@@ -495,6 +579,89 @@ function crumb(pid){
 $('#crumb').addEventListener('click', e => {
   const a = e.target.closest('[data-go]'); if (a) jump(a.dataset.go);
 });
+
+/* ---------- columns view ---------- */
+let colPath = [];
+
+function siblingsAt(level){
+  if (level === 0) return D.roots;
+  const parent = colPath[level - 1];
+  return D.kids[parent] || [];
+}
+
+const COL_WINDOW = 4;   // one column per generation would be 56 columns for this data
+
+function renderCols(){
+  const box = $('#cols');
+  box.innerHTML = '';
+  // show a window ending at the selection; the breadcrumb carries the rest of the line and is
+  // clickable, so nothing is lost by not drawing all 56
+  const first = Math.max(0, colPath.length - COL_WINDOW);
+  if (first > 0) {
+    const back = document.createElement('div');
+    back.className = 'col back';
+    back.innerHTML = `<div class="ch">${first} above</div>` +
+      colPath.slice(0, first).map((id, i) =>
+        `<div class="ci" data-id="${id}" data-lvl="${i}">
+           <span class="lat">${esc(D.people[id].name_lat)}</span></div>`).join('');
+    box.appendChild(back);
+  }
+  for (let lvl = first; lvl <= colPath.length; lvl++) {
+    const items = siblingsAt(lvl);
+    if (!items.length) break;
+    const col = document.createElement('div');
+    col.className = 'col';
+    col.dataset.level = lvl;
+    const head = lvl === 0 ? `roots · ${items.length}`
+      : `${D.people[colPath[lvl-1]].name_lat} · ${items.length}`;
+    col.innerHTML = `<div class="ch">${esc(head)}</div>` + items.map(id => {
+      const p = D.people[id], n = D.below[id] || 0;
+      return `<div class="ci${id===colPath[lvl]?' on':''}${n?'':' leafdot'}" data-id="${id}" data-lvl="${lvl}">
+        <span class="ar" dir="rtl" lang="ar">${esc(p.name_ar)}</span>
+        <span class="lat">${esc(p.name_lat)}</span>
+        <span class="more">${n || ''}</span></div>`;
+    }).join('');
+    box.appendChild(col);
+  }
+  box.scrollLeft = box.scrollWidth;
+  // the selection lives in the second-to-last column; make sure its row is visible
+  const cols = box.querySelectorAll('.col:not(.back)');
+  const last = cols[cols.length - 2] || cols[cols.length - 1];
+  last?.querySelector('.ci.on')?.scrollIntoView({block:'nearest'});
+}
+
+function pathTo(pid){
+  const out = []; let c = pid;
+  while (c) { out.unshift(c); c = D.father[c] || D.mother[c]; }
+  return out;
+}
+
+$('#cols').addEventListener('click', e => {
+  const it = e.target.closest('.ci'); if (!it) return;
+  colPath = colPath.slice(0, +it.dataset.lvl);
+  colPath.push(it.dataset.id);
+  renderCols();
+  show(it.dataset.id);
+});
+
+let view = 'tree';
+function setView(v){
+  view = v;
+  $('#vTree').classList.toggle('on', v === 'tree');
+  $('#vCols').classList.toggle('on', v === 'cols');
+  $('#tree').hidden = v !== 'tree';
+  $('#cols').hidden = v !== 'cols';
+  $('#none').hidden = v !== 'tree';
+  if (v === 'cols') {
+    renderCols();
+    // pin the toolbars at the top so the columns own the rest of the viewport; otherwise the
+    // page scroll and the column scroll fight each other
+    const bar = document.querySelector('.bar');
+    window.scrollTo({top: bar.offsetTop, behavior: 'instant'});
+  }
+}
+$('#vTree').onclick = () => setView('tree');
+$('#vCols').onclick = () => setView('cols');
 
 $('#none').onclick = () => {
   document.querySelectorAll('details').forEach(d => d.open = false);

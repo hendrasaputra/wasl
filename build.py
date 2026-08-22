@@ -174,7 +174,33 @@ def main():
         cls = "kids linear" if len(children) == 1 else "kids"
         return f'<details{open_attr} id="{pid}">{summary}{f'<div class="{cls}">{inner}</div>' if inner else ""}</details>'
 
-    tree = "".join(node(r) for r in sorted(roots, key=lambda x: (x != "p.adam", x)))
+    # ---- the unbranching prologue. Adam to Udad is 28 links with exactly one child each: a
+    # sequence, not a tree, and it currently eats half the scroll depth carrying no branching
+    # information at all. Render it as a ribbon and start the tree where the tree begins.
+    prologue, starts = {}, []
+    for r in sorted(roots, key=lambda x: (x != "p.adam", x)):
+        chain, cur = [r], r
+        while len(kids.get(cur, ())) == 1:
+            cur = kids[cur][0]
+            chain.append(cur)
+        if len(chain) > 4:
+            prologue[r] = chain
+            starts.append(cur)              # the first node that actually forks
+        else:
+            starts.append(r)
+
+    def ribbon(r):
+        ch = prologue.get(r)
+        if not ch:
+            return ""
+        links = "".join(
+            f'<b data-go="{i}" title="{html.escape(people[i]["name_ar"])}">'
+            f'{html.escape(people[i]["name_lat"])}</b>' for i in ch[:-1])
+        return (f'<div class="ribbon"><span class="rl">{len(ch)-1} generations, '
+                f'no branching</span>{links}<i>→</i></div>')
+
+    tree = "".join(ribbon(r) + node(s, gen=1 + len(prologue.get(r, [])) - 1)
+                   for r, s in zip(sorted(roots, key=lambda x: (x != "p.adam", x)), starts))
 
     data = {
         "people": people,
@@ -182,7 +208,8 @@ def main():
         "works": {k: {kk: v[kk] for kk in ("author_lat", "title_lat", "title_ar", "author_ar", "edition", "death_ah", "version_uri")} for k, v in works.items()},
         "father": father, "mother": mother,
         "below": {k: v for k, v in below.items() if v},
-        "band": band, "bands": BANDS,
+        "prologue": prologue, "starts": starts,
+        "band": band, "bands": BANDS, "roots": sorted(roots, key=lambda x: (x != "p.adam", x)),
         "kids": {k: v for k, v in kids.items() if v},
     }
     stats = {
