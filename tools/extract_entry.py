@@ -9,7 +9,7 @@ the rungs between - never guessing at the anchor, and never accepting a short ta
 import os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ingest, nasab
-from extract_walad import norm_name, identifies, BN
+from extract_walad import norm_name, identifies, BN, FEM_LINK
 from translit import translit
 
 # nisbas and the clauses that end a chain
@@ -23,12 +23,15 @@ ISTIAB = re.compile(r"^###\s*\|\s*(.+)$", re.M)
 USD = re.compile(r"^###\s*\$\s*(.+)$", re.M)
 
 
-def chain_of(raw):
+def chain_of(raw, want_sex=False):
+    """The chain, and whether its head is female - 'X bint Y' says so outright."""
     s = NUM.sub("", raw.strip())
     s = TAIL.sub("", s)
+    links = FEM_LINK.findall(" " + s + " ")
+    fem = bool(re.match(r"^[^ء-ي]*[ء-ي\s]+?\s+(?:ابنة|بنت)\s+", " " + s))
     parts = [norm_name(x) for x in BN.split(s)]
     parts = [p for p in parts if p and re.match(r"^[ء-ي]", p) and len(p) <= 26]
-    return parts
+    return (parts, fem) if want_sex else parts
 
 
 def entries(work, text):
@@ -59,7 +62,7 @@ def run(work, store, limit=None, quiet=True, min_anchor=2):
         seen += 1
         ent = re.sub(r"PageV\d{2}P\d{3}[AB]?|\bms\d+\b|[#~]+|\[\d+\]|%~%", " ", ent)
         ent = re.sub(r"\s+", " ", ent).strip()
-        chain = chain_of(ent)
+        chain, fem = chain_of(ent, want_sex=True)
         if len(chain) < min_anchor + 1:
             continue
         # deepest suffix the tree already knows
@@ -84,6 +87,7 @@ def run(work, store, limit=None, quiet=True, min_anchor=2):
             if quote is None:
                 break
             kid = store.person(name, father=cur,
+                               sex=("F" if (i == 0 and fem) else "M"),
                                sahabi=(i == 0 and work in ("IbnAbdAlBarr", "IbnAlAthir")) or None)
             if kid is None:
                 break

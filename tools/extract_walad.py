@@ -12,7 +12,21 @@ from translit import translit
 
 # the father/children separator is usually ':' but Ibn Hazm's Yemeni sections often use ';'
 WALAD = re.compile(r"(?:ف|و)?ولد\s+(?P<f>[^:؛.]{2,120}?)\s*[:؛]\s*(?P<k>[^.]{2,600}?)(?=\.|$)")
-BN = re.compile(r"\s+(?:ابن|بن)\s+")
+# 'bint' and 'ibna' are links in a chain exactly as 'bn' is. Leaving them out meant every
+# "X bint Y b. Z" was read as one long name and hung on Z instead of Y - which is why the tree
+# held 16 women when the sources name hundreds.
+BN = re.compile(r"\s+(?:ابنة|بنت|ابن|بن)\s+")
+FEM_LINK = re.compile(r"\s+(?:ابنة|بنت)\s+")
+
+# honorifics are not names. 'rasul Allah wa-sayyid walad Adam' is one man under two epithets,
+# and splitting it on the 'wa-' invented a son called Sayyid for the Prophet's father.
+HONORIFIC = re.compile(
+    r"رسول\s+الله|سيد\s+ولد\s+آدم|صلى\s+الله\s+عليه\s+و[آله\s]*سلم|"
+    r"عليه\s+السلام|عليهما\s+السلام|رضي\s+الله\s+عنه[ما]?|رضى\s+الله\s+عنه[ما]?|"
+    r"خليل\s+الله|كليم\s+الله|أمير\s+المؤمنين|عز\s+وجل|تبارك\s+وتعالى|جل\s+ثناؤه")
+
+# a child is often given with his kunya: 'al-Hasan Aba Muhammad'. The name is the head.
+KUNYA_TAIL = re.compile(r"\s+(?:أب[اوي]|أم)\s+[ء-ي].*$")
 # clauses that comment on a name rather than name a person
 STOP = re.compile(r"^(?:و?في|و?هو|و?هم|و?هي|و?كان|و?قد|و?قيل|و?ذكر|أم|و?أم|لا |ثم |أ?لهم|"
                   r"و?ليس|و?منهم|و?من\b|و?إلي|و?به|و?لم|درج|و?الله|و?أما|و?قال|و?يقال|"
@@ -90,6 +104,7 @@ def dealef(w):
 def children(work, blob):
     """Split a child list into names, dropping the commentary that follows each.
     'X, wa-huwa Y' is one person under two readings, not two people - carry Y as an alias."""
+    blob = HONORIFIC.sub(" ", blob)      # before any splitting
     out = []
     for piece in re.split(r"؛", blob):
         # 'wa-' is the ordinary separator too: 'Mu'awiya wa-Wa'il' is two sons, not one name
@@ -103,6 +118,11 @@ def children(work, blob):
                 break            # commentary has begun; nothing after it in this clause is a name
             s = BN.split(raw)[0].strip()        # a child named "X bn Y" restates the father
             s = re.sub(r"\s*\(.*", "", s).strip()
+            kun = None
+            m2 = KUNYA_TAIL.search(s)
+            if m2 and len(s) > len(m2.group(0)):
+                kun = norm_name(m2.group(0))
+                s = s[:m2.start()].strip()      # 'al-Hasan Aba Muhammad' -> al-Hasan
             if not (2 <= len(s) <= 24 and re.match(r"^[ء-ي]", s) and is_name(work, s)):
                 break
             alias = None
@@ -112,7 +132,7 @@ def children(work, blob):
                     a = norm_name(h.group("alias"))
                     if a and is_name(work, a):
                         alias = a
-            out.append((s, alias))
+            out.append((s, alias or kun))
             # keep going: 'walada al-Khazraj: Amr, Awf, Jusham, Ka'b, al-Harith' is five sons,
             # and taking only the first cost the whole Ansar clan structure
     return out

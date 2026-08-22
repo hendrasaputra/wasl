@@ -5,7 +5,7 @@ and confirm the checker actually rejects bad data rather than waving it through.
 
     python3 test_wasl.py
 """
-import json, os, re, sys
+import json, os, re, sys, collections
 import nasab
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -87,6 +87,69 @@ check("the chain is 50 generations",
 check("no node claims an unsourced birth year",
       all(c.get("date_basis") in (None, *("attested attested_relative derived_from_age_at_death "
           "generation_estimate unknown").split()) for c in claims))
+
+print("\nthe core family, checked name by name")
+# A parser error anywhere is bad; a parser error here is the project failing at the one thing
+# it exists to get right. Every one of these assertions was written because the data broke it:
+# an epithet became a son of the Prophet's father, granddaughters were hung on their
+# grandfather, and 'bint' was missing from the chain splitter so every woman was mis-attached.
+kids = collections.defaultdict(list)
+for c in claims:
+    if c["type"] == "father_of":
+        kids[c["subject"]].append(c["object"])
+byid = {p["id"]: p for p in json.load(open(f"{ROOT}/people.jsonl", encoding="utf-8"))} \
+       if False else {json.loads(l)["id"]: json.loads(l)
+                      for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip()}
+
+
+def person(chain):
+    hits = []
+    for a in [p for p in byid if nasab.normalise(byid[p]["name_ar"]) == nasab.normalise(chain[-1])]:
+        cur = a
+        for nm in reversed(chain[:-1]):
+            cur = next((k for k in kids.get(cur, ())
+                        if nasab.normalise(byid[k]["name_ar"]) == nasab.normalise(nm)), None)
+            if cur is None:
+                break
+        if cur:
+            hits.append(cur)
+    return hits[0] if len(set(hits)) == 1 else None
+
+
+def names_of(chain):
+    pid = person(chain)
+    return sorted({byid[k]["name_lat"] for k in dict.fromkeys(kids.get(pid, []))}) if pid else None
+
+
+abdallah = names_of(["عبد الله", "عبد المطلب", "هاشم"])
+check("the Prophet's father has exactly one child", abdallah == ["Muḥammad"], str(abdallah))
+# Ibn Hazm says so outright one sentence after the list the parser misread:
+# 'lam yakun li-Abd Allah walad ghayruhu'
+check("and the sources say so: lam yakun li-Abd Allah walad ghayruhu",
+      nasab.locate("IbnHazm", "لم يكن لعبد الله ولد غيره") is not None)
+
+amuttalib = names_of(["عبد المطلب", "هاشم", "عبد مناف"])
+check("Abd al-Muttalib has the ten sons and six daughters Ibn Hisham names",
+      len(amuttalib) == 16, str(amuttalib))
+sexes = collections.Counter(byid[k]["sex"] for k in
+                            dict.fromkeys(kids.get(person(["عبد المطلب", "هاشم", "عبد مناف"]), [])))
+check("ten male, six female", sexes["M"] == 10 and sexes["F"] == 6, str(dict(sexes)))
+
+prophet = names_of(["محمد", "عبد الله", "عبد المطلب"])
+check("the Prophet's seven children",
+      set(prophet) == {"al-Qāsim", "Zaynab", "Ruqayya", "Fāṭima", "Umm Kulthūm",
+                       "ʿAbd Allāh", "Ibrāhīm"}, str(prophet))
+check("Abu Talib's four sons",
+      set(names_of(["أبو طالب", "عبد المطلب", "هاشم"])) == {"Ṭālib", "ʿAqīl", "Jaʿfar", "ʿAlī"},
+      str(names_of(["أبو طالب", "عبد المطلب", "هاشم"])))
+
+print("\nno honorific or unsplit chain ever became a person")
+HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه السلام", "رضي الله", "أمير المؤمنين")
+bad = [p["name_ar"] for p in byid.values() if any(h in p["name_ar"] for h in HON)]
+check("no name contains an honorific", not bad, "; ".join(bad[:4]))
+unsplit = [p["name_ar"] for p in byid.values()
+           if re.search(r"\s+(?:ابنة|بنت|ابن|بن)\s+", p["name_ar"])]
+check("no name is an unsplit chain", not unsplit, "; ".join(unsplit[:4]))
 
 print("\nnormalisation folds printings, not readings")
 check("hamza forms fold", nasab.normalise("إلياس") == nasab.normalise("الياس"))

@@ -58,7 +58,12 @@ def main(write=False):
                 kids[root(c["subject"])].append(root(c["object"]))
         for k in kids:
             kids[k] = list(dict.fromkeys(kids[k]))
-        nm = {p: nasab.normalise(by[p]["name_ar"]) for p in by}
+        # 'al-Abbas' and 'Abbas' under one father are one man written two ways; the article is
+        # not a distinguishing letter, and edit distance alone treats it as two
+        def key(x):
+            n = nasab.normalise(by[x]["name_ar"])
+            return n[2:] if n.startswith("ال") and len(n) > 3 else n
+        nm = {p: key(p) for p in by}
         freq = collections.Counter(nm[p] for p in by if p not in alias)
         found = 0
         for f, ch in list(kids.items()):
