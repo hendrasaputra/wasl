@@ -116,6 +116,69 @@ a Who's who, and source-grounded bands rather than invented centuries.
 - Only **20 women** are in the tree. The `bint` fix removed the structural cause; the remaining
   limit is that most women in the companion dictionaries have fathers not yet anchored.
 
+## Responsive: the plan for phones
+
+Measured, not guessed, on iPhone 17 (393×852) and Galaxy S24 (360×780).
+
+| | iPhone 17 | Galaxy S24 |
+|---|---|---|
+| Chrome above the first name | 855px — **100% of the screen** | 989px — **127%** |
+| Filter chips wrap into | 6 rows | 7 rows |
+| Citation panel starts at | y = 6,811px | worse |
+| Tree horizontal scroll | 641px | ~670px |
+| Deepest row indent | 514px on a 393px screen | 514px |
+| Miller columns visible at once | 1.8 | 1.6 |
+| Smallest tap target | 34px (WCAG wants 44) | 34px |
+
+The desktop layout does not degrade on a phone, it inverts: **you scroll a full screen of
+chrome before seeing a single name, and the citation panel — the entire point of the project —
+sits below a 3,500px tree, so in practice it cannot be reached at all.**
+
+### 1. The panel must stop being a second grid row  *(the one structural change)*
+
+At ≤760px the panel becomes a **bottom sheet**: hidden until a name is tapped, then sliding up
+over the tree to about 70% height, with a grab handle, a close control, and dismissal by swipe
+or backdrop tap. The tree stays where it was, scroll position intact.
+
+Rejected alternatives: a full-screen overlay loses the tree and makes comparing siblings a
+round trip; Tree/Details tabs put the citations behind a mode switch, and the citations are the
+product. A sheet keeps both on one screen and is what a phone user already expects.
+
+### 2. Collapse the chrome from ~900px to ~120px
+
+- **Header** → a compact bar: title, the live counts, and an **About** disclosure holding the
+  three explanatory paragraphs. They are worth reading once, not on every visit.
+- **Filters** → one `Filter` button opening a sheet, instead of six rows of chips. The active
+  filter shows as a count on the button.
+- **Keep visible**: search (full width), the Tree/Columns toggle, the breadcrumb.
+- Breadcrumb compresses harder on narrow screens: first 2 and last 2 rather than 5 and 5.
+
+### 3. Tree and columns
+
+- Indent 12px → 8px per level, and cap total indent; ribbons already absorb the long runs.
+  `#tree` keeps `overflow-x:auto` so the page itself never scrolls sideways.
+- **Columns view shows one column at a time** on a phone — which is the native Miller-column
+  behaviour on iOS Files — with the breadcrumb as the back affordance.
+
+### 4. Touch, safe areas, and iOS quirks
+
+- Every control to a 44×44px minimum hit area; rows to 40px.
+- `viewport-fit=cover` plus `env(safe-area-inset-*)` padding, so the notch and the home
+  indicator do not sit on top of content.
+- Search input font-size ≥16px, otherwise iOS Safari zooms the page on focus and never zooms
+  back.
+- `-webkit-overflow-scrolling` and `overscroll-behavior: contain` on the sheet so its scroll
+  does not chain to the page.
+- Replace the hardcoded `top:110px` sticky offsets with a CSS variable set per breakpoint;
+  they currently assume the desktop toolbar height and will mis-stick on any other.
+
+### 5. Verification
+
+Same discipline as the data: measure, do not eyeball. A check that asserts, at 393×852 and
+360×780, that chrome above the first name is under 200px, that no element overflows the
+viewport width, that the panel is reachable without scrolling past the tree, and that every
+control clears 44px.
+
 ## What remains
 
 Not a Phase 7 so much as more of Phase 6: each hand-seeded trunk unlocks a further tranche of
