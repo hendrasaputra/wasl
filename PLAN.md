@@ -162,9 +162,15 @@ This is the one requirement the sources refuse, and the refusal is itself worth 
 - `index.html` is 1.8 MB at 1,657 nodes: one paint, 4 ms search, 22 ms to open a citation
   panel. It holds to roughly 5–10k nodes. Past that, render children on click from the JSONL
   instead of baking them into the page.
-- Transliteration of unvocalised Arabic cannot be solved, only widened: 715 of 1,657 names fall
-  back to a consonant skeleton and are flagged `translit_provisional`. Each name added to the
-  dictionary in `tools/translit.py` reduces the count. The Arabic is always authoritative.
+- Transliteration of unvocalised Arabic cannot be solved, only widened: after ~700 readings
+  were added, **19 of 1,607** names still fall back to a consonant skeleton, flagged
+  `translit_provisional`. The Arabic is always authoritative.
+- `tools/prune.py` recognises misparses by shape, which is a heuristic and will always be one.
+  It repairs before it prunes, and it protects hand-seeded spines; a length rule in an early
+  draft would have deleted Udd and Murr, ancestors of Tamīm, with 203 descendants.
+- The layout is an indented tree because the data is deep and narrow — 54 levels, only ten
+  nodes with more than eight children. Radial and sunburst layouts were rejected for that
+  reason, not for taste. If a future phase makes the tree *wide* rather than deep, revisit.
 - Arabic renders in whatever naskh face the reader's OS provides. Embedding Amiri would cost
   ~300 KB and make the file certain rather than likely. Worth doing when the project is shared.
 - `validate.py` re-reads all 2,312 quotes in a few seconds. Quote lookups are cached; if a

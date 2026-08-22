@@ -5,7 +5,7 @@
 *waṣl* — "the link, the joining". Every link in this tree is joined to a page of a printed
 critical edition, and the join is checked by machine, not by trust.
 
-**All five phases are complete: 1,657 persons, 2,312 sourced claims, 2,220 links, drawn from
+**All five phases are complete: 1,607 persons, 2,262 sourced claims, 1,609 links, drawn from
 7 primary works — every Arabic quotation re-read out of the source text at the cited page
 before the page was written.**
 
@@ -208,6 +208,27 @@ fails, the data is wrong, not the checker.
 
 ## The interface
 
+**Why an indented tree and not something prettier.** The data is *deep and narrow*: 54
+generations, the mass of it at depths 47–51, and only ten nodes with more than eight children.
+A radial or sunburst layout would need 54 rings and would set Arabic names on curves; a force
+graph throws away the one thing a lineage has, which is direction. The problem here was never
+seeing breadth — it was **reaching** a name fifty levels down. So the tree stays, and the work
+went into navigation.
+
+- **Search returns a list, not a count.** Ninety-one men in these books are called ʿAbd Allāh.
+  Telling you "91 matches" and leaving you to scroll is useless, so every hit is a row carrying
+  its own line of descent — `Jaʿfar ‹ Abū Ṭālib ‹ ʿAbd al-Muṭṭalib` against
+  `Muslim ‹ ʿAqīl ‹ Abū Ṭālib` — and clicking one opens every ancestor, scrolls to it and
+  flashes it. Arrow keys move, Enter jumps, Escape closes.
+- **A trail under the toolbar** shows the full line from the root to wherever you have landed,
+  every segment clickable. At 47 segments for Hāshim, it is the only way to know where you are.
+- **The `+` carries the number beneath it**, so you know whether it opens two names or 1,272.
+- **Jump chips** for the nine landmarks — the Prophet, Ādam, ʿAdnān, Qaḥṭān, Quraysh, Banū
+  Hāshim, ʿAlī, al-Aws, al-Khazraj — so a first visit has somewhere to start.
+- **Filter chips** dim everything outside one question: Ṣaḥāba (154), women (16), *ikhtilāf*,
+  2+ sources (365), hand-checked (106 — the complement of `auto`).
+- **The citation panel** gains Children and Brothers-and-sisters rows for moving sideways, and
+  a descendant count.
 - **The tree is nested `<details>`** — native HTML, so it expands to unlimited depth, survives
   browser Ctrl-F, and prints. Indentation appears only where the line actually forks, because a
   lineage is mostly a single file and a 50-level staircase is unreadable.
@@ -222,9 +243,10 @@ fails, the data is wrong, not the checker.
   rules. Indentation appears only where the line actually forks — a lineage is mostly a single
   file, and a fifty-level staircase is unreadable.
 - **Transliteration is a finding aid, not an edition.** Unvocalised Arabic does not carry the
-  vowels transliteration needs: عمرو is ʿAmr, but the letters alone say only ʿ-m-r-w. Names in
-  the dictionary are read properly; the other 715 fall back to a consonant skeleton and are
-  flagged `translit_provisional`. The Arabic is always the authority.
+  vowels transliteration needs: عمرو is ʿAmr, but the letters alone say only ʿ-m-r-w. The
+  dictionary in `tools/translit.py` holds ~700 readings, taken from a frequency count of the
+  data rather than guessed at. **19 of 1,607 names** still fall back to a consonant skeleton
+  and are flagged `translit_provisional`. The Arabic is always the authority.
 
 ## Where this goes next
 
