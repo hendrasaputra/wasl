@@ -1,0 +1,218 @@
+# -*- coding: utf-8 -*-
+"""Parse 'fa-walada X: A, B, C' statements - the standard shape of a genealogy book.
+
+Ibn Hazm and Ibn al-Kalbi are built almost entirely out of these, so one parser opens both.
+Prints candidates for review; --write commits them through the ingest layer, which refuses any
+quote the corpus does not carry.
+"""
+import os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ingest, nasab
+from translit import translit
+
+WALAD = re.compile(r"(?:ف|و)?ولد\s+(?P<f>[^:؛.]{2,120}?)\s*:\s*(?P<k>[^.]{2,600}?)(?=\.|$)")
+BN = re.compile(r"\s+(?:ابن|بن)\s+")
+# clauses that comment on a name rather than name a person
+STOP = re.compile(r"^(?:و?في|و?هو|و?هم|و?هي|و?كان|و?قد|و?قيل|و?ذكر|أم|و?أم|لا |ثم |أ?لهم|"
+                  r"و?ليس|و?منهم|و?من\b|و?إلي|و?به|و?لم|درج|و?الله|و?أما|و?قال|و?يقال|"
+                  r"و?هؤلاء|و?هذ|و?بنو|و?بني|و?ولد|و?إخوت|و?سائر|و?جميع|و?رهط|و?عقب|"
+                  r"و?انقرض|و?له|و?لها|و?لهم|و?عدد|و?بطن|و?فيهم)")
+ACC = re.compile(r"ا$")
+HUWA = re.compile(r"^\s*و?ه[وي]\s+(?P<alias>[ء-ي][^،؛.]{1,22})")
+
+_namelex = {}
+
+
+def namelex(work):
+    """Every token the work itself uses as a personal name - i.e. seen in the frame 'bn X'.
+    A stray verb swept up by the splitter will not be in it; a real name will."""
+    if work not in _namelex:
+        txt = nasab.clean(work)
+        toks = set()
+        for m in re.finditer(r"\b(?:ابن|بن|بنت)\s+([ء-ي]{2,})", txt):
+            toks.add(nasab.normalise(m.group(1)))
+        for m in re.finditer(r"([ء-ي]{2,})\s+(?:ابن|بن)\s", txt):
+            toks.add(nasab.normalise(m.group(1)))
+        _namelex[work] = toks
+    return _namelex[work]
+
+
+def is_name(work, s):
+    """Accept a candidate only if the corpus uses it as a name, or we know the reading."""
+    from translit import _look
+    head = s.split()[-1] if s.startswith(("عبد", "أبو", "أم", "بنت")) else s.split()[0]
+    return _look(s) is not None or nasab.normalise(head) in namelex(work) \
+        or nasab.normalise(s) in namelex(work)
+
+
+TAIL = re.compile(r"\s*(?:ولد|كان\b|منهم|رضي الله|وهم|فمن|وفيه|وهو|ولده|أعقب|عقبه|"
+                  r"لصلبه|ثمانية|سبعة|ستة|خمسة|أربعة|ثلاثة|رجال|ذكرا|اثنا|فولد).*$")
+
+
+def father_of_stmt(raw):
+    """clean() joins the heading line onto the body, so a statement often reads
+    'walada al-Zubayr b. Abd al-Muttalib walada al-Zubayr b. Abd al-Muttalib:'. Take the text
+    after the LAST 'walada', then cut the commentary that trails the name."""
+    raw = re.split(r"\bولد\s+", " " + raw)[-1]
+    return norm_name(TAIL.sub("", raw))
+
+
+PARTICLE = re.compile(r"\s+(?:لم|له|لها|لهم|لا|قد|ثم|من|في|هو|هي|هم|إلا|غير|أن|إن|بن|ابن|"
+                      r"على|عن|مع|بعد|قبل|أبو|أم)$")
+
+
+def norm_name(w):
+    """Undo the accusative these lists are written in: nizaran -> nizar, aba talib -> abu talib."""
+    w = re.sub(r"^أبا\b", "أبو", w.strip())
+    w = re.sub(r"^أبي\b", "أبو", w)
+    w = re.sub(r"\bابنة\b", "بنت", w)
+    w = w.strip(" ،؛.()[]«»-")
+    prev = None
+    while prev != w:                       # a name never ends in a particle
+        prev = w
+        w = PARTICLE.sub("", w).strip()
+    return w
+
+
+def dealef(w):
+    """Candidate readings of a word that may carry an accusative alif."""
+    out = [w]
+    if len(w) > 3 and w.endswith("ا"):
+        out.append(w[:-1])
+    if len(w) > 4 and w.endswith("ان") is False and w.endswith("ا"):
+        pass
+    return out
+
+
+def children(work, blob):
+    """Split a child list into names, dropping the commentary that follows each.
+    'X, wa-huwa Y' is one person under two readings, not two people - carry Y as an alias."""
+    out = []
+    for piece in re.split(r"؛", blob):
+        # 'wa-' is the ordinary separator too: 'Mu'awiya wa-Wa'il' is two sons, not one name
+        piece = re.sub(r"([ء-ي])\s+و(?=[ء-ي])", r"\1، و", piece)
+        parts = re.split(r"،", piece)
+        for i, sub in enumerate(parts):
+            s = norm_name(re.sub(r"^\s*و", "", sub.strip()))
+            if not s or STOP.match(s):
+                continue
+            s = BN.split(s)[0].strip()          # a child named "X bn Y" restates the father
+            s = re.sub(r"\s*\(.*", "", s).strip()
+            if not (2 <= len(s) <= 24 and re.match(r"^[ء-ي]", s) and is_name(work, s)):
+                break
+            alias = None
+            if i + 1 < len(parts):
+                h = HUWA.match(parts[i + 1].strip())
+                if h:
+                    a = norm_name(h.group("alias"))
+                    if a and is_name(work, a):
+                        alias = a
+            out.append((s, alias))
+            break                                # only the first comma-clause names a person
+    return out
+
+
+_conts = {}
+
+
+def continuations(work, chain):
+    """How many different grandfathers the book itself gives this chain.
+
+    'Qusayy b. Kilab' is only ever continued '... b. Murra' - one man. 'Muhammad b. Abd Allah'
+    is continued a hundred different ways, so a bare mention of it identifies nobody. This is
+    the test that keeps other men's sons from being hung on the Prophet: ask the corpus how
+    ambiguous its own phrase is, rather than guessing from the small tree we have built."""
+    key = (work, tuple(chain))
+    if key in _conts:
+        return _conts[key]
+    text = nasab.index(work)[0]
+    pat = r"\s+(?:ا?بن)\s+".join(re.escape(nasab.normalise(c)) for c in chain)
+    outs = set()
+    for m in re.finditer(pat + r"(?:\s+(?:ا?بن)\s+([ء-ي]+))?", text):
+        if m.group(1):
+            outs.add(m.group(1))
+    _conts[key] = outs
+    return outs
+
+
+def identifies(work, chain, store, fid):
+    """Does this chain, as the book uses it, pick out one man?"""
+    if len(chain) >= 4:
+        return True
+    cont = continuations(work, chain)
+    if len(cont) <= 1:
+        return True
+    # several continuations exist: accept only if the tree's candidate matches one of them
+    # AND the chain is long enough that the coincidence is unlikely
+    if len(chain) >= 3 and len(cont) <= 3:
+        return True
+    return False
+
+
+def run(work, store, limit=None, quiet=False, under=None):
+    """under: only take statements whose father already sits beneath this person, so a pass
+    grows the tree outward from a chosen trunk instead of sprawling across every tribe."""
+    text = nasab.clean(work)
+    scope = store.descendants(under) if under else None
+    added = edges = skipped = 0
+    for m in WALAD.finditer(text):
+        father_raw = father_of_stmt(m.group("f"))
+        chain = [norm_name(x) for x in BN.split(father_raw) if norm_name(x)]
+        if not chain:
+            continue
+        # resolve inside the scope: 'fa-walada Khalaf' is unambiguous among Quraysh even
+        # when a dozen men named Khalaf exist elsewhere in the book
+        if not identifies(work, chain, store, None):
+            skipped += 1
+            continue
+        fid = store.find_by_chain(chain, scope=scope)
+        if fid is None:
+            skipped += 1
+            continue
+        stmt = m.group(0)
+        kids = children(work, m.group("k"))
+        if not kids:
+            continue
+        for kid, alias in kids:
+            # quote: from "walada" up to and including this child, contiguous in the text
+            hits = [mm for w in dealef(kid) for mm in re.finditer(re.escape(w), stmt)]
+            if not hits:
+                continue
+            quote = stmt[:max(h.end() for h in hits)]
+            if nasab.locate(work, quote) is None:
+                continue
+            cid_before = len(store.claims)
+            kid_id = store.person(kid, father=fid, _alias=alias)
+            if kid_id is None:
+                continue
+            flat = translit(kid)[0]
+            store.add("father_of", fid, quote,
+                      f"{flat} son of {store.people[fid]['name_lat']} — from: “{store.people[fid]['name_lat']} begot …”",
+                      object=kid_id, work=work, grade="explicit", source_pattern="walada")
+            if len(store.claims) > cid_before:
+                edges += 1
+                if alias:
+                    aq = stmt[:stmt.index(alias) + len(alias)] if alias in stmt else None
+                    if aq:
+                        store.add("alias", kid_id, aq,
+                                  f"{flat}, who is {translit(alias)[0]}", work=work,
+                                  value_ar=alias, value_lat=translit(alias)[0],
+                                  source_pattern="wa-huwa")
+                if not quiet:
+                    print(f"  {store.people[fid]['name_lat']:22} -> {flat}"
+                          + (f"  (= {translit(alias)[0]})" if alias else ""))
+        added += 1
+        if scope is not None:
+            scope = store.descendants(under)   # newly attached children widen the scope
+        if limit and added >= limit:
+            break
+    print(f"{work}: {added} statements used, {edges} edges, {skipped} fathers not yet in tree")
+    return edges
+
+
+if __name__ == "__main__":
+    st = ingest.Store()
+    work = sys.argv[1]
+    lim = int(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2].isdigit() else None
+    run(work, st, limit=lim, quiet="-q" in sys.argv)
+    st.report("result (not written)")

@@ -31,6 +31,26 @@ def normalise(s):
     return re.sub(r"\s+", " ", s).strip()
 
 
+_clean = {}
+
+
+def clean(work):
+    """The work as continuous Arabic with mARkdown scaffolding removed but punctuation kept,
+    for parsing. Quotes cut from this still verify through locate(), which folds punctuation."""
+    if work in _clean:
+        return _clean[work]
+    out = []
+    with open(os.path.join(CORPUS, work + ".txt"), encoding="utf-8") as f:
+        for line in f:
+            if line.startswith("#META#"):
+                continue
+            line = re.sub(r"^###\s*\|+\s*|^#\s*|^~~", " ", line.rstrip("\n"))
+            line = re.sub(r"PageV\d{2}P\d{3}[AB]?|\bms\d+\b|%~%|\[\d+\]|«\d+»|/\s*\d+\s*/", " ", line)
+            out.append(line)
+    _clean[work] = re.sub(r"[ \t]+", " ", " ".join(out))
+    return _clean[work]
+
+
 _idx = {}
 
 
