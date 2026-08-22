@@ -22,6 +22,7 @@ class Store:
         self._byfather = {}
         self._ids = set()
         self._seen = set()
+        self._byname = {}
         self.rejected = []
         self.load()
 
@@ -33,6 +34,7 @@ class Store:
                 self.people[p["id"]] = p
                 self.order.append(p["id"])
                 self._ids.add(p["id"])
+                self._byname.setdefault(nasab.normalise(p["name_ar"]), []).append(p["id"])
         for l in open(f"{ROOT}/claims.jsonl", encoding="utf-8"):
             if l.strip():
                 self.claims.append(json.loads(l))
@@ -62,10 +64,11 @@ class Store:
         if not chain:
             return None
         names = [nasab.normalise(n) for n in chain]
-        pool = self.people if scope is None else {p: self.people[p] for p in scope}
-        anchors = [pid for pid, p in pool.items()
-                   if nasab.normalise(p["name_ar"]) == names[-1]
-                   or names[-1] in self.aliases_of(pid)]
+        anchors = list(self._byname.get(names[-1], ()))
+        if len(anchors) < 8:                       # aliases are worth the scan only when rare
+            anchors += [p for p in self.people if names[-1] in self.aliases_of(p)]
+        if scope is not None:
+            anchors = [a for a in anchors if a in scope]
         hits = []
         for a in anchors:
             cur = a
@@ -134,6 +137,7 @@ class Store:
         self.people[pid] = row
         self.order.append(pid)
         self._ids.add(pid)
+        self._byname.setdefault(key, []).append(pid)
         return pid
 
     # ------------------------------------------------------------ claims

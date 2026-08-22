@@ -66,7 +66,7 @@ def norm_name(w):
     w = re.sub(r"^أبا\b", "أبو", w.strip())
     w = re.sub(r"^أبي\b", "أبو", w)
     w = re.sub(r"\bابنة\b", "بنت", w)
-    w = w.strip(" ،؛.()[]«»-")
+    w = re.sub(r"[#~*]+", " ", w).strip(" ،؛.()[]«»-")
     prev = None
     while prev != w:                       # a name never ends in a particle
         prev = w
