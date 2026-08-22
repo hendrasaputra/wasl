@@ -64,7 +64,7 @@ git add -A && git commit -m "..." && git push
 
 Pages redeploys on push, usually within a minute. The CI workflow in
 `.github/workflows/verify.yml` runs the same three commands on every push: it fetches the
-pinned source texts, re-proves all 5,604 quotations against them, and **fails if `index.html`
+pinned source texts, re-proves all 5,407 quotations against them, and **fails if `index.html`
 is stale relative to the data** — so a page that no longer matches its own sources cannot sit
 in the repository unnoticed.
 
@@ -72,4 +72,6 @@ in the repository unnoticed.
 
 `corpus/*.txt` is deliberately gitignored — roughly 38 MB of source texts that belong to the
 [OpenITI corpus](https://github.com/OpenITI) and are fetched, not vendored. `corpus/SHA256SUMS`
-is committed, so any drift in those texts is detectable. Anyone cloning runs `./fetch.sh` once.
+is committed, so any drift in those texts is detectable. Anyone cloning runs `./fetch.sh` once. See [LICENSING.md](LICENSING.md): the software is
+GPL-3.0-or-later, the quotations are public-domain classical Arabic, and the corpus itself is
+OpenITI's and is fetched rather than vendored.

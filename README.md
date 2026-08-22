@@ -1,38 +1,30 @@
 # Wasl · وصل
 
-**A verifiable, expandable genealogy (nasab) explorer built directly on the primary Arabic sources.**
+**A verifiable, expandable genealogy (nasab) built directly on the primary Arabic sources.**
 
 *waṣl* — "the link, the joining". Every link in this tree is joined to a page of a printed
 critical edition, and the join is checked by machine, not by trust.
 
-**Six phases complete: 3,979 persons, 5,604 sourced claims, 3,981 links, drawn from
-7 primary works — every Arabic quotation re-read out of the source text at the cited page
-before the page was written.**
+**3,865 persons · 5,407 sourced claims · 3,867 links · 7 primary works** — the lineage of the
+Prophet Muḥammad ﷺ back to Ādam, his household, 459 Ṣaḥāba, and the Arab tribes down to
+al-Aws and al-Khazraj on the Qaḥṭānī side. Every Arabic quotation is re-read out of the source
+text at the cited page before the page is written.
 
-| Phase | Scope | Persons added |
-|---|---|---|
-| 1 | Muḥammad ﷺ → Ādam, 50 generations | 52 |
-| 2 | Quraysh — everything under Fihr b. Mālik | 116 |
-| 3 | Banū Hāshim and the Prophet's household | 24 |
-| 4 | The Ṣaḥāba, from the two companion dictionaries | 653 |
-| 5 | Qaḥṭān and the tribes, down to al-Aws and al-Khazraj | 812 |
-| 6 | The Anṣār clans and the companions that could not anchor before | 2,394 |
-
-**Live at [wasl.hensap.id](https://wasl.hensap.id)** — or open [`index.html`](index.html) in
-any browser. No server, no build step, no network.
+**Live at [wasl.hensap.id](https://wasl.hensap.id)** — or open [`index.html`](index.html) in any
+browser. No server, no build step, no network.
 
 [![verify](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml/badge.svg)](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml)
 
-Every push re-fetches the pinned source texts, re-proves all 5,604 quotations against them, and
-fails if the published page is stale relative to the data. See [DEPLOY.md](DEPLOY.md).
+Every push re-fetches the pinned texts, re-proves all 5,407 quotations against them, runs 31
+independent checks, and fails if the published page is stale. See [DEPLOY.md](DEPLOY.md).
 
 ---
 
 ## What makes it verifiable
 
 Most genealogy projects store facts. Wasl stores **claims**. A person record holds identity
-only — name, sex, tribe. Every relationship, every second name, every date is a separate row that
-carries its own citation:
+only — name, sex, tribe. Every relationship, second name, kunya and date is a separate row
+carrying its own citation:
 
 ```json
 {"cid":"c00003","type":"father_of","subject":"p.abd-al-muttalib","object":"p.abd-allah",
@@ -42,23 +34,21 @@ carries its own citation:
 ```
 
 Then `validate.py` **re-reads the cited page in the pinned source file and fails if the Arabic
-string is not there.** A quote that cannot be found is not a citation, so it cannot be committed.
-This has already caught three quotes drafted from a noisier copy of al-Istīʿāb; they were
-re-taken from the pinned text.
+string is not there.** A quote that cannot be found cannot be committed.
 
 Two consequences fall out for free:
 
-- **Disagreement is data, not a problem.** Sources differ constantly. Wasl never resolves a
-  disagreement by deleting one side — every reading becomes its own claim, and the interface
-  shows them together. Mudrika is `ʿĀmir` in Ibn Hishām and `ʿAmr` in Ibn Saʿd and Ibn al-Kalbī;
-  the tree shows `= ʿĀmir / ʿAmr` and the panel gives you all three quotations.
+- **Disagreement is data.** Wasl never resolves a disagreement by deleting one side. Mudrika is
+  `ʿĀmir` in Ibn Hishām and `ʿAmr` in Ibn Saʿd and Ibn al-Kalbī; the tree shows `= ʿĀmir / ʿAmr`
+  and the panel gives all three quotations. Zayd b. Thābit is reported as Abū Saʿīd, Abū Khārija
+  *and* Abū ʿAbd al-Raḥmān — all three kept.
 - **Corroboration is measurable.** `validate.py` reports how many independent works attest each
-  link. See "What the data says" below — the answer is interesting.
+  link, unprompted.
 
 ## The sources
 
 Eight machine-readable texts from the [OpenITI corpus](https://github.com/OpenITI), each pinned
-to a named printed edition with real volume and page numbers. Seven are cited in Phase 1.
+to a named printed edition with real volume and page numbers. Seven are cited.
 
 | Key | Work | Author (d. AH) | Edition |
 |---|---|---|---|
@@ -71,259 +61,200 @@ to a named printed edition with real volume and page numbers. Seven are cited in
 | `IbnAbdAlBarr` | al-Istīʿāb fī Maʿrifat al-Aṣḥāb | Yūsuf b. ʿAbd al-Barr (463) | al-Bajāwī — Dār al-Jīl, Beirut 1412 |
 | `IbnAlAthir` | Usd al-Ghāba fī Maʿrifat al-Ṣaḥāba | ʿAlī b. Muḥammad b. al-Athīr (630) | Dār al-Fikr, Beirut 1409/1989 |
 
-The four you named are all here. Three were added and are worth saying why:
+Ibn al-Kalbī and Ibn Ḥazm were added because they are books *about* genealogy, where the others
+mention it in passing. Ibn Isḥāq is pinned for completeness, but Zakkār's surviving recension
+does **not** carry the opening nasab: Ibn Isḥāq's chain reaches us through Ibn Hishām, whose
+isnād for it is stored as its own claim rather than assumed.
 
-- **Ibn al-Kalbī, *Jamharat al-Nasab* (d. 204)** and **Ibn Ḥazm, *Jamharat Ansāb al-ʿArab*
-  (d. 456)** are books *about* genealogy, where the other five mention it in passing. Ibn
-  al-Kalbī is the earliest systematic Arab genealogist and the source Ibn Saʿd cites by name for
-  the Prophet's nasab; leaving him out would mean citing him at second hand.
-- **Ibn Isḥāq (d. 151)** is included for completeness, but note: Zakkār's recension in the corpus
-  does **not** carry the opening nasab. Ibn Isḥāq's chain survives through Ibn Hishām, who names
-  his isnād for it — `IbnHisham` 1:3 — and that quotation is stored as an `isnad` claim so the
-  transmission is visible rather than assumed.
+## How the tree was built
 
-## How the tree was grown
+Phase 1 and the household were typed by hand. The rest could not be — the books hold tens of
+thousands of names — so two parsers do most of the work: `fa-walada X: A, B, C` (Ibn Ḥazm and
+Ibn al-Kalbī are built almost entirely of it) and the nasab chain that opens every entry in the
+two companion dictionaries.
 
-Phase 1 was typed by hand. Phases 2–5 could not be: the books hold tens of thousands of names.
-They are written in a small number of fixed shapes, so two parsers open most of them —
-`fa-walada X: A, B, C` (Ibn Ḥazm and Ibn al-Kalbī are built almost entirely of it), and the
-nasab chain that opens every entry in the two companion dictionaries.
+| Phase | Scope | Method |
+|---|---|---|
+| 1 | Muḥammad ﷺ → Ādam, 50 generations | hand |
+| 2 | Quraysh, under Fihr b. Mālik | parser |
+| 3 | Banū Hāshim and the household | hand |
+| 4–6 | Ṣaḥāba, Qaḥṭān and the tribes, the Anṣār clans | parser |
+| — | Marquee companions introduced by kunya | hand |
 
-Parsing genealogy is mostly a problem of **not inventing relatives**, and every guard below was
+Parsing genealogy is mostly the problem of **not inventing relatives**. Every guard below was
 added because a sample of fifteen lines caught the draft failing:
 
-- **A chain resolves only if the whole chain matches one path already in the tree.** Matching a
-  suffix hung Qaḥṭānī clans under Quraysh, because the resolver latched onto any `Zayd` it
-  could find.
-- **Ask the corpus how ambiguous its own phrase is.** `Quṣayy b. Kilāb` is only ever continued
-  `b. Murra` — one man. `Muḥammad b. ʿAbd Allāh` is continued 32 different ways in Ibn Saʿd
-  alone, so a bare mention identifies nobody. Without this test, three other men's sons were
-  attached to the Prophet. It also, correctly, refuses `Hāshim b. ʿAbd Manāf` — Ibn Ḥazm
-  records two of them.
-- **A one-name chain resolves on uniqueness inside the declared trunk.** `Qaḥṭān` is continued
-  a dozen ways because his own ancestry is disputed, not because there are a dozen Qaḥṭāns.
-- **Spines are seeded by hand.** Without a correct backbone the parser anchors onto the wrong
-  man: an early Phase 5 run hung al-Aws on a `al-Ḥārith b. Qaḥṭān`, visible only in a sample,
-  never in the totals.
+- **A chain resolves only if the whole chain matches one path already in the tree.** Suffix
+  matching hung Qaḥṭānī clans under Quraysh off a stray `Zayd`.
+- **Ask the corpus how ambiguous its own phrase is.** `Quṣayy b. Kilāb` has one continuation;
+  `Muḥammad b. ʿAbd Allāh` has 32 in Ibn Saʿd alone, so a bare mention identifies nobody.
+  Without this, three other men's sons were attached to the Prophet.
+- **A one-name chain resolves on uniqueness inside the declared trunk**, so a disputed eponym
+  is not mistaken for a common name.
+- **Honorifics are not names.** `rasūl Allāh wa-sayyid walad Ādam` is one man under two
+  epithets; splitting it on the *wa-* invented a son called Sayyid for the Prophet's father.
+- **`bint` is a link in a chain exactly as `bn` is.** Leaving it out of the splitter hung
+  granddaughters on their grandfathers.
+- **Spines are seeded by hand**; parsers grow outward from them, never inward to them.
 
-**What this buys, and what it costs.** Ibn Ḥazm alone yielded 2,056 people under Fihr with the
-loose resolver, and 116 with the strict one. A large share of the 2,056 would have been wrong.
-Recall is sacrificed to precision on purpose; rejected statements are counted and reported,
-never guessed at.
+**What this costs.** Ibn Ḥazm alone yielded 2,056 people under Fihr with a loose resolver and
+116 with the strict one. Recall is sacrificed to precision on purpose; rejected statements are
+counted and reported, never guessed at.
 
-**What is still uncertain.** A parser-placed node is badged `auto` in the page and carries
-`source_pattern` in the data. Its **quotation is verified** — the Arabic really is on that page.
-Its **placement rests on the anchor being the right man**, which the machine cannot prove.
-2,065 of the 2,312 claims are parser-placed. Hand-seeded spines, Phase 1 and Phase 3 carry no
-such badge. Treat the badge as the boundary between what is proven and what is inferred.
+## What is proven, and what is not
 
-## What the data says
+**Machine-checked on every run:** that each Arabic quotation appears in the pinned text at the
+volume and page cited; that no claim references an unknown person or undeclared work; that the
+parent graph has no cycles and no double fathers; that no date carries an unrecognised basis.
+`test_wasl.py` re-derives page boundaries from the raw files *without* sharing code with the
+indexer, and confirms the checker actually rejects a fabricated quote and a wrong page.
 
-`validate.py` counts, without being asked to, how many works independently attest each link:
+**Not proven:** that a parser-placed node sits under the right man. Its quotation is verified —
+the Arabic really is on that page — but the **placement rests on the anchor**, which the machine
+cannot confirm. 5,158 of 5,407 claims are parser-placed; their nodes are badged **`auto`** in
+the page itself, not only here. Hand-seeded spines, Phase 1, Phase 3 and the notables carry no
+badge. **Treat the badge as the boundary between proven and inferred.**
+
+Also not claimable: that the digitised text matches the paper edition character for character.
+Page numbers are those of the OpenITI/Shamela transcription of the named print edition. Evident
+printing or transcription errors met so far are flagged in `text_note` rather than silently
+corrected. Translations are ours and are not machine-checkable; the Arabic sits beside every one.
+
+### The core family is checked name by name
+
+A parser error anywhere is bad; one in the Prophet's own family is the project failing at the
+thing it exists for. `test_wasl.py` asserts:
+
+| | Children | |
+|---|---|---|
+| ʿAbd Allāh b. ʿAbd al-Muṭṭalib | **1** | Muḥammad, and nothing else — as Ibn Ḥazm says outright, *lam yakun li-ʿAbd Allāh walad ghayruhu* |
+| ʿAbd al-Muṭṭalib | **16** | the ten sons and six daughters Ibn Hishām names — 10 male, 6 female |
+| The Prophet ﷺ | **7** | al-Qāsim, Zaynab, Ruqayya, Fāṭima, Umm Kulthūm, ʿAbd Allāh, Ibrāhīm |
+| Abū Ṭālib | **4** | Ṭālib, ʿAqīl, Jaʿfar, ʿAlī |
+
+plus: no person's name may contain an honorific, and none may be an unsplit chain. Every one of
+these was written because the data had broken it.
+
+## What the sources say about themselves
+
+`validate.py` counts how many independent works attest each link:
 
 | Independent works | Links |
 |---|---|
-| 7 | 2 |
-| 6 | 7 |
-| 5 | 12 |
-| 4 | 19 |
-| 3 | 69 |
-| 2 | 257 |
-| 1 | 1,293 |
+| 7 | 1 |
+| 6 | 3 |
+| 5 | 19 |
+| 4 | 35 |
+| 3 | 131 |
+| 2 | 658 |
+| 1 | 3,013 |
 
-The deepest corroboration sits, as you would expect, on the Prophet's own line: the stretch from
-Muḥammad to ʿAbd Manāf is attested by every work in the collection. The single-source tail is
-mostly the long periphery added in Phases 4 and 5, where only one book happens to record a given
-father and son — and, importantly, the twenty links from ʿAdnān up to Ādam.
-
-**That last group is not a gap in the collection. It is the finding, and the sources say so
-themselves.** Wasl records eleven separate objections, including:
+The deepest corroboration sits on the Prophet's own line. The twenty links from ʿAdnān up to
+Ādam rest on Ibn Hishām alone — **and that is the finding, not a gap.** Wasl records eleven
+objections, including:
 
 > كذب النسابون — *the genealogists have lied*
 > — the Prophet, on going beyond Maʿadd b. ʿAdnān. Ibn Saʿd 1:38, Ibn al-Kalbī 1:1;
-> al-Balādhurī 1:12 places the stopping point one step higher, at Udad.
+> al-Balādhurī 1:12 places the stop one step higher, at Udad.
 
-Ibn ʿAbd al-Barr and Ibn al-Athīr both decline to give the chain above ʿAdnān at all. Ibn Saʿd
-gives **four mutually incompatible chains** from ʿAdnān to Ismāʿīl — of 3, 40, 18 and 8
-generations — then concludes one should stop at ʿAdnān. All four are stored in full, each with
-its isnād. Ibn ʿAbd al-Barr and Ibn Saʿd both transmit "thirty forefathers between Maʿadd and
-Ismāʿīl", against the seven Ibn Hishām names.
-
-So the page shows the Ibn Hishām chain to Ādam, because that is what the text says, and marks
-every step of it above ʿAdnān as single-source with the objections attached. Nothing is smoothed.
+Ibn ʿAbd al-Barr and Ibn al-Athīr both decline the chain above ʿAdnān. Ibn Saʿd gives **four
+mutually incompatible chains** from ʿAdnān to Ismāʿīl — of 3, 40, 18 and 8 generations — then
+concludes one should stop at ʿAdnān. All four are stored in full with their isnāds.
 
 ## On dates
 
-Requirement: each node carries a birth year in AD and Hijrī. **These books do not supply one.**
-They date by event, not by year, and no ancestor above the Prophet has an attested birth year
-anywhere in the seven works. Wasl will not print a number that looks sourced when it is not, so
-every date claim carries a `date_basis`:
+The requirement was a birth year on every node. **These seven works do not supply one.** They
+date by event, not by year, and no ancestor above the Prophet carries an attested birth year in
+any of them. Rather than print a computed number that reads as sourced, every date claim carries
+a `date_basis`: `attested`, `attested_relative`, `derived_from_age_at_death`,
+`generation_estimate`, or `unknown`.
 
-| `date_basis` | Meaning |
-|---|---|
-| `attested` | a year stated in the text |
-| `attested_relative` | dated to an event, not a year (`ʿĀm al-Fīl`) |
-| `derived_from_age_at_death` | back-computed from a stated age |
-| `generation_estimate` | computed from generation count — not from any text |
-| `unknown` | the sources are silent |
-
-The Prophet's birth is `attested_relative` — *ʿĀm al-Fīl*, the Year of the Elephant (Ibn Saʿd
-1:81; Ibn ʿAbd al-Barr "there is no disagreement" 1:30, alongside four competing readings of the
-day and interval, all recorded). The conventional 570 CE / 53 BH equation is stored explicitly
-labelled as a modern equation, not as something the text says. Every other node reads
+The Prophet's birth is `attested_relative` — *ʿĀm al-Fīl* — with the conventional 570 CE / 53 BH
+equation stored and explicitly labelled a modern equation. Every other node reads
 *"born · no year in these sources"*, which is the truthful answer.
 
-## What is and is not verified
+## Why bands and not centuries
 
-**Verified by machine, on every run:** that each Arabic quotation appears in the pinned source
-text at the volume and page the claim cites; that no claim references an unknown person or an
-undeclared work; that the parent graph has no cycles and no person has two different fathers;
-that no date carries an unrecognised basis. `test_wasl.py` re-derives page boundaries from the
-raw file *without* sharing code with the indexer, and confirms the checker actually rejects a
-fabricated quote and a wrong page number.
+A natural request is to cut the tree into eras — Ādam to Ibrāhīm, Ibrāhīm to Mūsā, and so on.
+Three things rule it out:
 
-**Not verified, and not claimable:** that the digitised text matches the paper edition
-character for character. Page numbers are those recorded in the OpenITI/Shamela transcription of
-the named print edition. Two evident printing or transcription errors met so far are flagged in
-`text_note` rather than silently corrected. Translations are ours and are not machine-checkable;
-the Arabic sits beside every one of them so the reader can judge.
+1. **No attested years above the Prophet**, so a band would be computed by us and would read as
+   though it came from the sources.
+2. **Mūsā and ʿĪsā are not in this tree.** The line runs Ibrāhīm → **Ismāʿīl**; Moses and Jesus
+   descend through Isḥāq, a branch these works do not carry.
+3. **Depth is not date across branches.** Generation 47 on the ʿAbbāsid line is the 8th century
+   CE; generation 47 on a Tamīmī line is not.
+
+So the bands are four things the sources themselves state or do — **a filter, not a period**:
+
+| Band | Count | Basis |
+|---|---|---|
+| beyond the attested chain | 29 | At or above ʿAdnān and Qaḥṭān — where these books decline to vouch |
+| the Arab genealogy | 2,206 | Below ʿAdnān or Qaḥṭān, no companion recorded above |
+| companions | 459 | Carries an entry in al-Istīʿāb or Usd al-Ghāba |
+| recorded below a companion | 1,171 | Largely the Umayyad, ʿAbbāsid and ʿAlid lines |
+
+## The interface
+
+The data is **deep and narrow** — 56 generations, only ten nodes with more than eight children.
+A left-to-right dendrogram would be 8,400px wide; a radial layout would need 56 rings. So the
+problem was never seeing breadth, it was **reaching** a name fifty levels down, and the work
+went into navigation.
+
+- **Two views.** *Tree* (nested `<details>` — unlimited depth, browser Ctrl-F, prints) and
+  *Columns* (Miller columns: one column per generation, but only a five-wide window around the
+  selection, with the generations above folded into a back-column). Bounded by the viewport
+  rather than by the data.
+- **Linear runs are ribbons.** Any chain of single-child links folds to one line: 209 ribbons
+  absorb ~950 rows. Lossless — a run of one child has no branching to lose. A fork of two or
+  three does, so forks always keep a branching layout.
+- **Search returns a list, not a count.** Ninety-one men here are called ʿAbd Allāh; each hit
+  carries its own line of descent, so they are told apart at a glance. Enter jumps, opening only
+  the line to the hit.
+- **Search by kunya.** 257 sourced kunyas on 189 people. `abu hafs` returns ʿUmar b. al-Khaṭṭāb
+  alone; `أبا حفص`, `أبي حفص` and `أبو حفص` all reach him.
+- **Who's who** — 36 people a reader actually arrives looking for, resolved at build time.
+- **A breadcrumb** showing the full line, compressed to first five and last five with an
+  expandable middle.
+- **Counts on the `+`**, so you know whether it opens two names or 1,200.
+- Search folds Latin diacritics, Arabic ḥarakāt and the alif/hamza families.
 
 ## Layout
 
 ```
-sources.tsv      the eight texts: version URI, download URL, author, editor, edition
+sources.tsv      the eight texts: version URI, URL, author, editor, edition
 fetch.sh         downloads them into corpus/ and writes SHA256SUMS
 corpus/          the pinned texts (gitignored; SHA256SUMS is committed)
-people.jsonl     source of truth - identity only
-claims.jsonl     source of truth - every relationship, name and date, each with its citation
+people.jsonl     source of truth — identity only
+claims.jsonl     source of truth — every relationship, name, kunya and date, each cited
 nasab.py         corpus index: resolves a quote to its true volume and page span
 validate.py      the proof. Must pass before every commit
+test_wasl.py     31 independent checks, sharing no code with the indexer
 build.py         renders index.html
-template.html    the page shell: palette, layout, tree and citation-panel behaviour
-tools/           one-shot helpers used to draft Phase 1 (not sources of truth)
+template.html    the page shell: palette, layout, views, search
+tools/           extraction and maintenance; the replay pipeline is in CLAUDE.md
 index.html       generated, committed, self-contained
 ```
 
 ## Use
 
 ```bash
-./fetch.sh && python3 validate.py && python3 build.py
+./fetch.sh                      # once; needs the network
+python3 validate.py             # the gate
+python3 test_wasl.py            # independent checks
+python3 build.py                # regenerate index.html
 ```
 
-`fetch.sh` needs the network once; nothing else ever does. `validate.py` is the gate — if it
-fails, the data is wrong, not the checker.
+## Licence
 
-## Why bands and not centuries
+Source code is **GPL-3.0-or-later** ([LICENSE](LICENSE)). The Arabic quotations belong to
+authors dead between 151 and 630 AH and are public domain; the corpus texts are OpenITI's and
+are fetched, not vendored. See [LICENSING.md](LICENSING.md) — the distinction matters if you
+redistribute.
 
-A reasonable request: cut the tree into eras — Ādam to Ibrāhīm, Ibrāhīm to Mūsā, Mūsā to ʿĪsā,
-ʿĪsā to the Prophet's birth, during his life, after it. The instinct is right — 3,979 names need
-slicing into something digestible. The **axis** is the problem, and three things rule it out:
+## Contributing
 
-1. **These books give no years above the Prophet.** Not one ancestor has an attested birth date
-   in any of the seven. A band label would therefore be computed from generation depth, and a
-   band label *looks like a fact* — it would be the project's own rule broken in the most
-   visible place possible.
-2. **Mūsā and ʿĪsā are not in this tree.** The Prophet's line runs Ibrāhīm → **Ismāʿīl**; Moses
-   and Jesus descend through Isḥāq, a branch these nasab works do not carry. (There are men
-   named Mūsā and ʿĪsā in the file — ordinary Arabs, much later.) Two of the six boundaries have
-   no node to anchor on.
-3. **Depth is not date across branches.** Generation 47 on the ʿAbbāsid line is the 8th century
-   CE; generation 47 on a Tamīmī line is not. One depth-based cut would put contemporaries in
-   different bands and strangers in the same one.
-
-**What the sources do supply is their own partition**, and it does the same work honestly. Four
-bands, each defensible in one sentence, each carrying its basis in a tooltip:
-
-| Band | Count | Basis |
-|---|---|---|
-| beyond the attested chain | 29 | At or above ʿAdnān and Qaḥṭān — the stretch these books decline to vouch for (*kadhaba al-nassābūn*; Ibn Ḥazm: nothing above Qaḥṭān is sound) |
-| the Arab genealogy | 3,236 | Below ʿAdnān or Qaḥṭān, no companion recorded above them |
-| companions | 544 | Carries an entry in al-Istīʿāb or Usd al-Ghāba — a fact about the sources, not a judgement |
-| recorded below a companion | 170 | Largely the Umayyad, ʿAbbāsid and ʿAlid lines Ibn Ḥazm carries forward |
-
-The first band is the one worth having. It is not a period; it is the sources telling you where
-their own evidence stops, and it is the single most important thing a reader can know here.
-
-## The interface
-
-**Why an indented tree and not something prettier.** The data is *deep and narrow*: 54
-generations, the mass of it at depths 47–51, and only ten nodes with more than eight children.
-A radial or sunburst layout would need 54 rings and would set Arabic names on curves; a force
-graph throws away the one thing a lineage has, which is direction. The problem here was never
-seeing breadth — it was **reaching** a name fifty levels down. So the tree stays, and the work
-went into navigation.
-
-- **A Who's who** lists the 36 people a reader actually arrives looking for — the four caliphs,
-  the household, the ten, Anṣār leaders, the landmarks of the chain — resolved at build time
-  from the chain that identifies each, so a link can never point nowhere.
-- **Search by kunya.** A reader looks for *Abū Bakr*, not for ʿAbd Allāh b. ʿUthmān. 189 people
-  carry a kunya harvested from the sources — 315 cited claims, each quoting the sentence that
-  states it. `abu hafs` returns ʿUmar b. al-Khaṭṭāb alone; `أبا حفص`, `أبي حفص` and `أبو حفص`
-  all reach him, because the accusative and genitive fold onto the nominative. Several kunyas
-  on one man is not an error: Zayd b. Thābit is reported as Abū Saʿīd, Abū Khārija **and** Abū
-  ʿAbd al-Raḥmān, and all three are kept with their quotes.
-- **Search finds the name you know, not the name in the file.** Abū Bakr is recorded under his
-  given name, ʿAbd Allāh; searching "abu bakr", or even "siddiq", now reaches him, because the
-  directory label, note, kunya and laqab fold into the index. Results are ranked so a name the
-  directory knows outranks its own forty descendants — "umar" returns ʿUmar b. al-Khaṭṭāb first,
-  starred.
-- **Search returns a list, not a count.** Ninety-one men in these books are called ʿAbd Allāh.
-  Telling you "91 matches" and leaving you to scroll is useless, so every hit is a row carrying
-  its own line of descent — `Jaʿfar ‹ Abū Ṭālib ‹ ʿAbd al-Muṭṭalib` against
-  `Muslim ‹ ʿAqīl ‹ Abū Ṭālib` — and clicking one opens every ancestor, scrolls to it and
-  flashes it. Arrow keys move, Enter jumps, Escape closes.
-- **A trail under the toolbar** shows the full line from the root to wherever you have landed,
-  every segment clickable. At 47 segments for Hāshim, it is the only way to know where you are.
-- **The `+` carries the number beneath it**, so you know whether it opens two names or 1,272.
-- **Jump chips** for the nine landmarks — the Prophet, Ādam, ʿAdnān, Qaḥṭān, Quraysh, Banū
-  Hāshim, ʿAlī, al-Aws, al-Khazraj — so a first visit has somewhere to start.
-- **Filter chips** dim everything outside one question: Ṣaḥāba (154), women (16), *ikhtilāf*,
-  2+ sources (365), hand-checked (106 — the complement of `auto`).
-- **The citation panel** gains Children and Brothers-and-sisters rows for moving sideways, and
-  a descendant count.
-- **The tree is nested `<details>`** — native HTML, so it expands to unlimited depth, survives
-  browser Ctrl-F, and prints. Indentation appears only where the line actually forks, because a
-  lineage is mostly a single file and a 50-level staircase is unreadable.
-- **Search** folds Latin diacritics, Arabic ḥarakāt and the alif/hamza families, so `mughira`,
-  `Mughīra`, `قصى` and `قصي` all find their man.
-- **Click any name** for every claim about them, grouped: descent, second names, birth, the full
-  chain as each source gives it, competing chains, and where the sources object — each with the
-  Arabic, an English translation, the isnād where one is given, the editor, the volume and page,
-  and the OpenITI version URI.
-- **The chrome is Windows Explorer's**, because a genealogy is a file tree: a boxed `+` where
-  there is more beneath a name, `−` where there is nothing further to open, joined by dotted
-  rules. Indentation appears only where the line actually forks — a lineage is mostly a single
-  file, and a fifty-level staircase is unreadable.
-- **Transliteration is a finding aid, not an edition.** Unvocalised Arabic does not carry the
-  vowels transliteration needs: عمرو is ʿAmr, but the letters alone say only ʿ-m-r-w. The
-  dictionary in `tools/translit.py` holds ~700 readings, taken from a frequency count of the
-  data rather than guessed at. **19 of 1,607 names** still fall back to a consonant skeleton
-  and are flagged `translit_provisional`. The Arabic is always the authority.
-
-## Where this goes next
-
-Phase 1 is the spine. The structure carries straight into breadth:
-
-| Phase | Scope | Est. nodes |
-|---|---|---|
-| 1 ✅ | Muḥammad → Ādam | 52 |
-| 2 ✅ | Quraysh, under Fihr b. Mālik | 116 |
-| 3 ✅ | Banū Hāshim and the household | 24 |
-| 4 ✅ | The Ṣaḥāba | 653 |
-| 5 ✅ | Qaḥṭān and the tribes | 812 |
-
-**Where the recall went.** 11,805 companion entries were scanned and 335 anchored. The rest are
-refused, not lost: their chains reach ancestors the tree does not yet hold, or reach them only
-through a phrase the ambiguity test will not accept. Seeding more trunks by hand — as Phase 5
-did for Qaḥṭān — unlocks more of them each time. That is the shape of the remaining work, and
-it is additive: nothing already in the file has to change.
-
-`index.html` is 1.8 MB at 1,657 nodes and renders in one paint; search runs in 4 ms and opening
-a citation panel in 22 ms. It holds comfortably to roughly 5–10k nodes. Past that, children
-should render on click from the JSONL rather than being baked into the page.
-
-## Adding to it
-
-Read [CLAUDE.md](CLAUDE.md) first — it holds the rules that keep the data trustworthy. In short:
-never assert without a citation, never hand-type Arabic, never delete one side of a
-disagreement, never invent a date, and never commit without `validate.py` passing.
+Read [CLAUDE.md](CLAUDE.md) first — it holds the rules that keep the data trustworthy: never
+assert without a citation, never hand-type Arabic, never delete one side of a disagreement,
+never invent a date, always sample the output before writing, and never commit without
+`validate.py` and `test_wasl.py` passing.

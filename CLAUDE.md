@@ -22,7 +22,9 @@ generated output. Everything asserted must be traceable to an Arabic primary tex
    re-run of `fetch.sh`. No claim may cite a work absent from `sources.tsv`.
 6. **Model proposes, script verifies, human approves.** An LLM may draft rows. `validate.py`
    decides whether they are real. Never let a draft land without a passing validate.
-7. **`validate.py` shares code with `nasab.py`, so it can agree with its own bug.**
+7. **Source files carry `SPDX-License-Identifier: GPL-3.0-or-later`.** Keep the header when
+   adding a file; see LICENSING.md for why the data and the corpus are not the same thing.
+8. **`validate.py` shares code with `nasab.py`, so it can agree with its own bug.**
    `test_wasl.py` re-derives page boundaries from the raw file with plain string operations and
    confirms the checker rejects fabricated quotes and wrong pages. Run both. This is not
    theoretical: it is how the repeated-page-marker bug in Ibn Sa'd was found.
@@ -80,6 +82,18 @@ Mudrika instead of minting a twin.
 inside longer chains and attribute whatever follows to the wrong man - this is how Fihr b. Malik
 was briefly given Umar's son's kunya. Check the preceding characters for `bn `.
 
+**Honorifics are not names, and a chain link is not always `bn`.** `rasul Allah wa-sayyid walad
+Adam` is one man under two epithets - splitting it on the `wa-` invented a son for the Prophet's
+father. `bint` and `ibna` are chain links exactly as `bn` is; leaving them out of the splitter
+hung granddaughters on their grandfathers and sexed them male. Both bugs reached the Prophet's
+immediate family. `test_wasl.py` now asserts that family name by name, and that no name may
+contain an honorific or be an unsplit chain.
+
+**When a parser is wrong, fix the parser and REPLAY.** Patching the output leaves the same class
+of error everywhere else in the 3,800 nodes you did not look at. Data resets cleanly to the
+hand-seeded Phase 3 commit; phases 2, 5, 6, 6b, kunya, merge, prune and retranslit replay over
+it in about ten minutes.
+
 **A chain in the text is often broken by an honorific** - `Umar b. al-Khattab, radiya Allahu
 anhu, ibn Nufayl`. A probe that assumes contiguity will miss the most famous men in the corpus.
 
@@ -102,6 +116,30 @@ indexed. Anything called per-statement must be O(1).
 PLACEMENT: that the man the chain anchored to is the man the text meant. Parser-placed claims
 carry `source_pattern` and their nodes are badged `auto` in the page. Never describe an `auto`
 node as verified without that distinction - in the docs, in commit messages, or to the user.
+
+## The replay pipeline
+
+The data is generated. When a PARSER is wrong, do not patch people.jsonl - reset and replay,
+or the same class of error stays in the thousands of nodes you did not inspect. Order matters:
+each phase can only anchor onto what the previous ones put in the tree.
+
+```bash
+git checkout <phase-3-commit> -- people.jsonl claims.jsonl   # the hand-seeded base
+python3 tools/phase2_quraysh.py   --write      # Quraysh, under Fihr
+python3 tools/phase5_tribes.py    --write      # Qahtan seed + tribes
+python3 tools/phase6_ansar.py     --write      # Ansar clans + companion entries
+python3 tools/phase6b_notables.py --write      # marquee companions, by hand-quoted chain
+python3 tools/extract_kunya.py    --write      # kunyas from entry bodies
+python3 tools/kunya_notables.py   --write      # kunyas for the directory people
+python3 tools/merge.py            --write      # collapse spelling-variant duplicates
+python3 tools/prune.py            --write      # repair, then drop what was never a name
+python3 tools/retranslit.py       --write      # re-read Latin forms in place
+python3 validate.py && python3 test_wasl.py && python3 build.py
+```
+
+Phase 1 and Phase 3 are hand-seeded and live in the base commit; `tools/seed_phase1.py` and
+`tools/phase3_ahlbayt.py` are kept as the record of how they were built. Roughly ten minutes end
+to end. `merge` before `prune` (merging can expose junk), `retranslit` last (it only relabels).
 
 ## Corpus gotchas
 - OpenITI mARkdown: `#` starts a paragraph, `~~` continues it, `### |` is a heading,

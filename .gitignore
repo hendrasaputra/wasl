@@ -1,3 +1,12 @@
+# Local editor and agent scaffolding — not part of the project
+.claude/
+.vscode/
+.idea/
+.DS_Store
+
+# The source texts are OpenITI's: fetched and pinned, never vendored.
+# corpus/SHA256SUMS IS committed, so drift is detectable.
 corpus/*.txt
+
 __pycache__/
 *.pyc
