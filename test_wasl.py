@@ -145,6 +145,16 @@ check("Abu Talib's four sons",
       set(names_of(["أبو طالب", "عبد المطلب", "هاشم"])) == {"Ṭālib", "ʿAqīl", "Jaʿfar", "ʿAlī"},
       str(names_of(["أبو طالب", "عبد المطلب", "هاشم"])))
 
+# The Prophet's sons all died in infancy - Ibn Hazm: Ibrahim 'died young, not completing two
+# years'. A chain parser once hung six descendants on him, because 'walada Ibrahim:' is a bare
+# one-name chain and Ibn Hazm continues that name 55 different ways.
+for son in ("إبراهيم", "القاسم", "عبد الله"):
+    pid = person([son, "محمد", "عبد الله"])
+    check(f"{son} b. Muhammad has no descendants",
+          pid is not None and not kids.get(pid), str(kids.get(pid)))
+check("and the sources say so: mata saghiran, lam yastakmil amayn",
+      nasab.locate("IbnHazm", "مات صغيرا، لم يستكمل عامين") is not None)
+
 print("\nno honorific or unsplit chain ever became a person")
 HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه السلام", "رضي الله", "أمير المؤمنين")
 bad = [p["name_ar"] for p in byid.values() if any(h in p["name_ar"] for h in HON)]

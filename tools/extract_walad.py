@@ -174,10 +174,16 @@ def identifies(work, chain, store, scope=None):
     if len(chain) == 1:
         if store is None:
             return False
+        # The corpus decides first. A bare 'walada Ibrahim:' identifies nobody - Ibn Hazm
+        # continues that name 55 different ways - and trusting tree-uniqueness alone made the
+        # answer depend on how many Ibrahims happened to be in the tree when the pass ran.
+        # Tribal eponyms sit at 1-6 continuations, personal names in the dozens or hundreds.
+        if len(continuations(work, chain)) > 3:
+            return False
         bearers = store._byname.get(nasab.normalise(chain[0]), ())
         if scope is not None:
             bearers = [b for b in bearers if b in scope]
-        # uniqueness is judged inside the declared trunk: Qahtan's Ya'rub and Isma'il's are two
+        # then uniqueness inside the declared trunk: Qahtan's Ya'rub and Isma'il's are two
         # different men, and neither should block the other from growing its own side
         return len(bearers) == 1
     if len(chain) >= 4:

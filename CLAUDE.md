@@ -131,15 +131,20 @@ python3 tools/phase6_ansar.py     --write      # Ansar clans + companion entries
 python3 tools/phase6b_notables.py --write      # marquee companions, by hand-quoted chain
 python3 tools/extract_kunya.py    --write      # kunyas from entry bodies
 python3 tools/kunya_notables.py   --write      # kunyas for the directory people
-python3 tools/merge.py            --write      # collapse spelling-variant duplicates
-python3 tools/prune.py            --write      # repair, then drop what was never a name
+python3 tools/prune.py            --write      # repair names, then drop what was never a name
+python3 tools/merge.py            --write      # collapse duplicates - AFTER prune, see below
 python3 tools/retranslit.py       --write      # re-read Latin forms in place
 python3 validate.py && python3 test_wasl.py && python3 build.py
 ```
 
 Phase 1 and Phase 3 are hand-seeded and live in the base commit; `tools/seed_phase1.py` and
 `tools/phase3_ahlbayt.py` are kept as the record of how they were built. Roughly ten minutes end
-to end. `merge` before `prune` (merging can expose junk), `retranslit` last (it only relabels).
+to end.
+
+**`prune` must run before `merge`.** Prune *repairs* names before dropping anything - `Umar
+amuhu al-Shayba` becomes `Umar` - and a repair can turn two differently-named siblings into
+duplicates. Run the other way round, merge never sees them: Ali ended up with two sons called
+Umar exactly this way. `retranslit` is last because it only relabels.
 
 ## Corpus gotchas
 - OpenITI mARkdown: `#` starts a paragraph, `~~` continues it, `### |` is a heading,

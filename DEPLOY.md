@@ -64,7 +64,7 @@ git add -A && git commit -m "..." && git push
 
 Pages redeploys on push, usually within a minute. The CI workflow in
 `.github/workflows/verify.yml` runs the same three commands on every push: it fetches the
-pinned source texts, re-proves all 5,407 quotations against them, and **fails if `index.html`
+pinned source texts, re-proves all 2,986 quotations against them, and **fails if `index.html`
 is stale relative to the data** — so a page that no longer matches its own sources cannot sit
 in the repository unnoticed.
 

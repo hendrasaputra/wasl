@@ -46,14 +46,14 @@ difference would have been wrong.
 | # | Scope | Added | Method |
 |---|---|---|---|
 | 1 ✅ | Muḥammad ﷺ → Ādam, 50 generations | 52 | hand |
-| 2 ✅ | Quraysh, under Fihr b. Mālik | ~760 | parser |
+| 2 ✅ | Quraysh, under Fihr b. Mālik | ~400 | parser |
 | 3 ✅ | Banū Hāshim and the household | 24 | hand |
 | 4 ✅ | The Ṣaḥāba, from the two companion dictionaries | — | parser |
-| 5 ✅ | Qaḥṭān and the tribes, to al-Aws and al-Khazraj | ~2,600 | parser + hand-seeded spine |
-| 6 ✅ | The Anṣār clans and the companions that could not anchor | ~500 | parser |
+| 5 ✅ | Qaḥṭān and the tribes, to al-Aws and al-Khazraj | ~1,200 | parser + hand-seeded spine |
+| 6 ✅ | The Anṣār clans and the companions that could not anchor | ~260 | parser |
 | — ✅ | Marquee companions introduced by kunya | 13 | hand |
 
-**Current: 3,865 persons · 5,407 claims · 3,867 links · 459 Ṣaḥāba · 7 works.**
+**Current: 1,957 persons · 2,986 claims · 1,959 links · 219 Ṣaḥāba · 7 works.**
 
 ## The bugs worth not relearning
 
@@ -105,15 +105,15 @@ a Who's who, and source-grounded bands rather than invented centuries.
 
 ## Ceilings, and when they bind
 
-- `index.html` is ~4 MB at 3,865 nodes and renders in one paint. It holds to roughly 10k. Past
+- `index.html` is ~2 MB at 1,957 nodes and renders in one paint. It holds to roughly 10k. Past
   that, render children on click from the JSONL instead of baking them into the page.
-- Transliteration of unvocalised Arabic cannot be solved, only widened: **379 of 3,865** names
+- Transliteration of unvocalised Arabic cannot be solved, only widened: **175 of 1,957** names
   still fall back to a consonant skeleton, flagged `translit_provisional`. Each reading added to
   `tools/translit.py` reduces the count.
 - `tools/prune.py` recognises misparses by shape, which is a heuristic and always will be. It
   repairs before it prunes and protects hand-seeded spines; an early draft's length rule would
   have deleted Udd and Murr with 203 descendants.
-- Only **20 women** are in the tree. The `bint` fix removed the structural cause; the remaining
+- Only **17 women** are in the tree. The `bint` fix removed the structural cause; the remaining
   limit is that most women in the companion dictionaries have fathers not yet anchored.
 
 ## Responsive: the plan for phones

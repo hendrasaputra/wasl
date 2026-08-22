@@ -5,8 +5,8 @@
 *waṣl* — "the link, the joining". Every link in this tree is joined to a page of a printed
 critical edition, and the join is checked by machine, not by trust.
 
-**3,865 persons · 5,407 sourced claims · 3,867 links · 7 primary works** — the lineage of the
-Prophet Muḥammad ﷺ back to Ādam, his household, 459 Ṣaḥāba, and the Arab tribes down to
+**1,957 persons · 2,986 sourced claims · 1,959 links · 7 primary works** — the lineage of the
+Prophet Muḥammad ﷺ back to Ādam, his household, 219 Ṣaḥāba, and the Arab tribes down to
 al-Aws and al-Khazraj on the Qaḥṭānī side. Every Arabic quotation is re-read out of the source
 text at the cited page before the page is written.
 
@@ -15,7 +15,7 @@ browser. No server, no build step, no network.
 
 [![verify](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml/badge.svg)](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml)
 
-Every push re-fetches the pinned texts, re-proves all 5,407 quotations against them, runs 31
+Every push re-fetches the pinned texts, re-proves all 2,986 quotations against them, runs 31
 independent checks, and fails if the published page is stale. See [DEPLOY.md](DEPLOY.md).
 
 ---
@@ -111,7 +111,7 @@ indexer, and confirms the checker actually rejects a fabricated quote and a wron
 
 **Not proven:** that a parser-placed node sits under the right man. Its quotation is verified —
 the Arabic really is on that page — but the **placement rests on the anchor**, which the machine
-cannot confirm. 5,158 of 5,407 claims are parser-placed; their nodes are badged **`auto`** in
+cannot confirm. 2,663 of 2,986 claims are parser-placed; their nodes are badged **`auto`** in
 the page itself, not only here. Hand-seeded spines, Phase 1, Phase 3 and the notables carry no
 badge. **Treat the badge as the boundary between proven and inferred.**
 
@@ -229,7 +229,7 @@ people.jsonl     source of truth — identity only
 claims.jsonl     source of truth — every relationship, name, kunya and date, each cited
 nasab.py         corpus index: resolves a quote to its true volume and page span
 validate.py      the proof. Must pass before every commit
-test_wasl.py     31 independent checks, sharing no code with the indexer
+test_wasl.py     35 independent checks, sharing no code with the indexer
 build.py         renders index.html
 template.html    the page shell: palette, layout, views, search
 tools/           extraction and maintenance; the replay pipeline is in CLAUDE.md
