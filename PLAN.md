@@ -73,18 +73,76 @@ and ʿĀmir — the last reported by Ibn ʿAbd al-Barr and rejected by him in th
 
 Two printing errors in the editions are flagged in `text_note` rather than silently corrected.
 
-### Phase 2 — Quraysh — next
-Descendants of Quṣayy and ʿAbd Manāf, from Ibn Hishām, Ibn Saʿd vol. 1, and Ibn Ḥazm (whose
-*Jamhara* is organised exactly this way). ~300 nodes. This is the trunk every Ṣaḥābī hangs off,
-and the first phase where the tree actually branches — the renderer already handles it.
+### Phase 2 — Quraysh ✅
+**+116 persons.** Everything the books hang under Fihr b. Mālik, which Ibn Ḥazm defines as
+exactly the set of people called Qurashī. Built the extraction engine: `tools/translit.py`,
+`tools/ingest.py`, `tools/extract_walad.py` for the `fa-walada X: A, B, C` shape.
 
-### Phase 3 — Ṣaḥāba
-al-Istīʿāb and Usd al-Ghāba, whose entries each open with a nasab chain in a formulaic
-`X بن Y بن Z` shape. `tools/extract_chain.py` already parses that shape; the loop is
-propose → `validate.py` proves the quote → human approves the diff. 5–10k nodes.
+The engine's three precision rules were each added because a fifteen-line sample caught the
+draft failing — see **Precision** below. The loose resolver produced 2,056 people under Fihr;
+the strict one produces 116, and a large share of the other 1,940 would have been wrong.
 
-### Phase 4 — tribal breadth
-al-Balādhurī and Ibn al-Kalbī beyond Quraysh.
+### Phase 3 — Banū Hāshim and the household ✅
+**+24 persons, 16 women now in the tree.** Hand-authored, not parsed: `fa-walada Muḥammad b.
+ʿAbd Allāh` names a different man on nearly every page, so the extractor is right to refuse it
+and the Prophet's own children have to come from passages that name him unmistakably.
+
+ʿAbd al-Muṭṭalib's ten sons and six daughters (Ibn Hishām 1:108); the Prophet's seven children
+(Ibn Saʿd 1:110); Ibrāhīm by Māriya (al-Istīʿāb 1:53); Abū Ṭālib's four sons (al-Balādhurī);
+al-Ḥasan, al-Ḥusayn, al-Muḥsin, Zaynab and Umm Kulthūm by Fāṭima (Ibn Ḥazm 1:15); Khadīja bt.
+Khuwaylid, joining the household back into the Quraysh trunk.
+
+The birth order of the Prophet's children is recorded twice and the two disagree; both are kept.
+`build.py` now hangs a child on its mother where the books name no father, badged *via mother*.
+
+### Phase 4 — the Ṣaḥāba ✅
+**+653 persons.** `tools/extract_entry.py` reads the shape both companion dictionaries share:
+an entry opens with a full nasab chain, which is a ladder down from someone the tree already
+holds. 11,805 entries scanned, 335 anchored over four rounds.
+
+The attach rate is low for a reason worth stating: most Ṣaḥāba are Anṣār, and Qaḥṭān was not in
+the tree yet.
+
+### Phase 5 — Qaḥṭān and the tribes ✅
+**+812 persons; 1,657 total.** Qaḥṭān is seeded as a **root**, not hung under Sām or Ismāʿīl:
+al-Balādhurī gives three incompatible origins for him and Ibn Ḥazm says outright that nothing
+above him is sound. All three are stored as claims; none becomes a tree edge. It is the Yemeni
+counterpart of the ceiling at ʿAdnān.
+
+The spine from Qaḥṭān down to al-Aws and al-Khazraj is hand-seeded from two sentences in Ibn
+Hishām, for the same reason Phase 1 was: without a correct backbone the parser anchors onto the
+wrong man. An earlier run hung al-Aws on a `al-Ḥārith b. Qaḥṭān` — visible in a sample, never in
+the totals.
+
+Three engine fixes: an O(people × claims) alias scan that turned a run into a ten-minute hang
+(now indexed, 0.7 s per pass); one-name chains resolving on uniqueness *within the declared
+trunk*; entry anchors requiring four names rather than three.
+
+## Precision
+
+Recall is sacrificed to precision deliberately. The rules that do it:
+
+1. **A chain resolves only if the whole chain matches one path in the tree.** A suffix match is
+   a wrong answer, so it must be no answer.
+2. **Ask the corpus how ambiguous its own phrase is.** `Quṣayy b. Kilāb` has one continuation;
+   `Muḥammad b. ʿAbd Allāh` has 32 in Ibn Saʿd alone. Correctly refuses `Hāshim b. ʿAbd Manāf`,
+   since Ibn Ḥazm records two of them.
+3. **A one-name chain resolves on uniqueness inside the declared trunk**, so a disputed eponym
+   is not mistaken for a common name.
+4. **Spines are hand-seeded**; parsers grow outward from them, never inward to them.
+5. **Always sample before writing.** Every bug above was invisible in the totals and obvious in
+   fifteen sampled lines.
+
+### What remains uncertain
+A parser-placed node is badged `auto` and carries `source_pattern`. Its quotation is verified —
+the Arabic really is on that page. Its *placement* rests on the anchor being the right man,
+which the machine cannot prove. 2,065 of 2,312 claims are parser-placed. The badge is the
+boundary between what is proven and what is inferred, and it is in the page, not just the docs.
+
+### Next
+Not a Phase 6 so much as more of Phase 4: each hand-seeded trunk unlocks a further tranche of
+companion entries that previously had nothing to anchor to. Additive — nothing already in the
+file has to change.
 
 ## On dates
 
@@ -101,12 +159,16 @@ This is the one requirement the sources refuse, and the refusal is itself worth 
 
 ## Ceilings, and when they bind
 
-- `index.html` as one self-contained file holds to roughly 5–10k nodes. Past that, render
-  children on click from the JSONL instead of baking them into the page. Bites in Phase 3.
+- `index.html` is 1.8 MB at 1,657 nodes: one paint, 4 ms search, 22 ms to open a citation
+  panel. It holds to roughly 5–10k nodes. Past that, render children on click from the JSONL
+  instead of baking them into the page.
+- Transliteration of unvocalised Arabic cannot be solved, only widened: 715 of 1,657 names fall
+  back to a consonant skeleton and are flagged `translit_provisional`. Each name added to the
+  dictionary in `tools/translit.py` reduces the count. The Arabic is always authoritative.
 - Arabic renders in whatever naskh face the reader's OS provides. Embedding Amiri would cost
   ~300 KB and make the file certain rather than likely. Worth doing when the project is shared.
-- `validate.py` scans each work linearly. Fine at 177 claims; index once and reuse if Phase 3
-  makes it slow.
+- `validate.py` re-reads all 2,312 quotes in a few seconds. Quote lookups are cached; if a
+  later phase makes it slow, the index is the thing to reuse across works.
 
 ## Deliberately not built
 

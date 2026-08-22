@@ -77,7 +77,24 @@ and `child_of` also matches recorded aliases, so `Amir wa-huwa Mudrika` resolves
 Mudrika instead of minting a twin.
 
 **Always sample the output before writing.** Every bug above was invisible in the totals and
-obvious in fifteen sampled lines.
+obvious in fifteen sampled lines. The recurring failure is a plausible-looking name attached to
+the wrong man; totals cannot show it and `validate.py` cannot either, because the quote is
+genuinely on the page. Only reading the lines shows it.
+
+**Seed a spine by hand before parsing into new territory.** Parsers grow outward from a correct
+backbone; they cannot find one. Phase 5 hung al-Aws on a `al-Harith b. Qahtan` until the real
+Qahtan-to-Ansar chain was seeded from Ibn Hisham.
+
+**Watch the cost of a scan inside a resolver.** `aliases_of` walked every claim per person,
+making chain resolution O(people x claims) - a ten-minute hang that became 0.7s per pass once
+indexed. Anything called per-statement must be O(1).
+
+## What is proven and what is inferred
+
+`validate.py` proves the QUOTE: the Arabic really is on the page cited. It cannot prove the
+PLACEMENT: that the man the chain anchored to is the man the text meant. Parser-placed claims
+carry `source_pattern` and their nodes are badged `auto` in the page. Never describe an `auto`
+node as verified without that distinction - in the docs, in commit messages, or to the user.
 
 ## Corpus gotchas
 - OpenITI mARkdown: `#` starts a paragraph, `~~` continues it, `### |` is a heading,
