@@ -5,7 +5,7 @@
 *waṣl* — "the link, the joining". Every link in this tree is joined to a page of a printed
 critical edition, and the join is checked by machine, not by trust.
 
-**Six phases complete: 3,979 persons, 5,289 sourced claims, 3,981 links, drawn from
+**Six phases complete: 3,979 persons, 5,604 sourced claims, 3,981 links, drawn from
 7 primary works — every Arabic quotation re-read out of the source text at the cited page
 before the page was written.**
 
@@ -250,6 +250,12 @@ went into navigation.
 - **A Who's who** lists the 36 people a reader actually arrives looking for — the four caliphs,
   the household, the ten, Anṣār leaders, the landmarks of the chain — resolved at build time
   from the chain that identifies each, so a link can never point nowhere.
+- **Search by kunya.** A reader looks for *Abū Bakr*, not for ʿAbd Allāh b. ʿUthmān. 189 people
+  carry a kunya harvested from the sources — 315 cited claims, each quoting the sentence that
+  states it. `abu hafs` returns ʿUmar b. al-Khaṭṭāb alone; `أبا حفص`, `أبي حفص` and `أبو حفص`
+  all reach him, because the accusative and genitive fold onto the nominative. Several kunyas
+  on one man is not an error: Zayd b. Thābit is reported as Abū Saʿīd, Abū Khārija **and** Abū
+  ʿAbd al-Raḥmān, and all three are kept with their quotes.
 - **Search finds the name you know, not the name in the file.** Abū Bakr is recorded under his
   given name, ʿAbd Allāh; searching "abu bakr", or even "siddiq", now reaches him, because the
   directory label, note, kunya and laqab fold into the index. Results are ranked so a name the

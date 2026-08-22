@@ -76,6 +76,13 @@ reported, never guessed at. `store.person(name, father=...)` treats identity as 
 and `child_of` also matches recorded aliases, so `Amir wa-huwa Mudrika` resolves to the existing
 Mudrika instead of minting a twin.
 
+**A probe must begin a chain.** Any search for a person by their chain will otherwise match
+inside longer chains and attribute whatever follows to the wrong man - this is how Fihr b. Malik
+was briefly given Umar's son's kunya. Check the preceding characters for `bn `.
+
+**A chain in the text is often broken by an honorific** - `Umar b. al-Khattab, radiya Allahu
+anhu, ibn Nufayl`. A probe that assumes contiguity will miss the most famous men in the corpus.
+
 **Always sample the output before writing.** Every bug above was invisible in the totals and
 obvious in fifteen sampled lines. The recurring failure is a plausible-looking name attached to
 the wrong man; totals cannot show it and `validate.py` cannot either, because the quote is
