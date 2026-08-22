@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Arabic -> ALA-LC transliteration.
 
 Unvocalised Arabic does not carry the vowels transliteration needs: عمرو is ʿAmr, but the

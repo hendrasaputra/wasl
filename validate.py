@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Prove the dataset against the primary texts. Must pass before every commit.
 
 The load-bearing check is #4: every Arabic quote is re-read out of the pinned corpus file at

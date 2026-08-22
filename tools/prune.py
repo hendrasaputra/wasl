@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Remove nodes the parsers created out of prose rather than out of names.
 
 A splitter that cuts a child list on punctuation will occasionally cut a clause instead: 'qutila

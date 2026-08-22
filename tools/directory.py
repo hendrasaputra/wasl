@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """The people a reader arrives looking for.
 
 Shared by build.py (which renders the Who's who and resolves each to an id) and by the kunya

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Phase 4 - the Sahaba, from the two dedicated companion dictionaries.
 
 Each entry opens with a nasab chain, so the work is to attach that chain to the deepest

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Re-read every person's Latin form against the current dictionary, in place.
 
 Ids are never touched: they are referenced by thousands of claims, and a name is a label, not

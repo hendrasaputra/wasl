@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Phase 3 - Banu Hashim and the Prophet's household.
 
 Hand-authored, not parsed: 'fa-walada Muhammad b. Abd Allah' names a different man on nearly

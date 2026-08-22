@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Shared corpus access: prove that a cited Arabic quote really is on the cited page.
 
 OpenITI mARkdown puts a PageV##P### milestone at the END of the page it closes, so page N's

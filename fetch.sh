@@ -1,4 +1,6 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 # Download the pinned OpenITI source texts into corpus/.
 # Files are gitignored; corpus/SHA256SUMS is committed so any drift is detectable.
 set -eu

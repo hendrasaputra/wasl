@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Parse 'fa-walada X: A, B, C' statements - the standard shape of a genealogy book.
 
 Ibn Hazm and Ibn al-Kalbi are built almost entirely out of these, so one parser opens both.

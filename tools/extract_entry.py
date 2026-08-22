@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Attach a Sahabi's entry-heading chain to the deepest ancestor already in the tree.
 
 al-Isti'ab puts the full nasab in the entry heading; Usd al-Ghaba puts it in the first lines of

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """One-shot seed for Phase 1 (Muhammad -> Adam).
 
 Emits people.jsonl and claims.jsonl. Every Arabic string here was copied out of a file in

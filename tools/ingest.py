@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Shared ingest layer: mint people, add claims, refuse anything the corpus does not support.
 
 Every add_claim call verifies the quote against the pinned text before the claim exists, so an

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Propose person + father_of rows from a nasab chain in the corpus.
 
 Not a source of truth: it drafts JSONL that a human reviews and validate.py proves.

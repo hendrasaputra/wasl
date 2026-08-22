@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Harvest kunyas from the companion dictionaries.
 
 A reader looks for 'Abu Bakr', not for 'Abd Allah b. Uthman'. The sources give the kunya

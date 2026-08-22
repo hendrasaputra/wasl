@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Phase 5 - the Arabs beyond Quraysh: Qahtan, and Adnan's other branches.
 
 Qahtan is seeded as a root, not hung under Sam or Isma'il, because the sources do not agree

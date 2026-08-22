@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Seed the companions a reader will actually look for.
 
 The generic parser reaches a companion only when his entry opens with a plain 'X b. Y b. Z'.

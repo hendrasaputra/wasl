@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Merge people the sources spell two ways.
 
 Editions differ on a letter and the parsers, quite correctly, refuse to assume: 'Rawah b. Adi'

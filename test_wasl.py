@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Independent checks. validate.py trusts nasab.py's page mapping; these do not - they
 re-derive page boundaries straight from the raw corpus file with plain string operations,
 and confirm the checker actually rejects bad data rather than waving it through.

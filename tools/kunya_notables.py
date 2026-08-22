@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
 """Give the people in the directory the kunya the sources give them.
 
 Not by supplying the kunya and looking for it - that would be deciding the answer first. We
