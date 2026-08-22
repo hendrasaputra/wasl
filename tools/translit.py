@@ -171,12 +171,42 @@ NAMES.update(EXTRA)
 # connectives and epithets: they belong to a name without being one, so a name built from
 # dictionary words plus these should not be flagged provisional
 NAMES.update({
- "بنت":"bt.","بن":"b.","ابن":"b.","أبي":"Abī","أبو":"Abū","أبا":"Abū","أم":"Umm",
+ "بنت":"bt.","بن":"b.","ابن":"b.","أبو":"Abū","أبا":"Abū","أم":"Umm",
  "الأكبر":"al-Akbar","الأصغر":"al-Aṣghar","الشاعر":"al-Shāʿir","الجواد":"al-Jawād",
  "جذل":"Jidhl","الطعان":"al-Ṭiʿān","حبيش":"Ḥubaysh","حثمة":"Ḥathma","الحشر":"al-Ḥashr",
  "ذكوان":"Dhakwān","العزي":"al-ʿUzzā","العاس":"al-ʿĀṣ","غرازة":"Gharāza","شاكر":"Shākir",
  "قحافة":"Quḥāfa","أحيحة":"Uḥayḥa","عرار":"ʿArār","جديلة":"Jadīla","كندي":"Kindī",
  "المختار":"al-Mukhtār","الواثق":"al-Wāthiq","البختري":"al-Bakhtarī","الشداخ":"al-Shaddākh",
+})
+
+
+# --- added after Phase 6: the Ansar clans and the companions
+NAMES.update({
+ "المنذر":"al-Mundhir","سالم":"Sālim","ساعدة":"Sāʿida","رفاعة":"Rifāʿa","الصامت":"al-Ṣāmit",
+ "مجدعة":"Majdaʿa","أصرم":"Aṣram","ضبيعة":"Ḍubayʿa","عتيك":"ʿAtīk","نابي":"Nābī",
+ "خديج":"Khadīj","شريك":"Sharīk","التيهان":"al-Tayyihān","رئاب":"Riʾāb","الجلاح":"al-Julāḥ",
+ "معن":"Maʿn","خداش":"Khidāsh","منبه":"Munabbih","الأعور":"al-Aʿwar","يربوع":"Yarbūʿ",
+ "البراء":"al-Barāʾ","عرفجة":"ʿArfaja","المعلى":"al-Muʿallā","الأصم":"al-Aṣamm",
+ "عائش":"ʿĀʾish","كلفة":"Kalafa","لبيد":"Labīd","الحريش":"al-Ḥuraysh","إساف":"Isāf",
+ "حصين":"Ḥuṣayn","حسان":"Ḥassān","ملحان":"Milḥān","الحسحاس":"al-Ḥasḥās","طليب":"Ṭulayb",
+ "عنز":"ʿAnz","العطاف":"al-ʿAṭṭāf","حجر":"Ḥujr","ضباب":"Ḍibāb","سواءة":"Sawāʾa",
+ "تيم الله":"Taym Allāh","الحليس":"al-Ḥulays","عائذة":"ʿĀʾidha","المسيب":"al-Musayyib",
+ "أيمن":"Aymān","عبد الأشهل":"ʿAbd al-Ashhal","سماك":"Simāk","ظهير":"Ẓuhayr","همام":"Hammām",
+ "قيظي":"Qayẓī","حارث":"Ḥārith","عازب":"ʿĀzib","كرز":"Kurz","عنمة":"ʿAnama","عبدة":"ʿAbda",
+ "الجموح":"al-Jamūḥ","خراش":"Khirāsh","خلاد":"Khallād","خليدة":"Khulayda","زنبر":"Zanbar",
+ "عبد المنذر":"ʿAbd al-Mundhir","هيشة":"Haysha","سبيع":"Subayʿ","القين":"al-Qayn",
+ "وقش":"Waqsh","مجمع":"Mujammiʿ","جارية":"Jāriya","زائدة":"Zāʾida","عتاب":"ʿAttāb",
+ "زعوراء":"Zaʿūrāʾ","جحجبي":"Jaḥjabā","ناقد":"Nāqid","فضالة":"Faḍāla","الدخشم":"al-Dukhshum",
+ "محمود":"Maḥmūd","نويرة":"Nuwayra","نهيك":"Nuhayk","زريق":"Zurayq","خلدة":"Khalada",
+ "النجار":"al-Najjār","ضمضم":"Ḍamḍam","ظفر":"Ẓafar","جبل":"Jabal","ثعلبة":"Thaʿlaba",
+ "الضحاك":"al-Ḍaḥḥāk","حضير":"Ḥuḍayr","النعمان":"al-Nuʿmān","عمرو بن عوف":"ʿAmr b. ʿAwf",
+ "بياضة":"Bayāḍa","زهرة بن كلاب":"Zuhra","سلمة":"Salama","حرام":"Ḥarām","عبيد":"ʿUbayd",
+ "غنم":"Ghanm","دينار":"Dīnār","مالك بن النجار":"Mālik","عدي بن النجار":"ʿAdī",
+ "مازن بن النجار":"Māzin","عوف بن الخزرج":"ʿAwf","جشم بن الخزرج":"Jusham",
+ "امرؤ القيس":"Imruʾ al-Qays","الأبجر":"al-Abjar","خنساء":"Khansāʾ","بلحارث":"Bal-Ḥārith",
+ "أنيف":"Unayf","لوذان":"Lawdhān","سنان":"Sinān","أحمر":"Aḥmar","عصمة":"ʿIṣma",
+ "قتادة":"Qatāda","بشير":"Bashīr","رواحة":"Rawāḥa","مسعود":"Masʿūd","أوس بن ثابت":"Aws",
+ "قوقل":"Qawqal","سلمي":"Salamī","حبيب":"Ḥabīb","صخر":"Ṣakhr","أبي بن كعب":"Ubayy b. Kaʿb",
 })
 
 CONS = {"ا":"a","أ":"a","إ":"i","آ":"ā","ء":"ʾ","ب":"b","ت":"t","ث":"th","ج":"j","ح":"ḥ",
@@ -214,7 +244,11 @@ def translit(ar):
     if bare:
         return "al-" + NAMES[bare], False
     parts, prov = [], False
-    for word in ar.split():
+    words = ar.split()
+    for wi, word in enumerate(words):
+        if word == "أبي":
+            parts.append("Ubayy" if wi == 0 else "Abī")
+            continue
         # look the whole word up FIRST: 'al-Walid' is in the dictionary as one entry, and
         # stripping the article before looking made it miss and fall back to a skeleton
         hw = _look(word)

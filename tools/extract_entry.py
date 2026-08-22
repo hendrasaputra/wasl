@@ -44,8 +44,11 @@ def entries(work, text):
             yield (head + " " + body) if head else body
 
 
-def run(work, store, limit=None, quiet=True, min_anchor=4):
-    # four names, not three: three let entries anchor onto the wrong man
+def run(work, store, limit=None, quiet=True, min_anchor=2):
+    # The length gate defers to identifies(), which asks the corpus how ambiguous the phrase is.
+    # A blunt gate of 4 meant a four-name chain could never anchor - the longest tail excluding
+    # the entry's own name is three - so 'Abd Allah b. Umar b. al-Khattab b. Nufayl' was
+    # silently skipped, and with it most of the companion dictionary.
     raw = open(f"{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/corpus/{work}.txt",
                encoding="utf-8").read()
     txt_lines = [l for l in raw.split("\n") if not l.startswith("#META#")]

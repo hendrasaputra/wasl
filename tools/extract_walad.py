@@ -94,10 +94,12 @@ def children(work, blob):
         piece = re.sub(r"([ء-ي])\s+و(?=[ء-ي])", r"\1، و", piece)
         parts = re.split(r"،", piece)
         for i, sub in enumerate(parts):
-            s = norm_name(re.sub(r"^\s*و", "", sub.strip()))
-            if not s or STOP.match(s):
+            raw = norm_name(re.sub(r"^\s*و", "", sub.strip()))
+            if not raw:
                 continue
-            s = BN.split(s)[0].strip()          # a child named "X bn Y" restates the father
+            if STOP.match(raw):
+                break            # commentary has begun; nothing after it in this clause is a name
+            s = BN.split(raw)[0].strip()        # a child named "X bn Y" restates the father
             s = re.sub(r"\s*\(.*", "", s).strip()
             if not (2 <= len(s) <= 24 and re.match(r"^[ء-ي]", s) and is_name(work, s)):
                 break
@@ -109,7 +111,8 @@ def children(work, blob):
                     if a and is_name(work, a):
                         alias = a
             out.append((s, alias))
-            break                                # only the first comma-clause names a person
+            # keep going: 'walada al-Khazraj: Amr, Awf, Jusham, Ka'b, al-Harith' is five sons,
+            # and taking only the first cost the whole Ansar clan structure
     return out
 
 
