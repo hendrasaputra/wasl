@@ -78,6 +78,9 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
   color:var(--ink-dim);overflow-x:auto;white-space:nowrap}
 #crumb a{color:var(--gold-lt);text-decoration:none;cursor:pointer}
 #crumb a:hover{text-decoration:underline}
+#crumb a.ell{color:var(--grn-1);border:1px dotted var(--rule);border-radius:6px;padding:1px 8px;
+  font-size:11.5px}
+#crumb a.ell:hover{color:var(--gold-lt);text-decoration:none;background:rgba(169,139,66,.14)}
 #crumb i{color:var(--grn-1);font-style:normal;margin:0 6px}
 @keyframes flash{0%,100%{box-shadow:inset 0 0 0 1px var(--gold)}
   50%{box-shadow:inset 0 0 0 2px var(--gold),0 0 0 6px rgba(169,139,66,.28)}}
@@ -145,8 +148,12 @@ summary.hide{display:none}
 summary.hit .lat{color:var(--gold-lt)}
 
 /* ---------- the unbranching prologue, as a ribbon rather than 28 levels of scroll ---------- */
-.ribbon{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:2px 0 14px;padding:10px 12px;
+.ribbon{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:2px 0 14px;padding:10px 12px;
   border:1px dotted var(--rule);border-radius:10px;background:rgba(10,58,39,.5)}
+.ribbon.inline{margin:1px 0 1px 6px;padding:3px 9px;border-radius:7px;background:transparent;
+  border:0;border-left:1px dotted var(--rule)}
+.ribbon.inline .rl{margin-right:4px;opacity:.75}
+.ribbon.inline b{font-size:12px;padding:0 4px}
 .ribbon .rl{font:600 10px/1 var(--sans);letter-spacing:.9px;text-transform:uppercase;
   color:var(--grn-1);margin-right:6px}
 .ribbon b{font:500 12.5px/1.7 var(--sans);color:var(--gold-lt);cursor:pointer;padding:0 6px;
@@ -188,9 +195,17 @@ summary.hit .lat{color:var(--gold-lt)}
 /* ---------- citation panel ---------- */
 #panel{position:sticky;top:110px;height:calc(100vh - 110px);overflow-y:auto;
   padding:22px;background:var(--panel);border-left:1px solid var(--line)}
-#panel h2{margin:0;font-size:15px;font-weight:600;color:var(--gold-lt);letter-spacing:.3px}
-#panel .pname{font-family:var(--arabic);font-size:38px;color:var(--ink);margin:2px 0 0;direction:rtl}
-#panel .plat{color:var(--ink-dim);font-size:14px;margin-bottom:4px}
+.phead{padding-bottom:14px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+#panel h2{margin:0 0 6px;font:600 10.5px/1.4 var(--sans);letter-spacing:1.1px;
+  text-transform:uppercase;color:var(--grn-1);display:flex;flex-wrap:wrap;gap:6px}
+#panel h2 em{font-style:normal;color:var(--gold-lt)}
+/* the name is Arabic but the column is left-to-right: dir shapes the script, text-align keeps
+   it in the same left edge as everything under it, so the header stops looking ragged */
+#panel .pname{font-family:var(--arabic);font-size:38px;line-height:1.35;color:var(--ink);
+  margin:0;direction:rtl;text-align:left;unicode-bidi:isolate}
+#panel .plat{color:var(--ink);font-size:15px;margin-top:2px}
+#panel .pnote{color:var(--ink-dim);font-size:12.5px;line-height:1.6;margin-top:8px;
+  padding-left:9px;border-left:2px solid var(--rule)}
 #panel .meta{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 18px}
 #panel .meta span{border:1px solid var(--line);border-radius:6px;padding:3px 9px;font-size:11.5px;
   color:var(--ink-dim)}
@@ -341,11 +356,21 @@ function show(pid){
       (ids.length>40 ? `<b class="m">+${ids.length-40} more</b>` : '') + '</div>'
     : '';
 
+  // eyebrow: what this person IS, from the data - not a placeholder phrase
+  const eyebrow = [
+    p.sahabi ? '<em>ṣaḥābī</em>' : null,
+    D.bands[D.band[pid]] ? D.bands[D.band[pid]][0] : null,
+    p.tribe || null,
+    `generation ${pathTo(pid).length}`,
+  ].filter(Boolean);
+
   $('#panel').innerHTML =
-    `<h2>${esc(p.kunya_lat || p.tribe || (p.sahabi ? 'ṣaḥābī' : 'in the lineage'))}</h2>
-     <div class="pname" dir="rtl" lang="ar">${esc(p.name_ar)}</div>
-     <div class="plat">${esc(p.name_lat)}</div>
-     ${p.note?`<div class="empty">${esc(p.note)}</div>`:''}
+    `<div class="phead">
+       <h2>${eyebrow.map(x => `<span>${x}</span>`).join('')}</h2>
+       <div class="pname" dir="rtl" lang="ar">${esc(p.name_ar)}</div>
+       <div class="plat">${esc(p.name_lat)}</div>
+       ${p.note?`<div class="pnote">${esc(p.note)}</div>`:''}
+     </div>
      <div class="meta">${meta.map(x=>`<span>${x}</span>`).join('')}</div>
      ${navRow('Children', chn)}${navRow('Brothers and sisters', sibs)}${groups}`;
   $('#panel').scrollTop = 0;
@@ -567,16 +592,34 @@ function applyLens(){
 }
 
 /* ---------- breadcrumb: where am I in 54 levels ---------- */
+const CRUMB_ENDS = 5;      // first five and last five; a 52-link trail is not a trail
+let crumbFull = false;
+
 function crumb(pid){
   const line = []; let c = pid;
   while (c) { line.unshift(c); c = D.father[c] || D.mother[c]; }
-  $('#crumb').innerHTML = line.map((id,i) =>
-    (i ? '<i>›</i>' : '') + (id===pid
-      ? `<b style="color:var(--ink)">${esc(D.people[id].name_lat)}</b>`
-      : `<a data-go="${id}">${esc(D.people[id].name_lat)}</a>`)).join('');
+  const seg = id => id === pid
+    ? `<b style="color:var(--ink)">${esc(D.people[id].name_lat)}</b>`
+    : `<a data-go="${id}">${esc(D.people[id].name_lat)}</a>`;
+  let html;
+  if (crumbFull || line.length <= CRUMB_ENDS * 2 + 1) {
+    html = line.map(seg).join('<i>›</i>');
+  } else {
+    const hidden = line.length - CRUMB_ENDS * 2;
+    html = line.slice(0, CRUMB_ENDS).map(seg).join('<i>›</i>')
+         + `<i>›</i><a class="ell" data-ell="1" title="show all ${line.length}">… ${hidden} more …</a><i>›</i>`
+         + line.slice(-CRUMB_ENDS).map(seg).join('<i>›</i>');
+  }
+  $('#crumb').innerHTML = html;
   $('#crumb').hidden = false;
+  $('#crumb').dataset.for = pid;
 }
 $('#crumb').addEventListener('click', e => {
+  if (e.target.closest('[data-ell]')) {
+    crumbFull = !crumbFull;
+    crumb($('#crumb').dataset.for);
+    return;
+  }
   const a = e.target.closest('[data-go]'); if (a) jump(a.dataset.go);
 });
 

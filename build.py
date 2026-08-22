@@ -169,38 +169,47 @@ def main():
                    f'<span class="lat">{html.escape(p["name_lat"])}{al}</span>'
                    f'<span class="badges">{"".join(badges)}</span></summary>')
         open_attr = " open" if pid in spine else ""
-        inner = "".join(node(k, depth + 1, gen + 1) for k in children)
-        # a lineage is mostly a single line; indent only where it actually forks
+        inner = subtree(children, depth + 1, gen + 1)
+        # a lineage forks rarely; indent only where it actually does
         cls = "kids linear" if len(children) == 1 else "kids"
         return f'<details{open_attr} id="{pid}">{summary}{f'<div class="{cls}">{inner}</div>' if inner else ""}</details>'
+
+    RUN_MIN = 3   # a run shorter than this is cheaper to read as rows than as a ribbon
+
+    def run_from(pid):
+        """The maximal chain of single-child links starting at pid."""
+        run = [pid]
+        while len(kids.get(run[-1], ())) == 1:
+            run.append(kids[run[-1]][0])
+        return run
+
+    def ribbon(run, gen):
+        """A chain of names on one line. Lossless: every node here has exactly one child, so
+        there is no branching to lose - only rows to save."""
+        links = "".join(
+            f'<b data-go="{i}">{html.escape(people[i]["name_lat"])}</b>' for i in run)
+        return (f'<div class="ribbon inline"><span class="rl">{len(run)}&nbsp;gen</span>'
+                f'{links}</div>')
+
+    def subtree(children, depth, gen):
+        """Render a set of children, folding any single-child chain among them into a ribbon."""
+        out = []
+        for c in children:
+            run = run_from(c)
+            if len(run) - 1 >= RUN_MIN:
+                # ribbon the chain, then resume the tree at the node that forks
+                out.append(ribbon(run[:-1], gen) + node(run[-1], depth, gen + len(run) - 1))
+            else:
+                out.append(node(c, depth, gen))
+        return "".join(out)
 
     # ---- the unbranching prologue. Adam to Udad is 28 links with exactly one child each: a
     # sequence, not a tree, and it currently eats half the scroll depth carrying no branching
     # information at all. Render it as a ribbon and start the tree where the tree begins.
-    prologue, starts = {}, []
-    for r in sorted(roots, key=lambda x: (x != "p.adam", x)):
-        chain, cur = [r], r
-        while len(kids.get(cur, ())) == 1:
-            cur = kids[cur][0]
-            chain.append(cur)
-        if len(chain) > 4:
-            prologue[r] = chain
-            starts.append(cur)              # the first node that actually forks
-        else:
-            starts.append(r)
-
-    def ribbon(r):
-        ch = prologue.get(r)
-        if not ch:
-            return ""
-        links = "".join(
-            f'<b data-go="{i}" title="{html.escape(people[i]["name_ar"])}">'
-            f'{html.escape(people[i]["name_lat"])}</b>' for i in ch[:-1])
-        return (f'<div class="ribbon"><span class="rl">{len(ch)-1} generations, '
-                f'no branching</span>{links}<i>→</i></div>')
-
-    tree = "".join(ribbon(r) + node(s, gen=1 + len(prologue.get(r, [])) - 1)
-                   for r, s in zip(sorted(roots, key=lambda x: (x != "p.adam", x)), starts))
+    ordered = sorted(roots, key=lambda x: (x != "p.adam", x))
+    tree = subtree(ordered, 0, 1)
+    prologue = {r: run_from(r) for r in ordered if len(run_from(r)) - 1 >= RUN_MIN}
+    starts = [run_from(r)[-1] if r in prologue else r for r in ordered]
 
     data = {
         "people": people,

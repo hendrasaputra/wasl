@@ -66,8 +66,8 @@
 {"id": "p.al-zubayr", "name_ar": "الزبير", "name_lat": "al-Zubayr", "sex": "M"}
 {"id": "p.al-muqawwim", "name_ar": "المقوم", "name_lat": "al-Muqawwim", "sex": "M"}
 {"id": "p.al-harith", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
-{"id": "p.hamza", "name_ar": "حمزة", "name_lat": "Ḥamza", "sex": "M", "sahabi": null}
-{"id": "p.al-abbas", "name_ar": "العباس", "name_lat": "al-ʿAbbās", "sex": "M", "sahabi": null}
+{"id": "p.hamza", "name_ar": "حمزة", "name_lat": "Ḥamza", "sex": "M", "sahabi": true}
+{"id": "p.al-abbas", "name_ar": "العباس", "name_lat": "al-ʿAbbās", "sex": "M", "sahabi": true}
 {"id": "p.al-tahir", "name_ar": "الطاهر", "name_lat": "al-Ṭāhir", "sex": "M"}
 {"id": "p.hajl", "name_ar": "حجل", "name_lat": "Ḥajl", "sex": "M"}
 {"id": "p.qra", "name_ar": "قرة", "name_lat": "Qurra", "sex": "M"}
@@ -75,8 +75,8 @@
 {"id": "p.bakr", "name_ar": "بكر", "name_lat": "Bakr", "sex": "M"}
 {"id": "p.abd-allah-3", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
 {"id": "p.abd-allah-4", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
-{"id": "p.jafar", "name_ar": "جعفر", "name_lat": "Jaʿfar", "sex": "M", "sahabi": null}
-{"id": "p.ali", "name_ar": "على", "name_lat": "ʿAlī", "sex": "M", "sahabi": null}
+{"id": "p.jafar", "name_ar": "جعفر", "name_lat": "Jaʿfar", "sex": "M", "sahabi": true}
+{"id": "p.ali", "name_ar": "على", "name_lat": "ʿAlī", "sex": "M", "sahabi": true}
 {"id": "p.aqil", "name_ar": "عقيل", "name_lat": "ʿAqīl", "sex": "M"}
 {"id": "p.talib", "name_ar": "طالب", "name_lat": "Ṭālib", "sex": "M"}
 {"id": "p.abd-allah-5", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
@@ -149,7 +149,7 @@
 {"id": "p.bd-al-harth", "name_ar": "عبد الحارث", "name_lat": "ʿAbd al-Ḥārith", "sex": "M"}
 {"id": "p.luayy-2", "name_ar": "لؤي", "name_lat": "Luʾayy", "sex": "M"}
 {"id": "p.bad-2", "name_ar": "عباد", "name_lat": "ʿAbbād", "sex": "M"}
-{"id": "p.al-hasan", "name_ar": "الحسن", "name_lat": "al-Ḥasan", "sex": "M", "sahabi": null}
+{"id": "p.al-hasan", "name_ar": "الحسن", "name_lat": "al-Ḥasan", "sex": "M", "sahabi": true}
 {"id": "p.abd-al-uzza-3", "name_ar": "عبد العزى", "name_lat": "ʿAbd al-ʿUzzā", "sex": "M"}
 {"id": "p.shrih", "name_ar": "شريح", "name_lat": "Shurayḥ", "sex": "M"}
 {"id": "p.abd-allah-11", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
@@ -160,11 +160,11 @@
 {"id": "p.al-harith-8", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
 {"id": "p.muhammad-5", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
 {"id": "p.khuwaylid", "name_ar": "خويلد", "name_lat": "Khuwaylid", "sex": "M"}
-{"id": "p.khadija", "name_ar": "خديجة", "name_lat": "Khadīja", "sex": "F", "id_alias": "p.khadija", "sahabi": null}
+{"id": "p.khadija", "name_ar": "خديجة", "name_lat": "Khadīja", "sex": "F", "id_alias": "p.khadija", "sahabi": true}
 {"id": "p.al-qasim", "name_ar": "القاسم", "name_lat": "al-Qāsim", "sex": "M"}
-{"id": "p.zaynab", "name_ar": "زينب", "name_lat": "Zaynab", "sex": "F", "sahabi": null}
+{"id": "p.zaynab", "name_ar": "زينب", "name_lat": "Zaynab", "sex": "F", "sahabi": true}
 {"id": "p.ruqayya", "name_ar": "رقية", "name_lat": "Ruqayya", "sex": "F"}
-{"id": "p.fatima", "name_ar": "فاطمة", "name_lat": "Fāṭima", "sex": "F", "sahabi": null}
+{"id": "p.fatima", "name_ar": "فاطمة", "name_lat": "Fāṭima", "sex": "F", "sahabi": true}
 {"id": "p.umm-kulthum", "name_ar": "أم كلثوم", "name_lat": "Umm Kulthūm", "sex": "F"}
 {"id": "p.abd-allah-12", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
 {"id": "p.hajl-2", "name_ar": "حجل", "name_lat": "Ḥajl", "sex": "M"}
@@ -176,11 +176,11 @@
 {"id": "p.umayma", "name_ar": "أميمة", "name_lat": "Umayma", "sex": "F"}
 {"id": "p.arwa", "name_ar": "أروى", "name_lat": "Arwā", "sex": "F"}
 {"id": "p.barra", "name_ar": "برة", "name_lat": "Barra", "sex": "F"}
-{"id": "p.al-husayn", "name_ar": "الحسين", "name_lat": "al-Ḥusayn", "sex": "M", "sahabi": null}
+{"id": "p.al-husayn", "name_ar": "الحسين", "name_lat": "al-Ḥusayn", "sex": "M", "sahabi": true}
 {"id": "p.al-muhsin", "name_ar": "المحسن", "name_lat": "al-Muḥsin", "sex": "M"}
 {"id": "p.zaynab-2", "name_ar": "زينب", "name_lat": "Zaynab", "sex": "F"}
 {"id": "p.umm-kulthum-2", "name_ar": "أم كلثوم", "name_lat": "Umm Kulthūm", "sex": "F"}
-{"id": "p.ibrahim-2", "name_ar": "إبراهيم", "name_lat": "Ibrāhīm", "sex": "M", "sahabi": null}
+{"id": "p.ibrahim-2", "name_ar": "إبراهيم", "name_lat": "Ibrāhīm", "sex": "M", "sahabi": true}
 {"id": "p.mariya-al-qibtiyya", "name_ar": "مارية القبطية", "name_lat": "Māriya al-Qibṭiyya", "sex": "F"}
 {"id": "p.utba", "name_ar": "عتبة", "name_lat": "ʿUtba", "sex": "M"}
 {"id": "p.bd-2", "name_ar": "عبد", "name_lat": "ʿAbd", "sex": "M", "sahabi": null}
@@ -827,8 +827,8 @@
 {"id": "p.amr-32", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
 {"id": "p.thalaba-6", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M"}
 {"id": "p.haritha-6", "name_ar": "حارثة", "name_lat": "Ḥāritha", "sex": "M"}
-{"id": "p.al-aws", "name_ar": "الأوس", "name_lat": "al-Aws", "sex": "M", "sahabi": null}
-{"id": "p.al-khazraj", "name_ar": "الخزرج", "name_lat": "al-Khazraj", "sex": "M", "sahabi": null}
+{"id": "p.al-aws", "name_ar": "الأوس", "name_lat": "al-Aws", "sex": "M", "sahabi": true}
+{"id": "p.al-khazraj", "name_ar": "الخزرج", "name_lat": "al-Khazraj", "sex": "M", "sahabi": true}
 {"id": "p.khalid-10", "name_ar": "خالد", "name_lat": "Khālid", "sex": "M"}
 {"id": "p.uthman-10", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
 {"id": "p.umar-3", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
@@ -2275,7 +2275,7 @@
 {"id": "p.abd-allah-108", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "sahabi": true}
 {"id": "p.abd-manaf-9", "name_ar": "عبد مناف", "name_lat": "ʿAbd Manāf", "sex": "M", "sahabi": null}
 {"id": "p.abd-allah-109", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "sahabi": true}
-{"id": "p.umar-18", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M", "sahabi": null}
+{"id": "p.umar-18", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M", "sahabi": true}
 {"id": "p.abd-allah-110", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "sahabi": true}
 {"id": "p.thalaba-26", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M", "sahabi": null}
 {"id": "p.haram-4", "name_ar": "حرام", "name_lat": "Ḥarām", "sex": "M", "sahabi": null}
