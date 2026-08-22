@@ -87,12 +87,15 @@ def locate(work, arabic):
 
 
 def page_text(work, vol, page):
+    """All text on one page. Some editions repeat a page marker once per report, so a page can
+    be several disjoint segments; concatenate them in order."""
     text, marks = index(work)
+    out = []
     for n, (off, v, p) in enumerate(marks):
         if (v, p) == (int(vol), int(page)):
             end = marks[n + 1][0] if n + 1 < len(marks) else len(text)
-            return text[off:end]
-    return ""
+            out.append(text[off:end])
+    return " ".join(out)
 
 
 if __name__ == "__main__":

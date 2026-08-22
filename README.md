@@ -115,6 +115,21 @@ day and interval, all recorded). The conventional 570 CE / 53 BH equation is sto
 labelled as a modern equation, not as something the text says. Every other node reads
 *"born · no year in these sources"*, which is the truthful answer.
 
+## What is and is not verified
+
+**Verified by machine, on every run:** that each Arabic quotation appears in the pinned source
+text at the volume and page the claim cites; that no claim references an unknown person or an
+undeclared work; that the parent graph has no cycles and no person has two different fathers;
+that no date carries an unrecognised basis. `test_wasl.py` re-derives page boundaries from the
+raw file *without* sharing code with the indexer, and confirms the checker actually rejects a
+fabricated quote and a wrong page number.
+
+**Not verified, and not claimable:** that the digitised text matches the paper edition
+character for character. Page numbers are those recorded in the OpenITI/Shamela transcription of
+the named print edition. Two evident printing or transcription errors met so far are flagged in
+`text_note` rather than silently corrected. Translations are ours and are not machine-checkable;
+the Arabic sits beside every one of them so the reader can judge.
+
 ## Layout
 
 ```

@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+"""Independent checks. validate.py trusts nasab.py's page mapping; these do not - they
+re-derive page boundaries straight from the raw corpus file with plain string operations,
+and confirm the checker actually rejects bad data rather than waving it through.
+
+    python3 test_wasl.py
+"""
+import json, os, re, sys
+import nasab
+
+ROOT = os.path.dirname(os.path.abspath(__file__))
+ok = 0
+
+
+def check(label, cond, detail=""):
+    global ok
+    print(("  ok   " if cond else "  FAIL ") + label + (f"  {detail}" if detail and not cond else ""))
+    if not cond:
+        sys.exit(1)
+    ok += 1
+
+
+def raw_page(work, vol, page):
+    """Slice page N straight out of the file with plain string ops - deliberately sharing no
+    code with nasab.py's index. Some editions (Ibn Sa'd) repeat the same page marker once per
+    report, so a page is several disjoint segments; take all of them."""
+    txt = open(f"{ROOT}/corpus/{work}.txt", encoding="utf-8").read()
+    mark = f"PageV{int(vol):02d}P{int(page):03d}"
+    any_mark = re.compile(r"PageV\d{2}P\d{3}")
+    out, at = [], 0
+    while True:
+        end = txt.find(mark, at)
+        if end < 0:
+            return " ".join(out)
+        prev = [m.end() for m in any_mark.finditer(txt, 0, end)]
+        out.append(txt[(prev[-1] if prev else 0):end])
+        at = end + len(mark)
+
+
+print("page mapping, re-derived from the raw file")
+for work, vol, page, needle in [
+    ("IbnHisham", 1, 1, "محمد بن عبد الله"),
+    ("IbnHisham", 1, 2, "واسم مدركة: عامر"),
+    ("IbnHisham", 1, 3, "بن شيث بن آدم"),
+    ("IbnSad", 1, 37, "واسمه شيبة الحمد"),
+    ("IbnAbdAlBarr", 1, 25, "لم يختلف أهل العلم بالأنساب"),
+    ("IbnAlAthir", 1, 20, "هو محمد بن عبد الله بن عبد المطلب"),
+    ("Baladhuri", 1, 3, "بن يارد بن مهلائيل"),
+]:
+    raw = nasab.normalise(raw_page(work, vol, page))
+    check(f"{work} {vol}:{page} contains {needle[:26]}", nasab.normalise(needle) in raw)
+
+print("\nevery committed claim, checked against the raw slice - not the index")
+claims = [json.loads(l) for l in open(f"{ROOT}/claims.jsonl", encoding="utf-8") if l.strip()]
+bad = []
+for c in claims:
+    # join with a space: pages abut at a word boundary, never mid-word
+    span = " ".join(nasab.normalise(raw_page(c["work"], c["vol"], p))
+                    for p in range(c["page"], c.get("page_end", c["page"]) + 1))
+    if nasab.normalise(c["ar"]) not in re.sub(r"\s+", " ", span):
+        bad.append(f"{c['cid']} {c['work']} {c['vol']}:{c['page']}")
+check(f"all {len(claims)} quotes present in their raw page slice", not bad, "; ".join(bad[:5]))
+
+print("\nthe checker rejects bad data")
+w, v, p = "IbnHisham", 1, 1
+check("a fabricated quote is not found", nasab.locate(w, "محمد بن عبد الرحمن بن أبي بكر الصديق") is None)
+real = "محمد بن عبد الله ابن عبد المطلب"
+check("a real quote is found", nasab.locate(w, real) == (1, 1, 1))
+check("a real quote cited to the wrong page is caught", not (1 <= 99 <= nasab.locate(w, real)[2]))
+check("a quote spanning a page break resolves to its true span",
+      nasab.locate(w, "بن مالك بن النضر ابن كنانة") == (1, 1, 2))
+
+print("\ndata integrity")
+people = {json.loads(l)["id"] for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip()}
+check("every claim references known persons",
+      all(c["subject"] in people and (not c.get("object") or c["object"] in people) for c in claims))
+check("no claim carries an empty translation", all(c["en"].strip() for c in claims))
+check("no claim carries an empty quote", all(c["ar"].strip() for c in claims))
+check("claim ids are unique", len({c["cid"] for c in claims}) == len(claims))
+works = set(nasab.sources())
+check("every cited work is declared in sources.tsv", all(c["work"] in works for c in claims))
+check("both readings of Mudrika's name survive",
+      {c.get("value_lat") for c in claims if c["type"] == "alias" and c["subject"] == "p.mudrika"}
+      >= {"ʿĀmir", "ʿAmr"})
+check("the chain is 50 generations",
+      any(c["type"] == "chain" and c.get("n_generations") == 50 for c in claims))
+check("no node claims an unsourced birth year",
+      all(c.get("date_basis") in (None, *("attested attested_relative derived_from_age_at_death "
+          "generation_estimate unknown").split()) for c in claims))
+
+print("\nnormalisation folds printings, not readings")
+check("hamza forms fold", nasab.normalise("إلياس") == nasab.normalise("الياس"))
+check("ta marbuta folds", nasab.normalise("خزيمة") == nasab.normalise("خزيمه"))
+check("distinct names stay distinct", nasab.normalise("عمرو") != nasab.normalise("عامر"))
+
+print(f"\n{ok} checks passed.")
