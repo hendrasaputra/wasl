@@ -1,0 +1,52 @@
+{"id": "p.muhammad", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M", "kunya_ar": "أبو القاسم", "kunya_lat": "Abū al-Qāsim", "laqab_ar": "رسول الله", "laqab_lat": "Rasūl Allāh", "tribe": "Quraysh / Banū Hāshim", "prophet": true}
+{"id": "p.abd-allah", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "tribe": "Quraysh / Banū Hāshim"}
+{"id": "p.abd-al-muttalib", "name_ar": "عبد المطلب", "name_lat": "ʿAbd al-Muṭṭalib", "sex": "M", "kunya_ar": "أبو الحارث", "kunya_lat": "Abū al-Ḥārith", "tribe": "Quraysh / Banū Hāshim"}
+{"id": "p.hashim", "name_ar": "هاشم", "name_lat": "Hāshim", "sex": "M", "tribe": "Quraysh / Banū Hāshim", "note": "Eponym of Banū Hāshim."}
+{"id": "p.abd-manaf", "name_ar": "عبد مناف", "name_lat": "ʿAbd Manāf", "sex": "M", "kunya_ar": "أبو عبد شمس", "kunya_lat": "Abū ʿAbd Shams", "tribe": "Quraysh"}
+{"id": "p.qusayy", "name_ar": "قصي", "name_lat": "Quṣayy", "sex": "M", "laqab_ar": "مجمع", "laqab_lat": "Mujammiʿ", "tribe": "Quraysh"}
+{"id": "p.kilab", "name_ar": "كلاب", "name_lat": "Kilāb", "sex": "M", "tribe": "Quraysh"}
+{"id": "p.murra", "name_ar": "مرة", "name_lat": "Murra", "sex": "M", "tribe": "Quraysh"}
+{"id": "p.kab", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M", "tribe": "Quraysh"}
+{"id": "p.luayy", "name_ar": "لؤي", "name_lat": "Luʾayy", "sex": "M", "tribe": "Quraysh"}
+{"id": "p.ghalib", "name_ar": "غالب", "name_lat": "Ghālib", "sex": "M", "tribe": "Quraysh"}
+{"id": "p.fihr", "name_ar": "فهر", "name_lat": "Fihr", "sex": "M", "tribe": "Quraysh", "note": "Ibn Saʿd: jimāʿ Quraysh - no one above Fihr is called Qurashī."}
+{"id": "p.malik", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M", "tribe": "Kināna"}
+{"id": "p.al-nadr", "name_ar": "النضر", "name_lat": "al-Naḍr", "sex": "M", "tribe": "Kināna"}
+{"id": "p.kinana", "name_ar": "كنانة", "name_lat": "Kināna", "sex": "M", "tribe": "Kināna"}
+{"id": "p.khuzayma", "name_ar": "خزيمة", "name_lat": "Khuzayma", "sex": "M", "kunya_ar": "أبو الأسد", "kunya_lat": "Abū al-Asad"}
+{"id": "p.mudrika", "name_ar": "مدركة", "name_lat": "Mudrika", "sex": "M"}
+{"id": "p.ilyas", "name_ar": "إلياس", "name_lat": "Ilyās", "sex": "M"}
+{"id": "p.mudar", "name_ar": "مضر", "name_lat": "Muḍar", "sex": "M"}
+{"id": "p.nizar", "name_ar": "نزار", "name_lat": "Nizār", "sex": "M"}
+{"id": "p.maadd", "name_ar": "معد", "name_lat": "Maʿadd", "sex": "M"}
+{"id": "p.adnan", "name_ar": "عدنان", "name_lat": "ʿAdnān", "sex": "M", "note": "Ceiling of the attested nasab: several sources stop here."}
+{"id": "p.udad", "name_ar": "أدد", "name_lat": "Udad", "sex": "M"}
+{"id": "p.muqawwam", "name_ar": "مقوم", "name_lat": "Muqawwam", "sex": "M"}
+{"id": "p.nahur-1", "name_ar": "ناحور", "name_lat": "Nāḥūr", "sex": "M", "note": "Distinct from Nāḥūr father of Tāriḥ."}
+{"id": "p.tayrah", "name_ar": "تيرح", "name_lat": "Tayraḥ", "sex": "M"}
+{"id": "p.yarub", "name_ar": "يعرب", "name_lat": "Yaʿrub", "sex": "M"}
+{"id": "p.yashjub", "name_ar": "يشجب", "name_lat": "Yashjub", "sex": "M"}
+{"id": "p.nabit", "name_ar": "نابت", "name_lat": "Nābit", "sex": "M"}
+{"id": "p.ismail", "name_ar": "إسماعيل", "name_lat": "Ismāʿīl", "sex": "M", "prophet": true}
+{"id": "p.ibrahim", "name_ar": "إبراهيم", "name_lat": "Ibrāhīm", "sex": "M", "laqab_ar": "خليل الرحمن", "laqab_lat": "Khalīl al-Raḥmān", "prophet": true}
+{"id": "p.tarih", "name_ar": "تارح", "name_lat": "Tāriḥ", "sex": "M"}
+{"id": "p.nahur-2", "name_ar": "ناحور", "name_lat": "Nāḥūr", "sex": "M", "note": "Distinct from Nāḥūr son of Muqawwam."}
+{"id": "p.sarugh", "name_ar": "ساروغ", "name_lat": "Sārūgh", "sex": "M"}
+{"id": "p.rau", "name_ar": "راعو", "name_lat": "Rāʿū", "sex": "M"}
+{"id": "p.falikh", "name_ar": "فالخ", "name_lat": "Fālikh", "sex": "M"}
+{"id": "p.aybar", "name_ar": "عيبر", "name_lat": "ʿAybar", "sex": "M"}
+{"id": "p.shalikh", "name_ar": "شالخ", "name_lat": "Shālikh", "sex": "M"}
+{"id": "p.arfakhshadh", "name_ar": "أرفخشذ", "name_lat": "Arfakhshadh", "sex": "M"}
+{"id": "p.sam", "name_ar": "سام", "name_lat": "Sām", "sex": "M"}
+{"id": "p.nuh", "name_ar": "نوح", "name_lat": "Nūḥ", "sex": "M", "prophet": true}
+{"id": "p.lamk", "name_ar": "لمك", "name_lat": "Lamk", "sex": "M"}
+{"id": "p.mattushalakh", "name_ar": "متوشلخ", "name_lat": "Mattūshalakh", "sex": "M"}
+{"id": "p.akhnukh", "name_ar": "أخنوخ", "name_lat": "Akhnūkh", "sex": "M", "prophet": true, "note": "Identified with the prophet Idrīs."}
+{"id": "p.yard", "name_ar": "يرد", "name_lat": "Yard", "sex": "M"}
+{"id": "p.mahlil", "name_ar": "مهليل", "name_lat": "Mahlīl", "sex": "M"}
+{"id": "p.qaynan", "name_ar": "قينن", "name_lat": "Qaynan", "sex": "M"}
+{"id": "p.yanish", "name_ar": "يانش", "name_lat": "Yānish", "sex": "M"}
+{"id": "p.shith", "name_ar": "شيث", "name_lat": "Shīth", "sex": "M"}
+{"id": "p.adam", "name_ar": "آدم", "name_lat": "Ādam", "sex": "M", "prophet": true, "note": "First man; the root of the chain."}
+{"id": "p.amina", "name_ar": "آمنة", "name_lat": "Āmina", "sex": "F", "tribe": "Quraysh / Banū Zuhra", "note": "Mother of the Prophet. Her own line rejoins the spine at Kilāb."}
+{"id": "p.salma", "name_ar": "سلمى", "name_lat": "Salmā", "sex": "F", "tribe": "Khazraj / Banū ʿAdī b. al-Najjār", "note": "Mother of ʿAbd al-Muṭṭalib."}
