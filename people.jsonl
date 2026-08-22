@@ -3975,3 +3975,5 @@
 {"id": "p.jabal", "name_ar": "جبل", "name_lat": "Jabal", "sex": "M", "sahabi": null, "note": null}
 {"id": "p.muadh-9", "name_ar": "معاذ", "name_lat": "Muʿādh", "sex": "M", "sahabi": true, "note": null}
 {"id": "p.sad-48", "name_ar": "سعد", "name_lat": "Saʿd", "sex": "M", "sahabi": true, "note": "chief of al-Aws"}
+{"id": "p.abu", "name_ar": "أبو", "name_lat": "Abū", "sex": "M", "sahabi": true, "note": null}
+{"id": "p.ubayy", "name_ar": "أبي", "name_lat": "Ubayy", "sex": "M", "sahabi": true, "note": null}

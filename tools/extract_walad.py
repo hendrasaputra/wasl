@@ -64,8 +64,10 @@ PARTICLE = re.compile(r"\s+(?:لم|له|لها|لهم|لا|قد|ثم|من|في|�
 
 def norm_name(w):
     """Undo the accusative these lists are written in: nizaran -> nizar, aba talib -> abu talib."""
-    w = re.sub(r"^أبا\b", "أبو", w.strip())
-    w = re.sub(r"^أبي\b", "أبو", w)
+    # kunya only when a name follows: bare 'Ubayy' is a name in its own right, and turning it
+    # into a bare 'Abu' made it look like a stray particle and got it pruned
+    w = re.sub(r"^أبا\s+", "أبو ", w.strip())
+    w = re.sub(r"^أبي\s+", "أبو ", w)
     w = re.sub(r"\bابنة\b", "بنت", w)
     w = re.sub(r"[#~*]+", " ", w).strip(" ،؛.()[]«»-")
     prev = None

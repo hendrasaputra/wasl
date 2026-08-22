@@ -60,6 +60,15 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
 #results .more{padding:8px 12px;color:var(--grn-1);font-size:11.5px;border-top:1px solid var(--line)}
 .bar2{gap:6px;padding-top:0;padding-bottom:10px;border-bottom:1px solid var(--line);top:57px}
 .bar2 .lbl{color:var(--grn-1);font-size:11px;letter-spacing:.8px;text-transform:uppercase}
+#dir{padding:16px 26px 20px;background:rgba(10,58,39,.75);border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 22px}
+#dir h4{margin:0 0 7px;font:600 11px/1 var(--sans);letter-spacing:1px;text-transform:uppercase;
+  color:var(--grn-1)}
+#dir a{display:block;padding:3px 0;color:var(--gold-lt);text-decoration:none;cursor:pointer;
+  font-size:13px;border-bottom:1px solid transparent}
+#dir a:hover{border-bottom-color:var(--rule)}
+#bands .chip[data-b="beyond"].on{border-color:var(--gold);}
+.bandnote{color:var(--ink-dim);font-size:11.5px;padding:2px 26px 10px;background:rgba(10,58,39,.75)}
 .chip{background:transparent;border:1px solid var(--line);color:var(--ink-dim);border-radius:999px;
   padding:4px 11px;font:12px var(--sans);cursor:pointer}
 .chip:hover{background:rgba(169,139,66,.12);color:var(--gold-lt)}
@@ -186,18 +195,18 @@ footer b{color:var(--gold-lt);font-weight:600}
 <div class="bar">
   <div class="searchwrap">
     <input id="q" type="search" autocomplete="off" spellcheck="false"
-      placeholder="Search 1,607 names — Arabic or transliteration (قصي · Qusayy · Kilāb · Khazraj)">
+      placeholder="Search names — Arabic or transliteration (ʿUmar · Abū Bakr · قصي · Khazraj)">
     <div id="results" hidden></div>
   </div>
   <span class="hits" id="hits"></span>
   <button id="none">Collapse</button>
 </div>
 <div class="bar bar2">
-  <span class="lbl">Jump</span>
-  <span id="marks"></span>
-  <span class="lbl" style="margin-left:8px">Show only</span>
-  <span id="filters"></span>
+  <button id="dirbtn" class="chip">Who&#39;s who</button>
+  <span class="lbl">Band</span><span id="bands"></span>
+  <span class="lbl" style="margin-left:6px">Only</span><span id="filters"></span>
 </div>
+<div id="dir" hidden></div>
 <div id="crumb" hidden></div>
 
 <main>
@@ -215,9 +224,11 @@ const S = JSON.parse(document.getElementById('stats-data').textContent);
 const $ = s => document.querySelector(s);
 const esc = s => String(s??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+$('#q').placeholder = `Search ${S.people.toLocaleString()} names — Arabic or transliteration `
+  + `(ʿUmar · Abū Bakr · قصي · Khazraj)`;
 $('#stats').innerHTML = [
-  `${S.people} names`, `${S.claims} sourced claims`, `${S.edges} links`,
-  `${S.works} primary works`, `50 generations`
+  `${S.people.toLocaleString()} names`, `${S.claims.toLocaleString()} sourced claims`,
+  `${S.edges.toLocaleString()} links`, `${S.works} primary works`, `54 generations`
 ].map(t => `<b>${t}</b>`).join('');
 
 $('#foot').innerHTML = 'Sources — ' + Object.entries(D.works).map(([k,w]) =>
@@ -320,6 +331,16 @@ const sums = [...document.querySelectorAll('summary')];
 const byId = {};
 sums.forEach(s => { s.dataset.search = fold(s.dataset.search); byId[s.dataset.id] = s; });
 
+/* Abu Bakr's node is recorded under his given name, Abd Allah, so a reader searching the name
+   they know would never reach him. Fold the directory label and the note into his index, and
+   rank the people the directory names above their own descendants. */
+const notable = new Map();
+D.directory.forEach(([, rows]) => rows.forEach(([label, id]) => notable.set(id, label)));
+Object.entries(D.people).forEach(([id, p]) => {
+  const extra = [notable.get(id), p.note, p.kunya_lat, p.laqab_lat].filter(Boolean).join(' ');
+  if (extra && byId[id]) byId[id].dataset.search += ' ' + fold(extra);
+});
+
 /* The tree is 54 levels deep, so a match is useless unless you can reach it. Every hit is a
    row carrying its own line of descent, and clicking one opens the ancestors and jumps. */
 const lineage = (pid, n = 5) => {
@@ -349,7 +370,7 @@ function renderResults(){
     return `<div class="rr${i===cursor?' on':''}" data-id="${pid}">
       <span class="ar" dir="rtl" lang="ar">${esc(p.name_ar)}</span>
       <span class="lat">${esc(p.name_lat)}</span>
-      <span class="path">${esc(lineage(pid))||'—'}</span></div>`;
+      <span class="path">${notable.has(pid) ? '★ ' : ''}${esc(lineage(pid))||'—'}</span></div>`;
   }).join('') + (hits.length>60 ? `<div class="more">${hits.length-60} more — narrow the search</div>` : '');
   RES.hidden = false;
 }
@@ -359,7 +380,13 @@ $('#q').addEventListener('input', e => {
   if (!q) { hits=[]; cursor=-1; RES.hidden=true; $('#hits').textContent=''; return; }
   hits = sums.filter(s => s.dataset.search.includes(q)).map(s => s.dataset.id);
   // exact-ish matches first, then by how shallow they sit - the famous men are nearer the top
-  hits.sort((a,b) => (fold(D.people[a].name_lat)===q?-1:0) - (fold(D.people[b].name_lat)===q?-1:0));
+  // rank: exact name first, then companions, then the shortest lineage - otherwise the man
+  // everyone is looking for sits behind forty of his own descendants
+  const rank = p => (notable.has(p) ? 0 : 20)
+                  + (fold(D.people[p].name_lat) === q ? 0 : 8)
+                  + (D.people[p].sahabi ? 0 : 3)
+                  + (D.band[p] === 'descendant' ? 3 : 0);
+  hits.sort((a,b) => rank(a) - rank(b) || (D.below[b]||0) - (D.below[a]||0));
   cursor = -1;
   $('#hits').textContent = `${hits.length} match${hits.length===1?'':'es'}`;
   renderResults();
@@ -383,14 +410,29 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.searchwrap')) RES.hidden = true;
 });
 
-/* ---------- jump marks: somewhere to start from ---------- */
-const MARKS = [['Muḥammad ﷺ','p.muhammad'],['Ādam','p.adam'],['ʿAdnān','p.adnan'],
-  ['Qaḥṭān','p.qahtan'],['Quraysh (Fihr)','p.fihr'],['Banū Hāshim','p.hashim'],
-  ['ʿAlī','p.ali'],['al-Aws','p.al-aws'],['al-Khazraj','p.al-khazraj']];
-$('#marks').innerHTML = MARKS.filter(([,id]) => D.people[id])
-  .map(([t,id]) => `<button class="chip" data-jump="${id}">${t}</button>`).join('');
-$('#marks').addEventListener('click', e => {
-  const b = e.target.closest('[data-jump]'); if (b) jump(b.dataset.jump);
+/* ---------- who's who: the people a reader arrives looking for ---------- */
+$('#dir').innerHTML = D.directory.map(([g, rows]) =>
+  `<div><h4>${esc(g)}</h4>` +
+  rows.map(([label, id]) => `<a data-go="${id}">${esc(label)}</a>`).join('') + '</div>').join('');
+$('#dirbtn').onclick = () => {
+  const d = $('#dir'); d.hidden = !d.hidden; $('#dirbtn').classList.toggle('on', !d.hidden);
+};
+$('#dir').addEventListener('click', e => {
+  const a = e.target.closest('[data-go]');
+  if (a) { jump(a.dataset.go); $('#dir').hidden = true; $('#dirbtn').classList.remove('on'); }
+});
+
+/* ---------- bands ---------- */
+/* Not centuries. These books give no years above the Prophet, so a date band would be computed
+   and would read as sourced. Each of these four is something the sources state or do. */
+$('#bands').innerHTML = Object.entries(D.bands)
+  .map(([k, [label, why]]) => `<button class="chip" data-b="${k}" title="${esc(why)}">${esc(label)}</button>`).join('');
+let bandOn = null;
+$('#bands').addEventListener('click', e => {
+  const b = e.target.closest('[data-b]'); if (!b) return;
+  bandOn = (bandOn === b.dataset.b) ? null : b.dataset.b;
+  [...$('#bands').children].forEach(c => c.classList.toggle('on', c.dataset.b === bandOn));
+  applyLens();
 });
 
 /* ---------- filters: dim what you are not asking about ---------- */
@@ -412,16 +454,25 @@ $('#filters').addEventListener('click', e => {
   const b = e.target.closest('[data-f]'); if (!b) return;
   active = (active === b.dataset.f) ? null : b.dataset.f;
   [...$('#filters').children].forEach(c => c.classList.toggle('on', c.dataset.f === active));
-  if (!active) { sums.forEach(s => s.classList.remove('dim')); $('#hits').textContent=''; return; }
-  const test = FILTERS[active];
+  applyLens();
+});
+
+function applyLens(){
+  if (!active && !bandOn) {
+    sums.forEach(s => s.classList.remove('dim'));
+    $('#hits').textContent = '';
+    return;
+  }
+  const test = active ? FILTERS[active] : () => true;
   let n = 0;
   sums.forEach(s => {
-    const keep = test(s.dataset.id);
+    const keep = test(s.dataset.id) && (!bandOn || s.dataset.band === bandOn);
     s.classList.toggle('dim', !keep);
     if (keep) { n++; openTo(s.dataset.id); }
   });
-  $('#hits').textContent = `${n} ${active}`;
-});
+  const parts = [bandOn && D.bands[bandOn][0], active].filter(Boolean).join(' · ');
+  $('#hits').textContent = `${n} — ${parts}`;
+}
 
 /* ---------- breadcrumb: where am I in 54 levels ---------- */
 function crumb(pid){

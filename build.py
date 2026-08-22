@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Wasl - generate index.html from people.jsonl + claims.jsonl. Run validate.py first."""
-import json, math, os, sys, html, collections
+import json, math, os, re, sys, html, collections
 import nasab
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -76,6 +76,42 @@ def main():
     sys.setrecursionlimit(10000)
     for r in roots:
         count(r)
+
+    # ---- bands. Not centuries: these books give no years, and a band label that looked like
+    # a date would read as sourced when it was computed. These four are things the sources
+    # either state or do, so each is defensible in one sentence.
+    def ancestors(pid):
+        out, c = set(), father.get(pid)
+        while c:
+            out.add(c)
+            c = father.get(c)
+        return out
+
+    unattested = ancestors("p.adnan") | {"p.qahtan"}     # the sources' own declared ceiling
+    band = {}
+    for pid in people:
+        if pid in unattested:
+            band[pid] = "beyond"
+        elif people[pid].get("sahabi"):
+            band[pid] = "companion"
+        else:
+            band[pid] = "descendant" if any(people[a].get("sahabi") for a in ancestors(pid)) \
+                        else "arabia"
+    BANDS = {
+      "beyond":     ("beyond the attested chain",
+                     "At or above ʿAdnān and Qaḥṭān — the stretch these books themselves "
+                     "decline to vouch for (kadhaba al-nassābūn; Ibn Ḥazm: nothing above "
+                     "Qaḥṭān is sound)."),
+      "arabia":     ("the Arab genealogy",
+                     "Below ʿAdnān or Qaḥṭān, with no companion recorded above them — the "
+                     "tribal genealogy the books treat as established."),
+      "companion":  ("companions",
+                     "Carries an entry in al-Istīʿāb or Usd al-Ghāba. That is a fact about "
+                     "the sources, not a judgement about the person."),
+      "descendant": ("recorded below a companion",
+                     "Placed under someone with a companion entry — largely the Umayyad, "
+                     "ʿAbbāsid and ʿAlid lines Ibn Ḥazm carries forward."),
+    }
     spine = set()
     n = "p.muhammad"
     while n:
@@ -117,7 +153,7 @@ def main():
                     uniq.append(v)
             if uniq:
                 al = f'<i class="alias">= {" / ".join(html.escape(u) for u in uniq)}</i>'
-        summary = (f'<summary data-id="{pid}" data-gen="{gen}" data-search="{html.escape((p["name_lat"]+" "+p["name_ar"]+" "+p.get("kunya_lat","")+" "+p.get("kunya_ar","")+" "+" ".join(a.get("value_lat","")+" "+a.get("value_ar","") for a in alias)).lower())}">'
+        summary = (f'<summary data-id="{pid}" data-gen="{gen}" data-band="{band.get(pid,"")}" data-search="{html.escape((p["name_lat"]+" "+p["name_ar"]+" "+p.get("kunya_lat","")+" "+p.get("kunya_ar","")+" "+" ".join(a.get("value_lat","")+" "+a.get("value_ar","") for a in alias)).lower())}">'
                    f'<span class="tw{"" if children else " leaf"}" data-n="{below.get(pid,0)}"></span>'
                    f'<span class="gen">{gen}</span>'
                    f'<span class="ar" dir="rtl" lang="ar">{html.escape(p["name_ar"])}</span>'
@@ -137,12 +173,96 @@ def main():
         "works": {k: {kk: v[kk] for kk in ("author_lat", "title_lat", "title_ar", "author_ar", "edition", "death_ah", "version_uri")} for k, v in works.items()},
         "father": father, "mother": mother,
         "below": {k: v for k, v in below.items() if v},
+        "band": band, "bands": BANDS,
         "kids": {k: v for k, v in kids.items() if v},
     }
     stats = {
         "people": len(people), "claims": len(claims), "works": len({c["work"] for c in claims}),
         "edges": len({(c["subject"], c["object"]) for c in claims if c["type"] in ("father_of", "mother_of")}),
     }
+
+    # ---- a directory of the people a reader actually comes looking for. Resolved here, at
+    # build time, from the chain that identifies each one, so a link can never point nowhere.
+    import unicodedata as _u
+
+    def _n(x):
+        x = _u.normalize("NFKC", x)
+        for a, b in (("أ","ا"),("إ","ا"),("آ","ا"),("ة","ه"),("ى","ي"),("ئ","ي"),("ؤ","و")):
+            x = x.replace(a, b)
+        return re.sub(r"\s+", " ", x).strip()
+
+    byname = collections.defaultdict(list)
+    for pid, pr in people.items():
+        byname[_n(pr["name_ar"])].append(pid)
+
+    def find(chain):
+        """Walk down a name chain given deepest-last; return the id only if it is unambiguous."""
+        if chain[-1] == "__root__":       # a root has no father to anchor on
+            c = [p for p in roots if _n(people[p]["name_ar"]) == _n(chain[0])]
+            return c[0] if len(c) == 1 else None
+        hits = []
+        for a in byname.get(_n(chain[-1]), ()):
+            cur = a
+            for nm in reversed(chain[:-1]):
+                nxt = next((k for k in kids.get(cur, ()) if _n(people[k]["name_ar"]) == _n(nm)), None)
+                cur = nxt
+                if cur is None:
+                    break
+            if cur:
+                hits.append(cur)
+        return hits[0] if len(set(hits)) == 1 else None
+
+    DIRECTORY = [
+      ("The four caliphs", [
+        ("Abū Bakr al-Ṣiddīq", ["عبد الله","عثمان","عامر","عمرو","كعب"]),
+        ("ʿUmar b. al-Khaṭṭāb", ["عمر","الخطاب","نفيل"]),
+        ("ʿUthmān b. ʿAffān", ["عثمان","عفان","أبو العاص"]),
+        ("ʿAlī b. Abī Ṭālib", ["علي","أبو طالب","عبد المطلب"])]),
+      ("The Prophet's household", [
+        ("Muḥammad ﷺ", ["محمد","عبد الله","عبد المطلب"]),
+        ("Khadīja", ["خديجة","خويلد","أسد"]),
+        ("Fāṭima", ["فاطمة","محمد","عبد الله"]),
+        ("al-Ḥasan", ["الحسن","علي","أبو طالب"]),
+        ("al-Ḥusayn", ["الحسين","علي","أبو طالب"]),
+        ("Ḥamza", ["حمزة","عبد المطلب","هاشم"]),
+        ("al-ʿAbbās", ["العباس","عبد المطلب","هاشم"]),
+        ("Jaʿfar b. Abī Ṭālib", ["جعفر","أبو طالب","عبد المطلب"]),
+        ("Zaynab", ["زينب","محمد","عبد الله"]),
+        ("Ibrāhīm", ["إبراهيم","محمد","عبد الله"])]),
+      ("Among the ten", [
+        ("Ṭalḥa b. ʿUbayd Allāh", ["طلحة","عبيد الله","عثمان"]),
+        ("al-Zubayr b. al-ʿAwwām", ["الزبير","العوام","خويلد"]),
+        ("ʿAbd al-Raḥmān b. ʿAwf", ["عبد الرحمن","عوف","عبد عوف"]),
+        ("Saʿīd b. Zayd", ["سعيد","زيد","عمرو","نفيل"]),
+        ("Abū ʿUbayda b. al-Jarrāḥ", ["عامر","عبد الله","الجراح"])]),
+      ("Anṣār", [
+        ("Saʿd b. Muʿādh", ["سعد","معاذ","النعمان"]),
+        ("Muʿādh b. Jabal", ["معاذ","جبل","عمرو"]),
+        ("Ubayy b. Kaʿb", ["أبي","كعب","قيس","عبيد"]),
+        ("Usayd b. Ḥuḍayr", ["أسيد","حضير","سماك"]),
+        ("Anas b. Mālik", ["أنس","مالك","النضر"]),
+        ("al-Aws", ["الأوس","حارثة","ثعلبة"]),
+        ("al-Khazraj", ["الخزرج","حارثة","ثعلبة"])]),
+      ("Landmarks of the chain", [
+        ("Ādam", ["آدم","__root__"]), ("Nūḥ", ["نوح","لمك"]), ("Ibrāhīm", ["إبراهيم","تارح"]),
+        ("Ismāʿīl", ["إسماعيل","إبراهيم"]), ("ʿAdnān", ["عدنان","أدد"]),
+        ("Qaḥṭān", ["قحطان"]), ("Quraysh (Fihr)", ["فهر","مالك","النضر"]),
+        ("Quṣayy", ["قصي","كلاب","مرة"]), ("Hāshim", ["هاشم","عبد مناف","قصي"]),
+        ("ʿAbd al-Muṭṭalib", ["عبد المطلب","هاشم","عبد مناف"])]),
+    ]
+    directory = []
+    missing = []
+    for group, items in DIRECTORY:
+        rows = []
+        for label, chain in items:
+            pid = find(chain)
+            (rows.append([label, pid]) if pid else missing.append(label))
+        if rows:
+            directory.append([group, rows])
+    if missing:
+        print("  directory entries unresolved: " + ", ".join(missing))
+
+    data["directory"] = directory
 
     tpl = open(f"{ROOT}/template.html", encoding="utf-8").read()
     out = (tpl.replace("{{TREE}}", tree)
