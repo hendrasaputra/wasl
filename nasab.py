@@ -92,18 +92,26 @@ def page_of(work, offset):
     return out
 
 
+_loc = {}
+
+
 def locate(work, arabic):
     """Page span a quote covers: (vol, first_page, last_page), or None if absent."""
     text, _ = index(work)
     needle = normalise(arabic)
     if not needle:
         return None
+    ck = (work, needle)
+    if ck in _loc:
+        return _loc[ck]
     i = text.find(needle)
     if i < 0:
+        _loc[ck] = None
         return None
     v1, p1 = page_of(work, i)
     v2, p2 = page_of(work, i + len(needle) - 1)
-    return (v1, p1, p2) if v1 == v2 else (v1, p1, p2)
+    _loc[ck] = (v1, p1, p2)
+    return _loc[ck]
 
 
 def page_text(work, vol, page):

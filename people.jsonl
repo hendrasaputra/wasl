@@ -843,3 +843,815 @@
 {"id": "p.abd-allah-53", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "sahabi": true}
 {"id": "p.qays-13", "name_ar": "قيس", "name_lat": "Qays", "sex": "M", "sahabi": true}
 {"id": "p.mmr-4", "name_ar": "معمر", "name_lat": "Mʿmr", "sex": "M", "translit_provisional": true, "sahabi": true}
+{"id": "p.qahtan", "name_ar": "قحطان", "name_lat": "Qaḥṭān", "sex": "M", "tribe": "Qaḥṭān / the Yemeni Arabs", "note": "Root of the Yemeni (Qaḥṭānī) Arabs. Left unattached on purpose: the sources give incompatible origins and Ibn Hazm holds that none of them is sound."}
+{"id": "p.yarub-2", "name_ar": "يعرب", "name_lat": "Yaʿrub", "sex": "M"}
+{"id": "p.yashjub-2", "name_ar": "يشجب", "name_lat": "Yashjub", "sex": "M"}
+{"id": "p.saba", "name_ar": "سبأ", "name_lat": "Sabaʾ", "sex": "M"}
+{"id": "p.kahlan", "name_ar": "كهلان", "name_lat": "Kahlān", "sex": "M"}
+{"id": "p.zayd-3", "name_ar": "زيد", "name_lat": "Zayd", "sex": "M"}
+{"id": "p.malik-10", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.nabt", "name_ar": "نبت", "name_lat": "Nabt", "sex": "M"}
+{"id": "p.al-ghuth", "name_ar": "الغوث", "name_lat": "al-Ghūth", "sex": "M", "translit_provisional": true}
+{"id": "p.al-asad", "name_ar": "الأسد", "name_lat": "al-Asad", "sex": "M"}
+{"id": "p.mazn", "name_ar": "مازن", "name_lat": "Mazn", "sex": "M", "translit_provisional": true}
+{"id": "p.thalaba-5", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M"}
+{"id": "p.amri-al-qays", "name_ar": "أمري القيس", "name_lat": "Amrī al-Qays", "sex": "M", "translit_provisional": true}
+{"id": "p.haritha-5", "name_ar": "حارثة", "name_lat": "Ḥāritha", "sex": "M"}
+{"id": "p.amir-14", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
+{"id": "p.amr-32", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.thalaba-6", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M"}
+{"id": "p.haritha-6", "name_ar": "حارثة", "name_lat": "Ḥāritha", "sex": "M"}
+{"id": "p.al-aws", "name_ar": "الأوس", "name_lat": "al-Aws", "sex": "M"}
+{"id": "p.al-khazraj", "name_ar": "الخزرج", "name_lat": "al-Khazraj", "sex": "M"}
+{"id": "p.khalid-10", "name_ar": "خالد", "name_lat": "Khālid", "sex": "M"}
+{"id": "p.uthman-10", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
+{"id": "p.umar-3", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.nbsa", "name_ar": "عنبسة", "name_lat": "ʿnbsa", "sex": "M", "translit_provisional": true}
+{"id": "p.al-mughira-5", "name_ar": "المغيرة", "name_lat": "al-Mughīra", "sex": "M"}
+{"id": "p.bkir-3", "name_ar": "بكير", "name_lat": "Bkīr", "sex": "M", "translit_provisional": true}
+{"id": "p.uthman-11", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
+{"id": "p.uthman-12", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
+{"id": "p.aban-2", "name_ar": "أبان", "name_lat": "Aban", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-54", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.al-harith-32", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.talha-3", "name_ar": "طلحة", "name_lat": "Ṭalḥa", "sex": "M"}
+{"id": "p.ibrahim-3", "name_ar": "إبراهيم", "name_lat": "Ibrāhīm", "sex": "M"}
+{"id": "p.jafar-3", "name_ar": "جعفر", "name_lat": "Jaʿfar", "sex": "M"}
+{"id": "p.muhammad-9", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.mran", "name_ar": "عمران", "name_lat": "ʿmran", "sex": "M", "translit_provisional": true}
+{"id": "p.salama-3", "name_ar": "سلمة", "name_lat": "Salama", "sex": "M"}
+{"id": "p.aiub", "name_ar": "أيوب", "name_lat": "Aīūb", "sex": "M", "translit_provisional": true}
+{"id": "p.said-12", "name_ar": "سعيد", "name_lat": "Saʿīd", "sex": "M"}
+{"id": "p.atika-2", "name_ar": "عاتكة", "name_lat": "ʿĀtika", "sex": "M"}
+{"id": "p.hisham-7", "name_ar": "هشام", "name_lat": "Hishām", "sex": "M"}
+{"id": "p.akht-umar", "name_ar": "أخت عمر", "name_lat": "Akht ʿUmar", "sex": "M", "translit_provisional": true}
+{"id": "p.jumah-2", "name_ar": "جمح", "name_lat": "Jumaḥ", "sex": "M"}
+{"id": "p.hdhafa-4", "name_ar": "حذافة", "name_lat": "Ḥdhafa", "sex": "M", "translit_provisional": true}
+{"id": "p.uthman-13", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
+{"id": "p.sabt", "name_ar": "سابط", "name_lat": "Sabṭ", "sex": "M", "translit_provisional": true}
+{"id": "p.nsr-2", "name_ar": "نصر", "name_lat": "Nṣr", "sex": "M", "translit_provisional": true}
+{"id": "p.shl", "name_ar": "سهل", "name_lat": "Shl", "sex": "M", "translit_provisional": true}
+{"id": "p.suhayl-2", "name_ar": "سهيل", "name_lat": "Suhayl", "sex": "M"}
+{"id": "p.al-skran", "name_ar": "السكران", "name_lat": "al-Skran", "sex": "M", "translit_provisional": true}
+{"id": "p.slit-2", "name_ar": "سليط", "name_lat": "Slīṭ", "sex": "M", "translit_provisional": true}
+{"id": "p.slit-3", "name_ar": "سليط", "name_lat": "Slīṭ", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-55", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.utba-3", "name_ar": "عتبة", "name_lat": "ʿUtba", "sex": "M"}
+{"id": "p.hind", "name_ar": "هند", "name_lat": "Hind", "sex": "M"}
+{"id": "p.abd-allah-56", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.laa", "name_ar": "لأى", "name_lat": "Laā", "sex": "M", "translit_provisional": true}
+{"id": "p.jabr-5", "name_ar": "جابر", "name_lat": "Jabr", "sex": "M", "translit_provisional": true}
+{"id": "p.al-mtlms", "name_ar": "المتلمس", "name_lat": "al-Mtlms", "sex": "M", "translit_provisional": true}
+{"id": "p.al-asa", "name_ar": "العاصى", "name_lat": "al-ʿaṣā", "sex": "M", "translit_provisional": true}
+{"id": "p.mni", "name_ar": "منيع", "name_lat": "Mnīʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.al-qtama", "name_ar": "القطامى", "name_lat": "al-Qṭamā", "sex": "M", "translit_provisional": true}
+{"id": "p.zalm", "name_ar": "ظالم", "name_lat": "Ẓalm", "sex": "M", "translit_provisional": true}
+{"id": "p.nbata", "name_ar": "نباتة", "name_lat": "Nbata", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-33", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.hidan", "name_ar": "حيدان", "name_lat": "Ḥīdan", "sex": "M", "translit_provisional": true}
+{"id": "p.jnada-2", "name_ar": "جنادة", "name_lat": "Jnada", "sex": "M", "translit_provisional": true}
+{"id": "p.wail-2", "name_ar": "وائل", "name_lat": "Wāʾil", "sex": "M"}
+{"id": "p.kab-6", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.abd-allah-57", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.al-numan", "name_ar": "النعمان", "name_lat": "al-Nuʿmān", "sex": "M"}
+{"id": "p.yashjub-3", "name_ar": "يشجب", "name_lat": "Yashjub", "sex": "M"}
+{"id": "p.rhm", "name_ar": "رهم", "name_lat": "Rhm", "sex": "M", "translit_provisional": true}
+{"id": "p.shdad-3", "name_ar": "شداد", "name_lat": "Shdad", "sex": "M", "translit_provisional": true}
+{"id": "p.rabia-14", "name_ar": "ربيعة", "name_lat": "Rabīʿa", "sex": "M"}
+{"id": "p.rib", "name_ar": "عريب", "name_lat": "ʿrīb", "sex": "M", "translit_provisional": true}
+{"id": "p.al-khiar-2", "name_ar": "الخيار", "name_lat": "al-Khīar", "sex": "M", "translit_provisional": true}
+{"id": "p.amr-33", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.amr-34", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.haritha-al-ghtrif", "name_ar": "حارثة الغطريف", "name_lat": "Ḥāritha al-Ghṭrīf", "sex": "M", "translit_provisional": true}
+{"id": "p.amir-ma-al-sma", "name_ar": "عامر ماء السماء", "name_lat": "ʿĀmir Maʾ al-Smaʾ", "sex": "M", "translit_provisional": true}
+{"id": "p.mran-al-kahn", "name_ar": "عمران الكاهن", "name_lat": "ʿmran al-Kahn", "sex": "M", "translit_provisional": true}
+{"id": "p.amr-mziqia", "name_ar": "عمرو مزيقياء", "name_lat": "ʿAmr Mzīqīaʾ", "sex": "M", "translit_provisional": true}
+{"id": "p.dhhl", "name_ar": "ذهل", "name_lat": "Dhhl", "sex": "M", "translit_provisional": true}
+{"id": "p.malik-11", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.amr-35", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.kab-7", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.ghnm-2", "name_ar": "غنم", "name_lat": "Ghnm", "sex": "M", "translit_provisional": true}
+{"id": "p.suad", "name_ar": "سواد", "name_lat": "Sūad", "sex": "M", "translit_provisional": true}
+{"id": "p.khnsa", "name_ar": "خنساء", "name_lat": "Khnsaʾ", "sex": "M", "translit_provisional": true}
+{"id": "p.adi-8", "name_ar": "عدى", "name_lat": "ʿAdī", "sex": "M"}
+{"id": "p.adi-9", "name_ar": "عدى", "name_lat": "ʿAdī", "sex": "M"}
+{"id": "p.rabia-15", "name_ar": "ربيعة", "name_lat": "Rabīʿa", "sex": "M"}
+{"id": "p.ausla", "name_ar": "أوسلة", "name_lat": "Aūsla", "sex": "M", "translit_provisional": true}
+{"id": "p.zayd-4", "name_ar": "زيد", "name_lat": "Zayd", "sex": "M"}
+{"id": "p.malik-12", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.alhan", "name_ar": "ألهان", "name_lat": "Alhan", "sex": "M", "translit_provisional": true}
+{"id": "p.hushb", "name_ar": "حوشب", "name_lat": "Ḥūshb", "sex": "M", "translit_provisional": true}
+{"id": "p.yashjub-4", "name_ar": "يشجب", "name_lat": "Yashjub", "sex": "M"}
+{"id": "p.zayd-5", "name_ar": "زيد", "name_lat": "Zayd", "sex": "M"}
+{"id": "p.udad-2", "name_ar": "أدد", "name_lat": "Udad", "sex": "M"}
+{"id": "p.murra-5", "name_ar": "مرة", "name_lat": "Murra", "sex": "M"}
+{"id": "p.malik-13", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.jld", "name_ar": "جلد", "name_lat": "Jld", "sex": "M", "translit_provisional": true}
+{"id": "p.ihabr", "name_ar": "يحابر", "name_lat": "Īḥabr", "sex": "M", "translit_provisional": true}
+{"id": "p.zayd-6", "name_ar": "زيد", "name_lat": "Zayd", "sex": "M"}
+{"id": "p.sad-al-shira", "name_ar": "سعد العشيرة", "name_lat": "Saʿd al-ʿshīra", "sex": "M", "translit_provisional": true}
+{"id": "p.al-hkm-2", "name_ar": "الحكم", "name_lat": "al-Ḥkm", "sex": "M", "translit_provisional": true}
+{"id": "p.al-sb", "name_ar": "الصعب", "name_lat": "al-Ṣʿb", "sex": "M", "translit_provisional": true}
+{"id": "p.nmra", "name_ar": "نمرة", "name_lat": "Nmra", "sex": "M", "translit_provisional": true}
+{"id": "p.jfa", "name_ar": "جعفى", "name_lat": "Jʿfā", "sex": "M", "translit_provisional": true}
+{"id": "p.aus-al-lh", "name_ar": "أوس الله", "name_lat": "Aūs al-Lh", "sex": "M", "translit_provisional": true}
+{"id": "p.zayd-al-lh", "name_ar": "زيد الله", "name_lat": "Zayd al-Lh", "sex": "M", "translit_provisional": true}
+{"id": "p.anas-al-lh", "name_ar": "أنس الله", "name_lat": "Anas al-Lh", "sex": "M", "translit_provisional": true}
+{"id": "p.al-hr", "name_ar": "الحر", "name_lat": "al-Ḥr", "sex": "M", "translit_provisional": true}
+{"id": "p.amir-15", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
+{"id": "p.ashrs", "name_ar": "أشرس", "name_lat": "Ashrs", "sex": "M", "translit_provisional": true}
+{"id": "p.awf-5", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.al-dl", "name_ar": "الدئل", "name_lat": "al-Dʾl", "sex": "M", "translit_provisional": true}
+{"id": "p.aslam", "name_ar": "أسلم", "name_lat": "Aslam", "sex": "M"}
+{"id": "p.jusham", "name_ar": "جشم", "name_lat": "Jusham", "sex": "M"}
+{"id": "p.asmh-sufyan", "name_ar": "اسمه سفيان", "name_lat": "Asmh Sufyān", "sex": "M", "translit_provisional": true}
+{"id": "p.mran-2", "name_ar": "مران", "name_lat": "Mran", "sex": "M", "translit_provisional": true}
+{"id": "p.la", "name_ar": "علة", "name_lat": "ʿla", "sex": "M", "translit_provisional": true}
+{"id": "p.amr-36", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.harb-2", "name_ar": "حرب", "name_lat": "Ḥarb", "sex": "M"}
+{"id": "p.yazid-fuld-mnbh", "name_ar": "يزيد فولد منبه", "name_lat": "Yazīd Fūld Mnbh", "sex": "M", "translit_provisional": true}
+{"id": "p.kab-8", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.amir-16", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
+{"id": "p.jsr", "name_ar": "جسر", "name_lat": "Jsr", "sex": "M", "translit_provisional": true}
+{"id": "p.mslia", "name_ar": "مسلية", "name_lat": "Mslīa", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-34", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.rhm-2", "name_ar": "رهم", "name_lat": "Rhm", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-al-rahman-10", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.muhammad-10", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.ahmd", "name_ar": "أحمد", "name_lat": "Aḥmd", "sex": "M", "translit_provisional": true}
+{"id": "p.al-numan-2", "name_ar": "النعمان", "name_lat": "al-Nuʿmān", "sex": "M"}
+{"id": "p.murra-6", "name_ar": "مرة", "name_lat": "Murra", "sex": "M"}
+{"id": "p.bd-6", "name_ar": "عبد", "name_lat": "ʿbd", "sex": "M", "translit_provisional": true}
+{"id": "p.asd-2", "name_ar": "أسعد", "name_lat": "Asʿd", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-manaf-5", "name_ar": "عبد مناف", "name_lat": "ʿAbd Manāf", "sex": "M"}
+{"id": "p.abd-al-uzza-9", "name_ar": "عبد العزى", "name_lat": "ʿAbd al-ʿUzzā", "sex": "M"}
+{"id": "p.al-harith-35", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.mslma-aba-shakr", "name_ar": "مسلمة أبا شاكر", "name_lat": "Mslma Aba Shakr", "sex": "M", "translit_provisional": true}
+{"id": "p.ubayd-allah-5", "name_ar": "عبيد الله", "name_lat": "ʿUbayd Allāh", "sex": "M"}
+{"id": "p.al-walid-5", "name_ar": "الوليد", "name_lat": "al-Walīd", "sex": "M"}
+{"id": "p.sad-8", "name_ar": "سعد", "name_lat": "Saʿd", "sex": "M"}
+{"id": "p.kab-9", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.muhammad-11", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.mara-2", "name_ar": "عمارة", "name_lat": "ʿmara", "sex": "M", "translit_provisional": true}
+{"id": "p.yaqub", "name_ar": "يعقوب", "name_lat": "Yaʿqūb", "sex": "M"}
+{"id": "p.ibrahim-4", "name_ar": "إبراهيم", "name_lat": "Ibrāhīm", "sex": "M"}
+{"id": "p.safwan-2", "name_ar": "صفوان", "name_lat": "Ṣafwān", "sex": "M"}
+{"id": "p.al-bkhtri", "name_ar": "البختري", "name_lat": "al-Bkhtrī", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-bakr", "name_ar": "أبو بكر", "name_lat": "Abū Bakr", "sex": "M"}
+{"id": "p.bd-7", "name_ar": "عبد", "name_lat": "ʿbd", "sex": "M", "translit_provisional": true}
+{"id": "p.kharja-2", "name_ar": "خارجة", "name_lat": "Kharja", "sex": "M", "translit_provisional": true}
+{"id": "p.bdud", "name_ar": "عبدود", "name_lat": "ʿbdūd", "sex": "M", "translit_provisional": true}
+{"id": "p.jdhima-4", "name_ar": "جذيمة", "name_lat": "Jdhīma", "sex": "M", "translit_provisional": true}
+{"id": "p.hsn", "name_ar": "حصن", "name_lat": "Ḥṣn", "sex": "M", "translit_provisional": true}
+{"id": "p.suhayl-3", "name_ar": "سهيل", "name_lat": "Suhayl", "sex": "M"}
+{"id": "p.shrif", "name_ar": "شريف", "name_lat": "Shrīf", "sex": "M", "translit_provisional": true}
+{"id": "p.layth-2", "name_ar": "ليث", "name_lat": "Layth", "sex": "M"}
+{"id": "p.fras-2", "name_ar": "فراس", "name_lat": "Fras", "sex": "M", "translit_provisional": true}
+{"id": "p.lqma-3", "name_ar": "علقمة", "name_lat": "ʿlqma", "sex": "M", "translit_provisional": true}
+{"id": "p.jdhima-5", "name_ar": "جذيمة", "name_lat": "Jdhīma", "sex": "M", "translit_provisional": true}
+{"id": "p.naf-2", "name_ar": "نافع", "name_lat": "Nafʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.mhlm", "name_ar": "محلم", "name_lat": "Mḥlm", "sex": "M", "translit_provisional": true}
+{"id": "p.hbal", "name_ar": "حبال", "name_lat": "Ḥbal", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-58", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.kbir-2", "name_ar": "كبير", "name_lat": "Kbīr", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-36", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.awf-6", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.qays-14", "name_ar": "قيس", "name_lat": "Qays", "sex": "M"}
+{"id": "p.thalaba-7", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M"}
+{"id": "p.kratha", "name_ar": "كراثة", "name_lat": "Kratha", "sex": "M", "translit_provisional": true}
+{"id": "p.awf-7", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.zfr", "name_ar": "زفر", "name_lat": "Zfr", "sex": "M", "translit_provisional": true}
+{"id": "p.rabia-16", "name_ar": "ربيعة", "name_lat": "Rabīʿa", "sex": "M"}
+{"id": "p.zayd-7", "name_ar": "زيد", "name_lat": "Zayd", "sex": "M"}
+{"id": "p.al-msur", "name_ar": "المسور", "name_lat": "al-Msūr", "sex": "M", "translit_provisional": true}
+{"id": "p.al-jlan", "name_ar": "العجلان", "name_lat": "al-ʿjlan", "sex": "M", "translit_provisional": true}
+{"id": "p.khshin", "name_ar": "خشين", "name_lat": "Khshīn", "sex": "M", "translit_provisional": true}
+{"id": "p.tia", "name_ar": "عطية", "name_lat": "ʿṭīa", "sex": "M", "translit_provisional": true}
+{"id": "p.jlan", "name_ar": "جلان", "name_lat": "Jlan", "sex": "M", "translit_provisional": true}
+{"id": "p.kab-10", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.ubayd-7", "name_ar": "عبيد", "name_lat": "ʿUbayd", "sex": "M"}
+{"id": "p.hlal-6", "name_ar": "هلال", "name_lat": "Hlal", "sex": "M", "translit_provisional": true}
+{"id": "p.amr-37", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.kab-11", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.blbla", "name_ar": "بلبلة", "name_lat": "Blbla", "sex": "M", "translit_provisional": true}
+{"id": "p.shkm", "name_ar": "شكم", "name_lat": "Shkm", "sex": "M", "translit_provisional": true}
+{"id": "p.bghid", "name_ar": "بغيض", "name_lat": "Bghīḍ", "sex": "M", "translit_provisional": true}
+{"id": "p.jusham-2", "name_ar": "جشم", "name_lat": "Jusham", "sex": "M"}
+{"id": "p.amir-17", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
+{"id": "p.amr-38", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.hmar", "name_ar": "حمار", "name_lat": "Ḥmar", "sex": "M", "translit_provisional": true}
+{"id": "p.mauia", "name_ar": "ماوية", "name_lat": "Maūīa", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-mlk", "name_ar": "عبد الملك", "name_lat": "ʿbd al-Mlk", "sex": "M", "translit_provisional": true}
+{"id": "p.ghzia", "name_ar": "غزية", "name_lat": "Ghzīa", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-rhmn-la-bqia", "name_ar": "عبد الرحمن, لا بقية", "name_lat": "ʿbd al-Rḥmn La Bqīa", "sex": "M", "translit_provisional": true}
+{"id": "p.al-hasan-2", "name_ar": "الحسن", "name_lat": "al-Ḥasan", "sex": "M"}
+{"id": "p.al-fdl-ubh-kan-ikna", "name_ar": "الفضل, وبه كان يكنى", "name_lat": "al-Fḍl Ūbh Kan Īknā", "sex": "M", "translit_provisional": true}
+{"id": "p.al-walid-6", "name_ar": "الوليد", "name_lat": "al-Walīd", "sex": "M"}
+{"id": "p.hamza-3", "name_ar": "حمزة", "name_lat": "Ḥamza", "sex": "M"}
+{"id": "p.khbib", "name_ar": "خبيب", "name_lat": "Khbīb", "sex": "M", "translit_provisional": true}
+{"id": "p.yazid-3", "name_ar": "يزيد", "name_lat": "Yazīd", "sex": "M"}
+{"id": "p.iyad", "name_ar": "إياد", "name_lat": "Iyād", "sex": "M"}
+{"id": "p.qans", "name_ar": "قنص", "name_lat": "Qanṣ", "sex": "M"}
+{"id": "p.umayr-5", "name_ar": "عمير", "name_lat": "ʿUmayr", "sex": "M"}
+{"id": "p.ubayd-allah-6", "name_ar": "عبيد الله", "name_lat": "ʿUbayd Allāh", "sex": "M"}
+{"id": "p.quthham", "name_ar": "قثم", "name_lat": "Quthham", "sex": "M"}
+{"id": "p.mabad", "name_ar": "معبد", "name_lat": "Maʿbad", "sex": "M"}
+{"id": "p.abd-al-rahman-11", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.tammam", "name_ar": "تمام", "name_lat": "Tammām", "sex": "M"}
+{"id": "p.ihia-abna-jafar", "name_ar": "يحيى ابنا جعفر", "name_lat": "Īḥīā Abna Jaʿfar", "sex": "M", "translit_provisional": true}
+{"id": "p.kathir-3", "name_ar": "كثير", "name_lat": "Kathīr", "sex": "M"}
+{"id": "p.al-harith-37", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.abu-al-uathq-bd-al-ziz", "name_ar": "أبو الواثق عبد العزيز", "name_lat": "Abū al-Ūathq ʿbd al-ʿzīz", "sex": "M", "translit_provisional": true}
+{"id": "p.umar-4", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.al-hsin-aba-bd-al-lh", "name_ar": "الحسين أبا عبد الله", "name_lat": "al-Ḥsīn Aba ʿbd al-Lh", "sex": "M", "translit_provisional": true}
+{"id": "p.slm", "name_ar": "سلم", "name_lat": "Slm", "sex": "M", "translit_provisional": true}
+{"id": "p.al-abbas-3", "name_ar": "العباس", "name_lat": "al-ʿAbbās", "sex": "M"}
+{"id": "p.ubayd-allah-7", "name_ar": "عبيد الله", "name_lat": "ʿUbayd Allāh", "sex": "M"}
+{"id": "p.abd-allah-59", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.bd-al-mlk-2", "name_ar": "عبد الملك", "name_lat": "ʿbd al-Mlk", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-mjid", "name_ar": "عبد المجيد", "name_lat": "ʿbd al-Mjīd", "sex": "M", "translit_provisional": true}
+{"id": "p.muhammad-12", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.shib", "name_ar": "شعيب", "name_lat": "Shʿīb", "sex": "M", "translit_provisional": true}
+{"id": "p.uthman-14", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
+{"id": "p.utba-4", "name_ar": "عتبة", "name_lat": "ʿUtba", "sex": "M"}
+{"id": "p.hind-2", "name_ar": "هند", "name_lat": "Hind", "sex": "M"}
+{"id": "p.al-walid-7", "name_ar": "الوليد", "name_lat": "al-Walīd", "sex": "M"}
+{"id": "p.mhshm", "name_ar": "مهشم", "name_lat": "Mhshm", "sex": "M", "translit_provisional": true}
+{"id": "p.hfs-2", "name_ar": "حفص", "name_lat": "Ḥfṣ", "sex": "M", "translit_provisional": true}
+{"id": "p.hisham-8", "name_ar": "هشام", "name_lat": "Hishām", "sex": "M"}
+{"id": "p.al-mughira-6", "name_ar": "المغيرة", "name_lat": "al-Mughīra", "sex": "M"}
+{"id": "p.abd-shams-8", "name_ar": "عبد شمس", "name_lat": "ʿAbd Shams", "sex": "M"}
+{"id": "p.abu-umayya-3", "name_ar": "أبو أمية", "name_lat": "Abū Umayya", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-al-hkm", "name_ar": "أبو الحكم", "name_lat": "Abū al-Ḥkm", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-hashim", "name_ar": "أبو هاشم", "name_lat": "Abū Hāshim", "sex": "M", "translit_provisional": true}
+{"id": "p.al-numan-3", "name_ar": "النعمان", "name_lat": "al-Nuʿmān", "sex": "M"}
+{"id": "p.asm", "name_ar": "عاصم", "name_lat": "ʿaṣm", "sex": "M", "translit_provisional": true}
+{"id": "p.asm-2", "name_ar": "عاصم", "name_lat": "ʿaṣm", "sex": "M", "translit_provisional": true}
+{"id": "p.lmr-hdha", "name_ar": "لعمر هذا", "name_lat": "Lʿmr Hdha", "sex": "M", "translit_provisional": true}
+{"id": "p.said-abu-ahiha", "name_ar": "سعيد أبو أحيحة", "name_lat": "Saʿīd Abū Aḥīḥa", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-60", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.amr-39", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.khalid-11", "name_ar": "خالد", "name_lat": "Khālid", "sex": "M"}
+{"id": "p.qtl-abnh-said", "name_ar": "قتل ابنه سعيد", "name_lat": "Qtl Abnh Saʿīd", "sex": "M", "translit_provisional": true}
+{"id": "p.ali-4", "name_ar": "علي", "name_lat": "ʿAlī", "sex": "M"}
+{"id": "p.aban-3", "name_ar": "أبان", "name_lat": "Aban", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-38", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.umar-5", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.yazid-4", "name_ar": "يزيد", "name_lat": "Yazīd", "sex": "M"}
+{"id": "p.amr-40", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.muhammad-13", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.nbsa-2", "name_ar": "عنبسة", "name_lat": "ʿnbsa", "sex": "M", "translit_provisional": true}
+{"id": "p.utba-5", "name_ar": "عتبة", "name_lat": "ʿUtba", "sex": "M"}
+{"id": "p.ma-uthman", "name_ar": "عمة عثمان", "name_lat": "ʿma ʿUthmān", "sex": "M", "translit_provisional": true}
+{"id": "p.uthman-15", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
+{"id": "p.uthman-16", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
+{"id": "p.aban-4", "name_ar": "أبان", "name_lat": "Aban", "sex": "M", "translit_provisional": true}
+{"id": "p.naf-3", "name_ar": "نافع", "name_lat": "Nafʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-sulayman", "name_ar": "أبو سليمان", "name_lat": "Abū Sulaymān", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-mlk-3", "name_ar": "عبد الملك", "name_lat": "ʿbd al-Mlk", "sex": "M", "translit_provisional": true}
+{"id": "p.mh-rua", "name_ar": "عمه عروة", "name_lat": "ʿmh ʿrūa", "sex": "M", "translit_provisional": true}
+{"id": "p.ubayd-allah-8", "name_ar": "عبيد الله", "name_lat": "ʿUbayd Allāh", "sex": "M"}
+{"id": "p.rua", "name_ar": "عروة", "name_lat": "ʿrūa", "sex": "M", "translit_provisional": true}
+{"id": "p.abn-mh-lha-bd-al-lh", "name_ar": "ابن عمه لحا عبد الله", "name_lat": "Abn ʿmh Lḥa ʿbd al-Lh", "sex": "M", "translit_provisional": true}
+{"id": "p.al-aswad-8", "name_ar": "الأسود", "name_lat": "al-Aswad", "sex": "M"}
+{"id": "p.mh-hisham", "name_ar": "عمه هشام", "name_lat": "ʿmh Hishām", "sex": "M", "translit_provisional": true}
+{"id": "p.naf-4", "name_ar": "نافع", "name_lat": "Nafʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-hnin", "name_ar": "أبو حنين", "name_lat": "Abū Ḥnīn", "sex": "M", "translit_provisional": true}
+{"id": "p.zhir", "name_ar": "زهير", "name_lat": "Zhīr", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-al-bkhtri-al-asi", "name_ar": "أبو البختري العاصي", "name_lat": "Abū al-Bkhtrī al-ʿaṣī", "sex": "M", "translit_provisional": true}
+{"id": "p.abnh-al-asud", "name_ar": "ابنه الأسود", "name_lat": "Abnh al-Asūd", "sex": "M", "translit_provisional": true}
+{"id": "p.al-mnsur", "name_ar": "المنصور", "name_lat": "al-Mnṣūr", "sex": "M", "translit_provisional": true}
+{"id": "p.hmid", "name_ar": "حميد", "name_lat": "Ḥmīd", "sex": "M", "translit_provisional": true}
+{"id": "p.qtl-ium-al-jml", "name_ar": "قتل يوم الجمل", "name_lat": "Qtl Īūm al-Jml", "sex": "M", "translit_provisional": true}
+{"id": "p.ubayd-allah-9", "name_ar": "عبيد الله", "name_lat": "ʿUbayd Allāh", "sex": "M"}
+{"id": "p.hfs-3", "name_ar": "حفص", "name_lat": "Ḥfṣ", "sex": "M", "translit_provisional": true}
+{"id": "p.tuit", "name_ar": "تويت", "name_lat": "Tūīt", "sex": "M", "translit_provisional": true}
+{"id": "p.aqil-2", "name_ar": "عقيل", "name_lat": "ʿAqīl", "sex": "M"}
+{"id": "p.bd-al-lh-al-akbr", "name_ar": "عبد الله الأكبر", "name_lat": "ʿbd al-Lh al-Akbr", "sex": "M", "translit_provisional": true}
+{"id": "p.yazid-5", "name_ar": "يزيد", "name_lat": "Yazīd", "sex": "M"}
+{"id": "p.nawfal-8", "name_ar": "نوفل", "name_lat": "Nawfal", "sex": "M"}
+{"id": "p.abd-al-rahman-12", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.al-harith-39", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.al-mrtf", "name_ar": "المرتفع", "name_lat": "al-Mrtfʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.mnsur-2", "name_ar": "منصور", "name_lat": "Mnṣūr", "sex": "M", "translit_provisional": true}
+{"id": "p.qast", "name_ar": "قاسط", "name_lat": "Qasṭ", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-lh-al-asghr", "name_ar": "عبد الله الأصغر", "name_lat": "ʿbd al-Lh al-Aṣghr", "sex": "M", "translit_provisional": true}
+{"id": "p.ubayd-allah-10", "name_ar": "عبيد الله", "name_lat": "ʿUbayd Allāh", "sex": "M"}
+{"id": "p.abd-allah-61", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.jabr-6", "name_ar": "جابر", "name_lat": "Jabr", "sex": "M", "translit_provisional": true}
+{"id": "p.iash", "name_ar": "عياش", "name_lat": "ʿīash", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-salama-2", "name_ar": "أبو سلمة", "name_lat": "Abū Salama", "sex": "M", "translit_provisional": true}
+{"id": "p.amir-18", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
+{"id": "p.klda-2", "name_ar": "كلدة", "name_lat": "Klda", "sex": "M", "translit_provisional": true}
+{"id": "p.abnh-abu-ghraza-muhammad", "name_ar": "ابنه أبو غرازة محمد", "name_lat": "Abnh Abū Ghraza Muḥammad", "sex": "M", "translit_provisional": true}
+{"id": "p.abn-mh-ali", "name_ar": "ابن عمه علي", "name_lat": "Abn ʿmh ʿAlī", "sex": "M", "translit_provisional": true}
+{"id": "p.uthman-abu-qhafa", "name_ar": "عثمان أبو قحافة", "name_lat": "ʿUthmān Abū Qḥafa", "sex": "M", "translit_provisional": true}
+{"id": "p.tiq", "name_ar": "عتيق", "name_lat": "ʿtīq", "sex": "M", "translit_provisional": true}
+{"id": "p.tzujha-al-ashth-al-kndi", "name_ar": "تزوجها الأشعث الكندي", "name_lat": "Tzūjha al-Ashʿth al-Kndī", "sex": "M", "translit_provisional": true}
+{"id": "p.mru-qtl-ium-al-qadsia", "name_ar": "عمرو: قتل يوم القادسية", "name_lat": "ʿmrū Qtl Īūm al-Qadsīa", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-al-mta", "name_ar": "أبو المطاع", "name_lat": "Abū al-Mṭaʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.uthman-17", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
+{"id": "p.musa-2", "name_ar": "موسى", "name_lat": "Mūsā", "sex": "M"}
+{"id": "p.madh-fmn", "name_ar": "معاذ: فمن", "name_lat": "Mʿadh Fmn", "sex": "M", "translit_provisional": true}
+{"id": "p.hdhafa-5", "name_ar": "حذافة", "name_lat": "Ḥdhafa", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-brda", "name_ar": "أبو بردة", "name_lat": "Abū Brda", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-al-rahman-13", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.mslm-2", "name_ar": "مسلم", "name_lat": "Mslm", "sex": "M", "translit_provisional": true}
+{"id": "p.al-muttalib-6", "name_ar": "المطلب", "name_lat": "al-Muṭṭalib", "sex": "M"}
+{"id": "p.al-aswad-9", "name_ar": "الأسود", "name_lat": "al-Aswad", "sex": "M"}
+{"id": "p.sufyan-5", "name_ar": "سفيان", "name_lat": "Sufyān", "sex": "M"}
+{"id": "p.abu-hdhifa-2", "name_ar": "أبو حذيفة", "name_lat": "Abū Ḥdhīfa", "sex": "M", "translit_provisional": true}
+{"id": "p.hashim-7", "name_ar": "هاشم", "name_lat": "Hāshim", "sex": "M"}
+{"id": "p.al-fakh-2", "name_ar": "الفاكه", "name_lat": "al-Fakh", "sex": "M", "translit_provisional": true}
+{"id": "p.nawfal-9", "name_ar": "نوفل", "name_lat": "Nawfal", "sex": "M"}
+{"id": "p.abu-rabia-2", "name_ar": "أبو ربيعة", "name_lat": "Abū Rabīʿa", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-62", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.abu-zhir", "name_ar": "أبو زهير", "name_lat": "Abū Zhīr", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-qays", "name_ar": "أبو قيس", "name_lat": "Abū Qays", "sex": "M", "translit_provisional": true}
+{"id": "p.hisham-9", "name_ar": "هشام", "name_lat": "Hishām", "sex": "M"}
+{"id": "p.abd-shams-9", "name_ar": "عبد شمس", "name_lat": "ʿAbd Shams", "sex": "M"}
+{"id": "p.abd-al-rahman-14", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.abd-allah-63", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.sulayman", "name_ar": "سليمان", "name_lat": "Sulaymān", "sex": "M"}
+{"id": "p.al-walid-8", "name_ar": "الوليد", "name_lat": "al-Walīd", "sex": "M"}
+{"id": "p.abu-bida", "name_ar": "أبو عبيدة", "name_lat": "Abū ʿbīda", "sex": "M", "translit_provisional": true}
+{"id": "p.ismail-2", "name_ar": "إسماعيل", "name_lat": "Ismāʿīl", "sex": "M"}
+{"id": "p.muhammad-14", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.khalid-12", "name_ar": "خالد", "name_lat": "Khālid", "sex": "M"}
+{"id": "p.abu-amr", "name_ar": "أبو عمرو", "name_lat": "Abū ʿAmr", "sex": "M", "translit_provisional": true}
+{"id": "p.skn-al-kufa", "name_ar": "سكن الكوفة", "name_lat": "Skn al-Kūfa", "sex": "M", "translit_provisional": true}
+{"id": "p.mhdth-thqa", "name_ar": "محدث ثقة", "name_lat": "Mḥdth Thqa", "sex": "M", "translit_provisional": true}
+{"id": "p.khlf-4", "name_ar": "خلف", "name_lat": "Khlf", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-bakr-2", "name_ar": "أبو بكر", "name_lat": "Abū Bakr", "sex": "M"}
+{"id": "p.abd-al-rahman-15", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.bd-al-ziz", "name_ar": "عبد العزيز", "name_lat": "ʿbd al-ʿzīz", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-mlk-4", "name_ar": "عبد الملك", "name_lat": "ʿbd al-Mlk", "sex": "M", "translit_provisional": true}
+{"id": "p.ibrahim-5", "name_ar": "إبراهيم", "name_lat": "Ibrāhīm", "sex": "M"}
+{"id": "p.muhammad-15", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.abu-bakr-3", "name_ar": "أبو بكر", "name_lat": "Abū Bakr", "sex": "M"}
+{"id": "p.mr-amh-thqfia", "name_ar": "عمر: أمه ثقفية", "name_lat": "ʿmr Amh Thqfīa", "sex": "M", "translit_provisional": true}
+{"id": "p.usayd-3", "name_ar": "أسيد", "name_lat": "Usayd", "sex": "M"}
+{"id": "p.hdhifa-2", "name_ar": "حذيفة", "name_lat": "Ḥdhīfa", "sex": "M", "translit_provisional": true}
+{"id": "p.jubayr-2", "name_ar": "جبير", "name_lat": "Jubayr", "sex": "M"}
+{"id": "p.abd-manaf-6", "name_ar": "عبد مناف", "name_lat": "ʿAbd Manāf", "sex": "M"}
+{"id": "p.nim-al-nham", "name_ar": "نعيم النحام", "name_lat": "Nʿīm al-Nḥam", "sex": "M", "translit_provisional": true}
+{"id": "p.qtl-ium-ajnadin", "name_ar": "قتل يوم أجنادين", "name_lat": "Qtl Īūm Ajnadīn", "sex": "M", "translit_provisional": true}
+{"id": "p.abnh-ibrahim", "name_ar": "ابنه إبراهيم", "name_lat": "Abnh Ibrāhīm", "sex": "M", "translit_provisional": true}
+{"id": "p.jnada-3", "name_ar": "جنادة", "name_lat": "Jnada", "sex": "M", "translit_provisional": true}
+{"id": "p.muhammad-16", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.ibrahim-6", "name_ar": "إبراهيم", "name_lat": "Ibrāhīm", "sex": "M"}
+{"id": "p.muhammad-17", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.abd-allah-64", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.jam", "name_ar": "جامع", "name_lat": "Jamʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.ismail-3", "name_ar": "إسماعيل", "name_lat": "Ismāʿīl", "sex": "M"}
+{"id": "p.hisham-10", "name_ar": "هشام", "name_lat": "Hishām", "sex": "M"}
+{"id": "p.bd-al-lh-al-shar", "name_ar": "عبد الله الشاعر", "name_lat": "ʿbd al-Lh al-Shaʿr", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-al-akhns", "name_ar": "أبو الأخنس", "name_lat": "Abū al-Akhns", "sex": "M", "translit_provisional": true}
+{"id": "p.slit-4", "name_ar": "سليط", "name_lat": "Slīṭ", "sex": "M", "translit_provisional": true}
+{"id": "p.utba-6", "name_ar": "عتبة", "name_lat": "ʿUtba", "sex": "M"}
+{"id": "p.hind-3", "name_ar": "هند", "name_lat": "Hind", "sex": "M"}
+{"id": "p.amr-41", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.mkrz", "name_ar": "مكرز", "name_lat": "Mkrz", "sex": "M", "translit_provisional": true}
+{"id": "p.qays-15", "name_ar": "قيس", "name_lat": "Qays", "sex": "M"}
+{"id": "p.habib-10", "name_ar": "حبيب", "name_lat": "Ḥabīb", "sex": "M"}
+{"id": "p.abd-al-rahman-16", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.naf-5", "name_ar": "نافع", "name_lat": "Nafʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.yusuf", "name_ar": "يوسف", "name_lat": "Yūsuf", "sex": "M"}
+{"id": "p.al-mhdth-bmsr-abu-bakr-muhammad", "name_ar": "المحدث بمصر أبو بكر محمد", "name_lat": "al-Mḥdth Bmṣr Abū Bakr Muḥammad", "sex": "M", "translit_provisional": true}
+{"id": "p.amir-19", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
+{"id": "p.murra-7", "name_ar": "مرة", "name_lat": "Murra", "sex": "M"}
+{"id": "p.jnd", "name_ar": "جندع", "name_lat": "Jndʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.tuara", "name_ar": "عتوارة", "name_lat": "ʿtūara", "sex": "M", "translit_provisional": true}
+{"id": "p.trif-3", "name_ar": "طريف", "name_lat": "Ṭrīf", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-65", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.al-fqih-muhammad", "name_ar": "الفقيه محمد", "name_lat": "al-Fqīh Muḥammad", "sex": "M", "translit_provisional": true}
+{"id": "p.hmis", "name_ar": "حميس", "name_lat": "Ḥmīs", "sex": "M", "translit_provisional": true}
+{"id": "p.jda", "name_ar": "جدى", "name_lat": "Jdā", "sex": "M", "translit_provisional": true}
+{"id": "p.awf-8", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.kab-12", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.ghifar-btn-dkhm", "name_ar": "غفار بطن ضخم", "name_lat": "Ghifār Bṭn Ḍkhm", "sex": "M", "translit_provisional": true}
+{"id": "p.mdlj", "name_ar": "مدلج", "name_lat": "Mdlj", "sex": "M", "translit_provisional": true}
+{"id": "p.mbdhul", "name_ar": "مبذول", "name_lat": "Mbdhūl", "sex": "M", "translit_provisional": true}
+{"id": "p.shbib-2", "name_ar": "شبيب", "name_lat": "Shbīb", "sex": "M", "translit_provisional": true}
+{"id": "p.amr-42", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.abnh-rar", "name_ar": "ابنه عرار", "name_lat": "Abnh ʿrar", "sex": "M", "translit_provisional": true}
+{"id": "p.ghadra", "name_ar": "غاضرة", "name_lat": "Ghaḍra", "sex": "M", "translit_provisional": true}
+{"id": "p.malik-14", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.thalaba-8", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M"}
+{"id": "p.rhm-3", "name_ar": "رهم", "name_lat": "Rhm", "sex": "M", "translit_provisional": true}
+{"id": "p.udd", "name_ar": "أد", "name_lat": "Udd", "sex": "M"}
+{"id": "p.mr", "name_ar": "مر", "name_lat": "Mr", "sex": "M", "translit_provisional": true}
+{"id": "p.tamim-5", "name_ar": "تميم", "name_lat": "Tamīm", "sex": "M"}
+{"id": "p.thalaba-9", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M"}
+{"id": "p.bakr-3", "name_ar": "بكر", "name_lat": "Bakr", "sex": "M"}
+{"id": "p.muharib-3", "name_ar": "محارب", "name_lat": "Muḥārib", "sex": "M"}
+{"id": "p.al-ghuth-2", "name_ar": "الغوث", "name_lat": "al-Ghūth", "sex": "M", "translit_provisional": true}
+{"id": "p.ifr", "name_ar": "يعفر", "name_lat": "Īʿfr", "sex": "M", "translit_provisional": true}
+{"id": "p.malik-15", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.jdila-bnt-mr", "name_ar": "جديلة بنت مر", "name_lat": "Jdīla Bnt Mr", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-40", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.mqas", "name_ar": "مقاعس", "name_lat": "Mqaʿs", "sex": "M", "translit_provisional": true}
+{"id": "p.amir-20", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
+{"id": "p.zhr", "name_ar": "زهر", "name_lat": "Zhr", "sex": "M", "translit_provisional": true}
+{"id": "p.dma", "name_ar": "دعمى", "name_lat": "Dʿmā", "sex": "M", "translit_provisional": true}
+{"id": "p.nmara", "name_ar": "نمارة", "name_lat": "Nmara", "sex": "M", "translit_provisional": true}
+{"id": "p.udad-3", "name_ar": "أدد", "name_lat": "Udad", "sex": "M"}
+{"id": "p.amr-43", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.adi-10", "name_ar": "عدى", "name_lat": "ʿAdī", "sex": "M"}
+{"id": "p.habib-11", "name_ar": "حبيب", "name_lat": "Ḥabīb", "sex": "M"}
+{"id": "p.amr-44", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.al-abbas-4", "name_ar": "العباس", "name_lat": "al-ʿAbbās", "sex": "M"}
+{"id": "p.abd-allah-66", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.al-muttalib-7", "name_ar": "المطلب", "name_lat": "al-Muṭṭalib", "sex": "M"}
+{"id": "p.umar-6", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.abd-allah-67", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.abd-allah-68", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.adi-11", "name_ar": "عدي", "name_lat": "ʿAdī", "sex": "M"}
+{"id": "p.abd-allah-69", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.hmtt", "name_ar": "حمطط", "name_lat": "Ḥmṭṭ", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-8", "name_ar": "عبد", "name_lat": "ʿbd", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-70", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.abd-manaf-7", "name_ar": "عبد مناف", "name_lat": "ʿAbd Manāf", "sex": "M"}
+{"id": "p.mira", "name_ar": "عميرة", "name_lat": "ʿmīra", "sex": "M", "translit_provisional": true}
+{"id": "p.amra", "name_ar": "عامرة", "name_lat": "ʿamra", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-al-uzza-10", "name_ar": "عبد العزى", "name_lat": "ʿAbd al-ʿUzzā", "sex": "M"}
+{"id": "p.al-harith-41", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.md-ubh-kan-ikna", "name_ar": "معد- وبه كان يكنى", "name_lat": "Mʿd Ūbh Kan Īknā", "sex": "M", "translit_provisional": true}
+{"id": "p.al-nas", "name_ar": "الناس", "name_lat": "al-Nas", "sex": "M", "translit_provisional": true}
+{"id": "p.smith-hrba", "name_ar": "سميته حربا", "name_lat": "Smīth Ḥrba", "sex": "M", "translit_provisional": true}
+{"id": "p.umar-7", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.al-asbgh", "name_ar": "الأصبغ", "name_lat": "al-Aṣbgh", "sex": "M", "translit_provisional": true}
+{"id": "p.aba-al-as", "name_ar": "أبا العاص", "name_lat": "Aba al-ʿaṣ", "sex": "M", "translit_provisional": true}
+{"id": "p.kinana-3", "name_ar": "كنانة", "name_lat": "Kināna", "sex": "M"}
+{"id": "p.abd-allah-71", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.aba-al-as-2", "name_ar": "أبا العاص", "name_lat": "Aba al-ʿaṣ", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-72", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.urqa", "name_ar": "ورقة", "name_lat": "Ūrqa", "sex": "M", "translit_provisional": true}
+{"id": "p.sad-9", "name_ar": "سعد", "name_lat": "Saʿd", "sex": "M"}
+{"id": "p.umar-8", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.talha-4", "name_ar": "طلحة", "name_lat": "Ṭalḥa", "sex": "M"}
+{"id": "p.yaqub-2", "name_ar": "يعقوب", "name_lat": "Yaʿqūb", "sex": "M"}
+{"id": "p.aba-said", "name_ar": "أبا سعيد", "name_lat": "Aba Saʿīd", "sex": "M", "translit_provisional": true}
+{"id": "p.mhmda", "name_ar": "محمدا", "name_lat": "Mḥmda", "sex": "M", "translit_provisional": true}
+{"id": "p.khalid-13", "name_ar": "خالد", "name_lat": "Khālid", "sex": "M"}
+{"id": "p.aba-al-sab", "name_ar": "أبا السائب", "name_lat": "Aba al-Saʾb", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-manaf-8", "name_ar": "عبد مناف", "name_lat": "ʿAbd Manāf", "sex": "M"}
+{"id": "p.jafar-4", "name_ar": "جعفر", "name_lat": "Jaʿfar", "sex": "M"}
+{"id": "p.awn", "name_ar": "عون", "name_lat": "ʿAwn", "sex": "M"}
+{"id": "p.muhammad-18", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.rzq", "name_ar": "رزق", "name_lat": "Rzq", "sex": "M", "translit_provisional": true}
+{"id": "p.al-hkm-al-juad", "name_ar": "الحكم الجواد", "name_lat": "al-Ḥkm al-Jūad", "sex": "M", "translit_provisional": true}
+{"id": "p.isa-2", "name_ar": "عيسى", "name_lat": "ʿīsā", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-qays-2", "name_ar": "أبو قيس", "name_lat": "Abū Qays", "sex": "M", "translit_provisional": true}
+{"id": "p.abu", "name_ar": "أبو", "name_lat": "Abū", "sex": "M", "translit_provisional": true}
+{"id": "p.muhammad-19", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.aba-al-jhm", "name_ar": "أبا الجهم", "name_lat": "Aba al-Jhm", "sex": "M", "translit_provisional": true}
+{"id": "p.bdud-2", "name_ar": "عبدود", "name_lat": "ʿbdūd", "sex": "M", "translit_provisional": true}
+{"id": "p.habib-12", "name_ar": "حبيب", "name_lat": "Ḥabīb", "sex": "M"}
+{"id": "p.al-shdakh", "name_ar": "الشداخ", "name_lat": "al-Shdakh", "sex": "M", "translit_provisional": true}
+{"id": "p.layth-3", "name_ar": "ليث", "name_lat": "Layth", "sex": "M"}
+{"id": "p.jabr-7", "name_ar": "جابر", "name_lat": "Jabr", "sex": "M", "translit_provisional": true}
+{"id": "p.awf-9", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.amr-45", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.fras-3", "name_ar": "فراس", "name_lat": "Fras", "sex": "M", "translit_provisional": true}
+{"id": "p.hr", "name_ar": "هر", "name_lat": "Hr", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-42", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.mhlm-2", "name_ar": "محلم", "name_lat": "Mḥlm", "sex": "M", "translit_provisional": true}
+{"id": "p.lghn", "name_ar": "لغن", "name_lat": "Lghn", "sex": "M", "translit_provisional": true}
+{"id": "p.nsr-3", "name_ar": "نصر", "name_lat": "Nṣr", "sex": "M", "translit_provisional": true}
+{"id": "p.awf-10", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.qays-16", "name_ar": "قيس", "name_lat": "Qays", "sex": "M"}
+{"id": "p.muharib-4", "name_ar": "محارب", "name_lat": "Muḥārib", "sex": "M"}
+{"id": "p.awf-11", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.ghdban", "name_ar": "غضبان", "name_lat": "Ghḍban", "sex": "M", "translit_provisional": true}
+{"id": "p.zayd-mnaa", "name_ar": "زيد مناة", "name_lat": "Zayd Mnaa", "sex": "M", "translit_provisional": true}
+{"id": "p.sad-10", "name_ar": "سعد", "name_lat": "Saʿd", "sex": "M"}
+{"id": "p.al-trjman-lam", "name_ar": "الترجمان لأم", "name_lat": "al-Trjman Lam", "sex": "M", "translit_provisional": true}
+{"id": "p.zhir-2", "name_ar": "زهير", "name_lat": "Zhīr", "sex": "M", "translit_provisional": true}
+{"id": "p.ubayd-8", "name_ar": "عبيد", "name_lat": "ʿUbayd", "sex": "M"}
+{"id": "p.mnqr", "name_ar": "منقر", "name_lat": "Mnqr", "sex": "M", "translit_provisional": true}
+{"id": "p.khalid-14", "name_ar": "خالد", "name_lat": "Khālid", "sex": "M"}
+{"id": "p.mhrz-3", "name_ar": "محرز", "name_lat": "Mḥrz", "sex": "M", "translit_provisional": true}
+{"id": "p.ghdia", "name_ar": "غضيا", "name_lat": "Ghḍīa", "sex": "M", "translit_provisional": true}
+{"id": "p.mhsn-3", "name_ar": "محصن", "name_lat": "Mḥṣn", "sex": "M", "translit_provisional": true}
+{"id": "p.siar-3", "name_ar": "سيار", "name_lat": "Sīar", "sex": "M", "translit_provisional": true}
+{"id": "p.mkhashn", "name_ar": "مخاشن", "name_lat": "Mkhashn", "sex": "M", "translit_provisional": true}
+{"id": "p.habib-13", "name_ar": "حبيب", "name_lat": "Ḥabīb", "sex": "M"}
+{"id": "p.akthm-2", "name_ar": "أكثم", "name_lat": "Akthm", "sex": "M", "translit_provisional": true}
+{"id": "p.qays-17", "name_ar": "قيس", "name_lat": "Qays", "sex": "M"}
+{"id": "p.abd-allah-73", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.sia", "name_ar": "عصية", "name_lat": "ʿṣīa", "sex": "M", "translit_provisional": true}
+{"id": "p.jlan-2", "name_ar": "جلان", "name_lat": "Jlan", "sex": "M", "translit_provisional": true}
+{"id": "p.kab-13", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.kab-14", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.blbla-2", "name_ar": "بلبلة", "name_lat": "Blbla", "sex": "M", "translit_provisional": true}
+{"id": "p.bakr-4", "name_ar": "بكر", "name_lat": "Bakr", "sex": "M"}
+{"id": "p.jusham-3", "name_ar": "جشم", "name_lat": "Jusham", "sex": "M"}
+{"id": "p.dhman", "name_ar": "دهمان", "name_lat": "Dhman", "sex": "M", "translit_provisional": true}
+{"id": "p.kab-15", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.riah-3", "name_ar": "رياح", "name_lat": "Rīaḥ", "sex": "M", "translit_provisional": true}
+{"id": "p.hmar-2", "name_ar": "حمار", "name_lat": "Ḥmar", "sex": "M", "translit_provisional": true}
+{"id": "p.mauia-2", "name_ar": "ماوية", "name_lat": "Maūīa", "sex": "M", "translit_provisional": true}
+{"id": "p.ant-ahq-bh", "name_ar": "أنت أحق به", "name_lat": "Ant Aḥq Bh", "sex": "M", "translit_provisional": true}
+{"id": "p.an-bd-al-rhmn", "name_ar": "أن عبد الرحمن", "name_lat": "An ʿbd al-Rḥmn", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-74", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.al-harth-ualbas-ubshra", "name_ar": "الحارث, والعباس, وبشرا", "name_lat": "al-Ḥarth Ūalʿbas Ūbshra", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-75", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.hnzla", "name_ar": "حنظلة", "name_lat": "Ḥnẓla", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-lh-uamh-bnt-shayba", "name_ar": "عبد الله, وأمه بنت شيبة", "name_lat": "ʿbd al-Lh Ūamh Bnt Shayba", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-al-rahman-17", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.abd-allah-76", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.abd-allah-77", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.al-ajsh", "name_ar": "الأجش", "name_lat": "al-Ajsh", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-al-rahman-18", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.al-mkhtar-uamh", "name_ar": "المختار, وأمه", "name_lat": "al-Mkhtar Ūamh", "sex": "M", "translit_provisional": true}
+{"id": "p.slma-ubh-kan-ikna", "name_ar": "سلمة, وبه كان يكنى", "name_lat": "Slma Ūbh Kan Īknā", "sex": "M", "translit_provisional": true}
+{"id": "p.al-walid-9", "name_ar": "الوليد", "name_lat": "al-Walīd", "sex": "M"}
+{"id": "p.abd-al-rahman-19", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.talha-5", "name_ar": "طلحة", "name_lat": "Ṭalḥa", "sex": "M"}
+{"id": "p.isa-3", "name_ar": "عيسى", "name_lat": "ʿīsā", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-78", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.muhammad-20", "name_ar": "محمد", "name_lat": "Muḥammad", "sex": "M"}
+{"id": "p.mara-3", "name_ar": "عمارة", "name_lat": "ʿmara", "sex": "M", "translit_provisional": true}
+{"id": "p.ila", "name_ar": "يعلى", "name_lat": "Īʿlā", "sex": "M", "translit_provisional": true}
+{"id": "p.amir-21", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
+{"id": "p.ubayd-allah-11", "name_ar": "عبيد الله", "name_lat": "ʿUbayd Allāh", "sex": "M"}
+{"id": "p.quthham-2", "name_ar": "قثم", "name_lat": "Quthham", "sex": "M"}
+{"id": "p.mabad-2", "name_ar": "معبد", "name_lat": "Maʿbad", "sex": "M"}
+{"id": "p.abd-al-rahman-20", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.tammam-2", "name_ar": "تمام", "name_lat": "Tammām", "sex": "M"}
+{"id": "p.ihia-abna-jafar-2", "name_ar": "يحيى ابنا جعفر", "name_lat": "Īḥīā Abna Jaʿfar", "sex": "M", "translit_provisional": true}
+{"id": "p.kathir-4", "name_ar": "كثير", "name_lat": "Kathīr", "sex": "M"}
+{"id": "p.al-harith-43", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.abd-al-rahman-21", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.asm-3", "name_ar": "عاصم", "name_lat": "ʿaṣm", "sex": "M", "translit_provisional": true}
+{"id": "p.muawiya", "name_ar": "معاوية", "name_lat": "Muʿāwiya", "sex": "M"}
+{"id": "p.naf-6", "name_ar": "نافع", "name_lat": "Nafʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.adh-3", "name_ar": "عائذ", "name_lat": "ʿaʾdh", "sex": "M", "translit_provisional": true}
+{"id": "p.amr-46", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.hdhafa-6", "name_ar": "حذافة", "name_lat": "Ḥdhafa", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-brda-2", "name_ar": "أبو بردة", "name_lat": "Abū Brda", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-al-rahman-22", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.mslm-3", "name_ar": "مسلم", "name_lat": "Mslm", "sex": "M", "translit_provisional": true}
+{"id": "p.tiq-2", "name_ar": "عتيق", "name_lat": "ʿtīq", "sex": "M", "translit_provisional": true}
+{"id": "p.tzujha-sifi", "name_ar": "تزوجها صيفي", "name_lat": "Tzūjha Ṣīfī", "sex": "M", "translit_provisional": true}
+{"id": "p.qtl-sifi", "name_ar": "قتل صيفي", "name_lat": "Qtl Ṣīfī", "sex": "M", "translit_provisional": true}
+{"id": "p.qtl-aida-mhm", "name_ar": "قتل أيضا معهم", "name_lat": "Qtl Aīḍa Mʿhm", "sex": "M", "translit_provisional": true}
+{"id": "p.fqtlh", "name_ar": "فقتله", "name_lat": "Fqtlh", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-mlk-5", "name_ar": "عبد الملك", "name_lat": "ʿbd al-Mlk", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-44", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.umar-9", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.hisham-11", "name_ar": "هشام", "name_lat": "Hishām", "sex": "M"}
+{"id": "p.al-walid-10", "name_ar": "الوليد", "name_lat": "al-Walīd", "sex": "M"}
+{"id": "p.abu-bida-2", "name_ar": "أبو عبيدة", "name_lat": "Abū ʿbīda", "sex": "M", "translit_provisional": true}
+{"id": "p.mmr-5", "name_ar": "معمر", "name_lat": "Mʿmr", "sex": "M", "translit_provisional": true}
+{"id": "p.malik-16", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.habib-14", "name_ar": "حبيب", "name_lat": "Ḥabīb", "sex": "M"}
+{"id": "p.abd-al-rahman-23", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.naf-7", "name_ar": "نافع", "name_lat": "Nafʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-al-rahman-24", "name_ar": "عبد الرحمن", "name_lat": "ʿAbd al-Raḥmān", "sex": "M"}
+{"id": "p.ilyas-2", "name_ar": "الياس", "name_lat": "Ilyās", "sex": "M"}
+{"id": "p.yusuf-2", "name_ar": "يوسف", "name_lat": "Yūsuf", "sex": "M"}
+{"id": "p.al-mhdth-bmsr-abu-bakr-muhammad-2", "name_ar": "المحدث بمصر أبو بكر محمد", "name_lat": "al-Mḥdth Bmṣr Abū Bakr Muḥammad", "sex": "M", "translit_provisional": true}
+{"id": "p.raf", "name_ar": "رافع", "name_lat": "Rafʿ", "sex": "M", "translit_provisional": true}
+{"id": "p.ubayd-9", "name_ar": "عبيد", "name_lat": "ʿUbayd", "sex": "M"}
+{"id": "p.abnh-bd-al-lh", "name_ar": "ابنه عبد الله", "name_lat": "Abnh ʿbd al-Lh", "sex": "M", "translit_provisional": true}
+{"id": "p.ammar", "name_ar": "عمار", "name_lat": "ʿAmmār", "sex": "M"}
+{"id": "p.lqma-jdhl-al-tan", "name_ar": "علقمة جذل الطعان", "name_lat": "ʿlqma Jdhl al-Ṭʿan", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-79", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.bakr-5", "name_ar": "بكر", "name_lat": "Bakr", "sex": "M"}
+{"id": "p.srim", "name_ar": "صريم", "name_lat": "Ṣrīm", "sex": "M", "translit_provisional": true}
+{"id": "p.khsfa", "name_ar": "خصفة", "name_lat": "Khṣfa", "sex": "M", "translit_provisional": true}
+{"id": "p.amr-47", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.kab-16", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.awf-12", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.zayd-8", "name_ar": "زيد", "name_lat": "Zayd", "sex": "M"}
+{"id": "p.salama-4", "name_ar": "سلمة", "name_lat": "Salama", "sex": "M"}
+{"id": "p.ada", "name_ar": "أدى", "name_lat": "Adā", "sex": "M", "translit_provisional": true}
+{"id": "p.han", "name_ar": "هانئ", "name_lat": "Hanʾ", "sex": "M", "translit_provisional": true}
+{"id": "p.hbira", "name_ar": "هبيرة", "name_lat": "Hbīra", "sex": "M", "translit_provisional": true}
+{"id": "p.fir", "name_ar": "عفير", "name_lat": "ʿfīr", "sex": "M", "translit_provisional": true}
+{"id": "p.thur", "name_ar": "ثور", "name_lat": "Thūr", "sex": "M", "translit_provisional": true}
+{"id": "p.kndi", "name_ar": "كندي", "name_lat": "Kndī", "sex": "M", "translit_provisional": true}
+{"id": "p.smith-hrba-2", "name_ar": "سميته حربا", "name_lat": "Smīth Ḥrba", "sex": "M", "translit_provisional": true}
+{"id": "p.hisham-12", "name_ar": "هشام", "name_lat": "Hishām", "sex": "M"}
+{"id": "p.mabad-3", "name_ar": "معبد", "name_lat": "Maʿbad", "sex": "M"}
+{"id": "p.isa-4", "name_ar": "عيسى", "name_lat": "ʿīsā", "sex": "M", "translit_provisional": true}
+{"id": "p.hfs-4", "name_ar": "حفص", "name_lat": "Ḥfṣ", "sex": "M", "translit_provisional": true}
+{"id": "p.al-mml", "name_ar": "المؤمل", "name_lat": "al-Mʾml", "sex": "M", "translit_provisional": true}
+{"id": "p.al-mjzm", "name_ar": "المجزم", "name_lat": "al-Mjzm", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-45", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.ghanm-2", "name_ar": "غانم", "name_lat": "Ghanm", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-80", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.habib-15", "name_ar": "حبيب", "name_lat": "Ḥabīb", "sex": "M"}
+{"id": "p.awf-13", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.malik-17", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.murra-8", "name_ar": "مرة", "name_lat": "Murra", "sex": "M"}
+{"id": "p.shhab-2", "name_ar": "شهاب", "name_lat": "Shhab", "sex": "M", "translit_provisional": true}
+{"id": "p.zhir-3", "name_ar": "زهير", "name_lat": "Zhīr", "sex": "M", "translit_provisional": true}
+{"id": "p.shdad-4", "name_ar": "شداد", "name_lat": "Shdad", "sex": "M", "translit_provisional": true}
+{"id": "p.klub", "name_ar": "كلوب", "name_lat": "Klūb", "sex": "M", "translit_provisional": true}
+{"id": "p.umar-10", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.dhubyan", "name_ar": "ذبيان", "name_lat": "Dhubyān", "sex": "M"}
+{"id": "p.sad-11", "name_ar": "سعد", "name_lat": "Saʿd", "sex": "M"}
+{"id": "p.awf-14", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.aqil-3", "name_ar": "عقيل", "name_lat": "ʿAqīl", "sex": "M"}
+{"id": "p.jabr-8", "name_ar": "جابر", "name_lat": "Jabr", "sex": "M", "translit_provisional": true}
+{"id": "p.amr-48", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.awf-15", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.rabia-17", "name_ar": "ربيعة", "name_lat": "Rabīʿa", "sex": "M"}
+{"id": "p.kratha-2", "name_ar": "كراثة", "name_lat": "Kratha", "sex": "M", "translit_provisional": true}
+{"id": "p.awf-16", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.ikrima-2", "name_ar": "عكرمة", "name_lat": "ʿIkrima", "sex": "M"}
+{"id": "p.mnsur-3", "name_ar": "منصور", "name_lat": "Mnṣūr", "sex": "M", "translit_provisional": true}
+{"id": "p.zayd-9", "name_ar": "زيد", "name_lat": "Zayd", "sex": "M"}
+{"id": "p.awf-17", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.mara-mat", "name_ar": "عمارة, مات", "name_lat": "ʿmara Mat", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-81", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.umar-11", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.abd-allah-82", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.isa-5", "name_ar": "عيسى", "name_lat": "ʿīsā", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-mlk-6", "name_ar": "عبد الملك", "name_lat": "ʿbd al-Mlk", "sex": "M", "translit_provisional": true}
+{"id": "p.tiq-3", "name_ar": "عتيق", "name_lat": "ʿtīq", "sex": "M", "translit_provisional": true}
+{"id": "p.dhia", "name_ar": "دحية", "name_lat": "Dḥīa", "sex": "M", "translit_provisional": true}
+{"id": "p.salama-5", "name_ar": "سلمة", "name_lat": "Salama", "sex": "M"}
+{"id": "p.umar-12", "name_ar": "عمر", "name_lat": "ʿUmar", "sex": "M"}
+{"id": "p.bd-al-uahd", "name_ar": "عبد الواحد", "name_lat": "ʿbd al-Ūaḥd", "sex": "M", "translit_provisional": true}
+{"id": "p.bd-al-ziz-2", "name_ar": "عبد العزيز", "name_lat": "ʿbd al-ʿzīz", "sex": "M", "translit_provisional": true}
+{"id": "p.lqma-jdhl-al-tan-2", "name_ar": "علقمة جذل الطعان", "name_lat": "ʿlqma Jdhl al-Ṭʿan", "sex": "M", "translit_provisional": true}
+{"id": "p.abd-allah-83", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.malik-18", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.awf-18", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.amir-22", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
+{"id": "p.kab-17", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.amr-49", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.al-harith-46", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.uafa", "name_ar": "عوافة", "name_lat": "ʿūafa", "sex": "M", "translit_provisional": true}
+{"id": "p.jusham-4", "name_ar": "جشم", "name_lat": "Jusham", "sex": "M"}
+{"id": "p.malik-19", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.bshms", "name_ar": "عبشمس", "name_lat": "ʿbshms", "sex": "M", "translit_provisional": true}
+{"id": "p.al-nadr-3", "name_ar": "النضر", "name_lat": "al-Naḍr", "sex": "M"}
+{"id": "p.tarq", "name_ar": "طارق", "name_lat": "Ṭarq", "sex": "M", "translit_provisional": true}
+{"id": "p.kab-18", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M"}
+{"id": "p.khuat", "name_ar": "خوات", "name_lat": "Khūat", "sex": "M", "translit_provisional": true}
+{"id": "p.awf-19", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.fqim", "name_ar": "فقيم", "name_lat": "Fqīm", "sex": "M", "translit_provisional": true}
+{"id": "p.asd-3", "name_ar": "أسعد", "name_lat": "Asʿd", "sex": "M", "translit_provisional": true}
+{"id": "p.jrul", "name_ar": "جرول", "name_lat": "Jrūl", "sex": "M", "translit_provisional": true}
+{"id": "p.sakhr-3", "name_ar": "صخر", "name_lat": "Ṣakhr", "sex": "M"}
+{"id": "p.awf-20", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.anis-3", "name_ar": "أنيس", "name_lat": "Anīs", "sex": "M", "translit_provisional": true}
+{"id": "p.al-hsin-3", "name_ar": "الحصين", "name_lat": "al-Ḥṣīn", "sex": "M", "translit_provisional": true}
+{"id": "p.rabia-18", "name_ar": "ربيعة", "name_lat": "Rabīʿa", "sex": "M"}
+{"id": "p.ludhan", "name_ar": "لوذان", "name_lat": "Lūdhan", "sex": "M", "translit_provisional": true}
+{"id": "p.al-arqam-2", "name_ar": "الأرقم", "name_lat": "al-Arqam", "sex": "M"}
+{"id": "p.abd-allah-84", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.awf-21", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.abd-allah-85", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.zhir-4", "name_ar": "زهير", "name_lat": "Zhīr", "sex": "M", "translit_provisional": true}
+{"id": "p.tard", "name_ar": "عطارد", "name_lat": "ʿṭard", "sex": "M", "translit_provisional": true}
+{"id": "p.malik-20", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M"}
+{"id": "p.is", "name_ar": "عيص", "name_lat": "ʿīṣ", "sex": "M", "translit_provisional": true}
+{"id": "p.salman", "name_ar": "سلمان", "name_lat": "Salmān", "sex": "M"}
+{"id": "p.mnqdh", "name_ar": "منقذ", "name_lat": "Mnqdh", "sex": "M", "translit_provisional": true}
+{"id": "p.dhubyan-2", "name_ar": "ذبيان", "name_lat": "Dhubyān", "sex": "M"}
+{"id": "p.hfs-5", "name_ar": "حفص", "name_lat": "Ḥfṣ", "sex": "M", "translit_provisional": true}
+{"id": "p.sad-12", "name_ar": "سعد", "name_lat": "Saʿd", "sex": "M"}
+{"id": "p.mabad-4", "name_ar": "معبد", "name_lat": "Maʿbad", "sex": "M"}
+{"id": "p.sad-13", "name_ar": "سعد", "name_lat": "Saʿd", "sex": "M"}
+{"id": "p.awf-22", "name_ar": "عوف", "name_lat": "ʿAwf", "sex": "M"}
+{"id": "p.juia", "name_ar": "جوية", "name_lat": "Jūīa", "sex": "M", "translit_provisional": true}
+{"id": "p.amr-50", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M"}
+{"id": "p.bdr-2", "name_ar": "بدر", "name_lat": "Bdr", "sex": "M", "translit_provisional": true}
+{"id": "p.nsr-4", "name_ar": "نصر", "name_lat": "Nṣr", "sex": "M", "translit_provisional": true}
+{"id": "p.salama-6", "name_ar": "سلمة", "name_lat": "Salama", "sex": "M"}
+{"id": "p.abd-allah-86", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.mruan", "name_ar": "مروان", "name_lat": "Mrūan", "sex": "M", "translit_provisional": true}
+{"id": "p.ihia", "name_ar": "يحيى", "name_lat": "Īḥīā", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-bakr-4", "name_ar": "أبو بكر", "name_lat": "Abū Bakr", "sex": "M"}
+{"id": "p.abd-allah-87", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.mazn-2", "name_ar": "مازن", "name_lat": "Mazn", "sex": "M", "translit_provisional": true}
+{"id": "p.sulaym-2", "name_ar": "سليم", "name_lat": "Sulaym", "sex": "M"}
+{"id": "p.slaman", "name_ar": "سلامان", "name_lat": "Slaman", "sex": "M", "translit_provisional": true}
+{"id": "p.abu-malik", "name_ar": "أبو مالك", "name_lat": "Abū Mālik", "sex": "M", "translit_provisional": true}
+{"id": "p.muharib-5", "name_ar": "محارب", "name_lat": "Muḥārib", "sex": "M"}
+{"id": "p.hlma", "name_ar": "حلمة", "name_lat": "Ḥlma", "sex": "M", "translit_provisional": true}
+{"id": "p.khalid-15", "name_ar": "خالد", "name_lat": "Khālid", "sex": "M"}
+{"id": "p.sbra-3", "name_ar": "صبرة", "name_lat": "Ṣbra", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-47", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.abd-allah-88", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
+{"id": "p.bd-al-mlk-7", "name_ar": "عبد الملك", "name_lat": "ʿbd al-Mlk", "sex": "M", "translit_provisional": true}
+{"id": "p.mir", "name_ar": "معير", "name_lat": "Mʿīr", "sex": "M", "translit_provisional": true}
+{"id": "p.anis-4", "name_ar": "أنيس", "name_lat": "Anīs", "sex": "M", "translit_provisional": true}
+{"id": "p.aus-2", "name_ar": "أوس", "name_lat": "Aūs", "sex": "M", "translit_provisional": true}
+{"id": "p.ruaha", "name_ar": "رواحة", "name_lat": "Rūaḥa", "sex": "M", "translit_provisional": true}
+{"id": "p.jdhima-6", "name_ar": "جذيمة", "name_lat": "Jdhīma", "sex": "M", "translit_provisional": true}
+{"id": "p.zhir-5", "name_ar": "زهير", "name_lat": "Zhīr", "sex": "M", "translit_provisional": true}
+{"id": "p.al-harith-48", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
+{"id": "p.hnin", "name_ar": "حنين", "name_lat": "Ḥnīn", "sex": "M", "translit_provisional": true}
+{"id": "p.bhdla", "name_ar": "بهدلة", "name_lat": "Bhdla", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.khlf-5", "name_ar": "خلف", "name_lat": "Khlf", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.amr-al-qays", "name_ar": "امرئ القيس", "name_lat": "Amrʾ al-Qays", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.bdr-3", "name_ar": "بدر", "name_lat": "Bdr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.al-hsin-4", "name_ar": "الحصين", "name_lat": "al-Ḥṣīn", "sex": "M", "translit_provisional": true, "sahabi": true}
+{"id": "p.amr-51", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M", "sahabi": null}
+{"id": "p.uthman-18", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M", "sahabi": null}
+{"id": "p.latm", "name_ar": "لاطم", "name_lat": "Laṭm", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.hdma", "name_ar": "هدمة", "name_lat": "Hdma", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.thur-2", "name_ar": "ثور", "name_lat": "Thūr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.bd-9", "name_ar": "عبد", "name_lat": "ʿbd", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.kab-19", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M", "sahabi": null}
+{"id": "p.laa-2", "name_ar": "لأى", "name_lat": "Laā", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.hraq", "name_ar": "حراق", "name_lat": "Ḥraq", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.mbr", "name_ar": "معبر", "name_lat": "Mʿbr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.abd-allah-89", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "sahabi": null}
+{"id": "p.isar", "name_ar": "يسار", "name_lat": "Īsar", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.mql", "name_ar": "معقل", "name_lat": "Mʿql", "sex": "M", "translit_provisional": true, "sahabi": true}
+{"id": "p.malik-21", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M", "sahabi": null}
+{"id": "p.sad-14", "name_ar": "سعد", "name_lat": "Saʿd", "sex": "M", "sahabi": null}
+{"id": "p.haritha-7", "name_ar": "حارثة", "name_lat": "Ḥāritha", "sex": "M", "sahabi": null}
+{"id": "p.amir-23", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M", "sahabi": null}
+{"id": "p.slaman-2", "name_ar": "سلامان", "name_lat": "Slaman", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.kab-20", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M", "sahabi": null}
+{"id": "p.shrahil", "name_ar": "شراحيل", "name_lat": "Shraḥīl", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.kab-21", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M", "sahabi": null}
+{"id": "p.amr-52", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M", "sahabi": null}
+{"id": "p.mqas-uasmh-al-harth", "name_ar": "مقاعس، واسمه: الحارث", "name_lat": "Mqaʿs Ūasmh al-Ḥarth", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.ubayd-10", "name_ar": "عبيد", "name_lat": "ʿUbayd", "sex": "M", "sahabi": null}
+{"id": "p.murra-9", "name_ar": "مرة", "name_lat": "Murra", "sex": "M", "sahabi": null}
+{"id": "p.al-nzal", "name_ar": "النزال", "name_lat": "al-Nzal", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.bada", "name_ar": "عبادة", "name_lat": "ʿbada", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.himyar", "name_ar": "حمير", "name_lat": "Ḥimyar", "sex": "M", "sahabi": null}
+{"id": "p.sri", "name_ar": "سريع", "name_lat": "Srīʿ", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.thalaba-10", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M", "sahabi": null}
+{"id": "p.khlaua", "name_ar": "خلاوة", "name_lat": "Khlaūa", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.qra-2", "name_ar": "قرة", "name_lat": "Qra", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.said-13", "name_ar": "سعيد", "name_lat": "Saʿīd", "sex": "M", "sahabi": null}
+{"id": "p.sm", "name_ar": "عصم", "name_lat": "ʿṣm", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.al-harith-49", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M", "sahabi": null}
+{"id": "p.abd-al-uzza-11", "name_ar": "عبد العزى", "name_lat": "ʿAbd al-ʿUzzā", "sex": "M", "sahabi": null}
+{"id": "p.jman", "name_ar": "جمان", "name_lat": "Jman", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.murra-10", "name_ar": "مرة", "name_lat": "Murra", "sex": "M", "sahabi": null}
+{"id": "p.al-namir", "name_ar": "النمر", "name_lat": "al-Namir", "sex": "M", "sahabi": null}
+{"id": "p.zhir-6", "name_ar": "زهير", "name_lat": "Zhīr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.shdad-5", "name_ar": "شداد", "name_lat": "Shdad", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.mshmt", "name_ar": "مشمت", "name_lat": "Mshmt", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.rabia-19", "name_ar": "ربيعة", "name_lat": "Rabīʿa", "sex": "M", "sahabi": null}
+{"id": "p.abd-allah-90", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "sahabi": null}
+{"id": "p.wahb-10", "name_ar": "وهب", "name_lat": "Wahb", "sex": "M", "sahabi": null}
+{"id": "p.salama-7", "name_ar": "سلمة", "name_lat": "Salama", "sex": "M", "sahabi": null}
+{"id": "p.qnan", "name_ar": "قنان", "name_lat": "Qnan", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.shdad-6", "name_ar": "شداد", "name_lat": "Shdad", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.yazid-6", "name_ar": "يزيد", "name_lat": "Yazīd", "sex": "M", "sahabi": null}
+{"id": "p.taym-3", "name_ar": "تيم", "name_lat": "Taym", "sex": "M", "sahabi": null}
+{"id": "p.amr-53", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M", "sahabi": null}
+{"id": "p.malik-22", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M", "sahabi": null}
+{"id": "p.jshm", "name_ar": "جعشم", "name_lat": "Jʿshm", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.malik-23", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M", "sahabi": null}
+{"id": "p.hdhma", "name_ar": "هذمة", "name_lat": "Hdhma", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.thur-3", "name_ar": "ثور", "name_lat": "Thūr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.kab-22", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M", "sahabi": null}
+{"id": "p.hbshia", "name_ar": "حبشية", "name_lat": "Ḥbshīa", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.nsr-5", "name_ar": "نصر", "name_lat": "Nṣr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.hjir", "name_ar": "هجير", "name_lat": "Hjīr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.mija", "name_ar": "ميجا", "name_lat": "Mīja", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.adh-4", "name_ar": "عائذ", "name_lat": "ʿaʾdh", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.mqrn", "name_ar": "مقرن", "name_lat": "Mqrn", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.tur", "name_ar": "تور", "name_lat": "Tūr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.thalaba-11", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M", "sahabi": null}
+{"id": "p.amir-24", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M", "sahabi": null}
+{"id": "p.adi-12", "name_ar": "عدي", "name_lat": "ʿAdī", "sex": "M", "sahabi": null}
+{"id": "p.zbina", "name_ar": "زبينة", "name_lat": "Zbīna", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.ruaha-2", "name_ar": "رواحة", "name_lat": "Rūaḥa", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.yazid-7", "name_ar": "يزيد", "name_lat": "Yazīd", "sex": "M", "sahabi": null}
+{"id": "p.ubayd-11", "name_ar": "عبيد", "name_lat": "ʿUbayd", "sex": "M", "sahabi": null}
+{"id": "p.hlal-7", "name_ar": "هلال", "name_lat": "Hlal", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.amr-54", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M", "sahabi": null}
+{"id": "p.kab-23", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M", "sahabi": null}
+{"id": "p.rabia-20", "name_ar": "ربيعة", "name_lat": "Rabīʿa", "sex": "M", "sahabi": null}
+{"id": "p.malik-24", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M", "sahabi": null}
+{"id": "p.al-harith-50", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M", "sahabi": null}
+{"id": "p.ziad", "name_ar": "زياد", "name_lat": "Zīad", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.qtn", "name_ar": "قطن", "name_lat": "Qṭn", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.al-dian-uasm-al-dian-yazid", "name_ar": "الديان، واسم الديان يزيد", "name_lat": "al-Dīan Ūasm al-Dīan Yazīd", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.abd-manat-3", "name_ar": "عبد مناة", "name_lat": "ʿAbd Manāt", "sex": "M", "sahabi": null}
+{"id": "p.taym-4", "name_ar": "تيم", "name_lat": "Taym", "sex": "M", "sahabi": null}
+{"id": "p.al-harith-51", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M", "sahabi": null}
+{"id": "p.amr-55", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M", "sahabi": null}
+{"id": "p.mnqr-2", "name_ar": "منقر", "name_lat": "Mnqr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.khalid-16", "name_ar": "خالد", "name_lat": "Khālid", "sex": "M", "sahabi": null}
+{"id": "p.snan", "name_ar": "سنان", "name_lat": "Snan", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.smi", "name_ar": "سمي", "name_lat": "Smī", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.al-ahtm-uasm-al-ahtm-snan", "name_ar": "الأهتم- واسم الأهتم: سنان", "name_lat": "al-Ahtm Ūasm al-Ahtm Snan", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.mqas-uasm-mqas-al-harth", "name_ar": "مقاعس- واسم مقاعس: الحارث", "name_lat": "Mqaʿs Ūasm Mqaʿs al-Ḥarth", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.ubayd-12", "name_ar": "عبيد", "name_lat": "ʿUbayd", "sex": "M", "sahabi": null}
+{"id": "p.mnqr-3", "name_ar": "منقر", "name_lat": "Mnqr", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.khalid-17", "name_ar": "خالد", "name_lat": "Khālid", "sex": "M", "sahabi": null}
+{"id": "p.snan-2", "name_ar": "سنان", "name_lat": "Snan", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.asm-4", "name_ar": "عاصم", "name_lat": "ʿaṣm", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.thalaba-12", "name_ar": "ثعلبة", "name_lat": "Thaʿlaba", "sex": "M", "sahabi": null}
+{"id": "p.khlaua-2", "name_ar": "خلاوة", "name_lat": "Khlaūa", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.mazn-3", "name_ar": "مازن", "name_lat": "Mazn", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.al-harith-52", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M", "sahabi": null}
+{"id": "p.qrt-3", "name_ar": "قرط", "name_lat": "Qrṭ", "sex": "M", "translit_provisional": true, "sahabi": null}
+{"id": "p.riah-4", "name_ar": "رياح", "name_lat": "Rīaḥ", "sex": "M", "translit_provisional": true, "sahabi": null}

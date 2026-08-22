@@ -44,7 +44,8 @@ def entries(work, text):
             yield (head + " " + body) if head else body
 
 
-def run(work, store, limit=None, quiet=True, min_anchor=3):
+def run(work, store, limit=None, quiet=True, min_anchor=4):
+    # four names, not three: three let entries anchor onto the wrong man
     raw = open(f"{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/corpus/{work}.txt",
                encoding="utf-8").read()
     txt_lines = [l for l in raw.split("\n") if not l.startswith("#META#")]

@@ -84,6 +84,11 @@ def main():
             badges.append('<b class="bf">f</b>')
         if pid in via_mother:
             badges.append('<b class="bm">via mother</b>')
+        auto = {c.get("source_pattern") for c in cs
+                if c["type"] == "father_of" and c["object"] == pid}
+        if auto and not (auto & {None, "spine"}):
+            badges.append('<b class="ba" title="attached by the chain parser: the quote is '
+                          'verified, the placement rests on the anchor being right">auto</b>')
         if disputed:
             badges.append('<b class="bd">ikhtilāf</b>')
         if edge_srcs:

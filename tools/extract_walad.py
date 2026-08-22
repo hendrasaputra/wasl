@@ -10,7 +10,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ingest, nasab
 from translit import translit
 
-WALAD = re.compile(r"(?:ف|و)?ولد\s+(?P<f>[^:؛.]{2,120}?)\s*:\s*(?P<k>[^.]{2,600}?)(?=\.|$)")
+# the father/children separator is usually ':' but Ibn Hazm's Yemeni sections often use ';'
+WALAD = re.compile(r"(?:ف|و)?ولد\s+(?P<f>[^:؛.]{2,120}?)\s*[:؛]\s*(?P<k>[^.]{2,600}?)(?=\.|$)")
 BN = re.compile(r"\s+(?:ابن|بن)\s+")
 # clauses that comment on a name rather than name a person
 STOP = re.compile(r"^(?:و?في|و?هو|و?هم|و?هي|و?كان|و?قد|و?قيل|و?ذكر|أم|و?أم|لا |ثم |أ?لهم|"
@@ -135,8 +136,23 @@ def continuations(work, chain):
     return outs
 
 
-def identifies(work, chain, store, fid):
-    """Does this chain, as the book uses it, pick out one man?"""
+def identifies(work, chain, store, scope=None):
+    """Does this chain, as the book uses it, pick out one man?
+
+    A bare eponym needs different treatment from a bare name. 'Qahtan' is continued a dozen
+    ways in al-Baladhuri, but those are rival accounts of ONE man's ancestry, not a dozen men.
+    'Muhammad' is a dozen men. The tree can tell them apart: an eponym has exactly one bearer,
+    a common name has many. So a one-name chain resolves only when the whole tree holds a
+    single person of that name."""
+    if len(chain) == 1:
+        if store is None:
+            return False
+        bearers = store._byname.get(nasab.normalise(chain[0]), ())
+        if scope is not None:
+            bearers = [b for b in bearers if b in scope]
+        # uniqueness is judged inside the declared trunk: Qahtan's Ya'rub and Isma'il's are two
+        # different men, and neither should block the other from growing its own side
+        return len(bearers) == 1
     if len(chain) >= 4:
         return True
     cont = continuations(work, chain)
@@ -162,7 +178,7 @@ def run(work, store, limit=None, quiet=False, under=None):
             continue
         # resolve inside the scope: 'fa-walada Khalaf' is unambiguous among Quraysh even
         # when a dozen men named Khalaf exist elsewhere in the book
-        if not identifies(work, chain, store, None):
+        if not identifies(work, chain, store, scope):
             skipped += 1
             continue
         fid = store.find_by_chain(chain, scope=scope)
@@ -185,6 +201,9 @@ def run(work, store, limit=None, quiet=False, under=None):
             kid_id = store.person(kid, father=fid, _alias=alias)
             if kid_id is None:
                 continue
+            if scope is not None:
+                scope.add(kid_id)          # a new child widens the trunk, incrementally
+
             flat = translit(kid)[0]
             store.add("father_of", fid, quote,
                       f"{flat} son of {store.people[fid]['name_lat']} — from: “{store.people[fid]['name_lat']} begot …”",
@@ -202,8 +221,6 @@ def run(work, store, limit=None, quiet=False, under=None):
                     print(f"  {store.people[fid]['name_lat']:22} -> {flat}"
                           + (f"  (= {translit(alias)[0]})" if alias else ""))
         added += 1
-        if scope is not None:
-            scope = store.descendants(under)   # newly attached children widen the scope
         if limit and added >= limit:
             break
     print(f"{work}: {added} statements used, {edges} edges, {skipped} fathers not yet in tree")

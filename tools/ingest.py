@@ -23,6 +23,8 @@ class Store:
         self._ids = set()
         self._seen = set()
         self._byname = {}
+        self._alias = {}          # person -> set of normalised alias values
+        self._byalias = {}        # normalised alias value -> [person]
         self.rejected = []
         self.load()
 
@@ -41,6 +43,8 @@ class Store:
         for c in self.claims:
             self._seen.add((c["type"], c["subject"], c.get("object"), c["work"],
                             nasab.normalise(c["ar"])))
+            if c["type"] == "alias" and c.get("value_ar"):
+                self._note_alias(c["subject"], c["value_ar"])
             if c["type"] == "father_of":
                 self._byfather[(c["subject"], nasab.normalise(self.people[c["object"]]["name_ar"]))] = c["object"]
         self._n = max((int(c["cid"][1:]) for c in self.claims), default=0)
@@ -64,9 +68,7 @@ class Store:
         if not chain:
             return None
         names = [nasab.normalise(n) for n in chain]
-        anchors = list(self._byname.get(names[-1], ()))
-        if len(anchors) < 8:                       # aliases are worth the scan only when rare
-            anchors += [p for p in self.people if names[-1] in self.aliases_of(p)]
+        anchors = list(self._byname.get(names[-1], ())) + list(self._byalias.get(names[-1], ()))
         if scope is not None:
             anchors = [a for a in anchors if a in scope]
         hits = []
@@ -80,9 +82,15 @@ class Store:
                 hits.append(cur)
         return hits[0] if len(set(hits)) == 1 else None
 
+    def _note_alias(self, pid, value_ar):
+        v = nasab.normalise(value_ar)
+        self._alias.setdefault(pid, set()).add(v)
+        self._byalias.setdefault(v, []).append(pid)
+
     def aliases_of(self, pid):
-        return {nasab.normalise(c["value_ar"]) for c in self.claims
-                if c["type"] == "alias" and c["subject"] == pid and c.get("value_ar")}
+        """Indexed. Scanning every claim per person made chain resolution O(people x claims),
+        which is what turned a Phase-5 run into a ten-minute hang."""
+        return self._alias.get(pid, frozenset())
 
     def child_of(self, fid, names):
         """names may be raw Arabic or already normalised."""
@@ -162,6 +170,8 @@ class Store:
              "grade": extra.pop("grade", "explicit"), **extra}
         if object is None:
             del c["object"]
+        if type == "alias" and extra.get("value_ar"):
+            self._note_alias(subject, extra["value_ar"])
         self.claims.append(c)
         return cid
 
