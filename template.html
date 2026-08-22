@@ -60,6 +60,19 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
 #results .more{padding:8px 12px;color:var(--grn-1);font-size:11.5px;border-top:1px solid var(--line)}
 .bar2{gap:6px;padding-top:0;padding-bottom:10px;border-bottom:1px solid var(--line);top:57px}
 .bar2 .lbl{color:var(--grn-1);font-size:11px;letter-spacing:.8px;text-transform:uppercase}
+.chip.primary{border-color:var(--rule-s);color:var(--gold-lt);background:rgba(169,139,66,.12)}
+.chip.clear{border-style:dashed}
+.sep{width:1px;height:20px;background:var(--line);margin:0 4px}
+.qm{border:1px solid var(--line);background:transparent;color:var(--grn-1);width:15px;height:15px;
+  border-radius:50%;font:600 10px/1 var(--sans);cursor:pointer;padding:0;vertical-align:middle}
+.qm:hover,.qm.on{color:var(--gold-lt);border-color:var(--gold)}
+#bandlegend{padding:14px 26px 18px;background:rgba(10,58,39,.75);border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px 24px}
+#bandlegend .bl{font-size:12.5px;line-height:1.55;color:var(--ink-dim)}
+#bandlegend .bl b{display:block;color:var(--gold-lt);font-size:12.5px;margin-bottom:2px}
+#bandlegend .bl u{text-decoration:none;color:var(--grn-1);font-variant-numeric:tabular-nums}
+#bandlegend .note{grid-column:1/-1;color:var(--grn-1);font-size:12px;border-top:1px solid var(--line);
+  padding-top:10px}
 #dir{padding:16px 26px 20px;background:rgba(10,58,39,.75);border-bottom:1px solid var(--line);
   display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 22px}
 #dir h4{margin:0 0 7px;font:600 11px/1 var(--sans);letter-spacing:1px;text-transform:uppercase;
@@ -98,7 +111,8 @@ details[open]>summary .tw::after{content:"" !important}
 
 /* ---------- layout ---------- */
 main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,430px);gap:0;align-items:start}
-@media(max-width:960px){main{grid-template-columns:1fr}#panel{position:static;height:auto;
+#stage{min-width:0}
+@media(max-width:1100px){main{grid-template-columns:1fr}#panel{position:static;height:auto;
   border-left:0;border-top:1px solid var(--line)}}
 #tree{padding:20px 26px 90px;overflow-x:auto;min-width:0}
 
@@ -260,16 +274,24 @@ footer b{color:var(--gold-lt);font-weight:600}
   <button id="none">Collapse</button>
 </div>
 <div class="bar bar2">
-  <button id="dirbtn" class="chip">Who&#39;s who</button>
-  <span class="lbl">Band</span><span id="bands"></span>
-  <span class="lbl" style="margin-left:6px">Only</span><span id="filters"></span>
+  <button id="dirbtn" class="chip primary">Who&#39;s who ▾</button>
+  <span class="sep"></span>
+  <span class="lbl">Narrow to <button id="bandhelp" class="qm" title="What are these?">?</button></span>
+  <span id="bands"></span>
+  <span id="filters"></span>
+  <button id="clearlens" class="chip clear" hidden>clear</button>
 </div>
+<div id="bandlegend" hidden></div>
 <div id="dir" hidden></div>
 <div id="crumb" hidden></div>
 
 <main>
-  <div id="tree">{{TREE}}</div>
-  <div id="cols" hidden></div>
+  <!-- tree and columns are alternate views of the same thing, so they share one grid cell:
+       as separate children of a two-column grid the panel wrapped to a second row -->
+  <div id="stage">
+    <div id="tree">{{TREE}}</div>
+    <div id="cols" hidden></div>
+  </div>
   <aside id="panel"><div class="empty">Select a name to see every source that attests it.</div></aside>
 </main>
 
@@ -542,8 +564,23 @@ $('#dir').addEventListener('click', e => {
 /* ---------- bands ---------- */
 /* Not centuries. These books give no years above the Prophet, so a date band would be computed
    and would read as sourced. Each of these four is something the sources state or do. */
+const bandCount = {};
+Object.entries(D.band).forEach(([, b]) => bandCount[b] = (bandCount[b] || 0) + 1);
 $('#bands').innerHTML = Object.entries(D.bands)
-  .map(([k, [label, why]]) => `<button class="chip" data-b="${k}" title="${esc(why)}">${esc(label)}</button>`).join('');
+  .map(([k, [label, why]]) =>
+    `<button class="chip" data-b="${k}" title="${esc(why)}">${esc(label)}
+      <u style="color:var(--grn-1);text-decoration:none">${bandCount[k]||0}</u></button>`).join('');
+
+$('#bandlegend').innerHTML = Object.entries(D.bands).map(([k, [label, why]]) =>
+  `<div class="bl"><b>${esc(label)} <u>${bandCount[k]||0}</u></b>${esc(why)}</div>`).join('')
+  + `<div class="note">These are not centuries. These books give no birth years above the
+     Prophet, so any date band would be computed by us and would read as though it came from
+     the sources. Each band above is instead something the sources themselves state or do —
+     a filter, not a period. Turning one on dims everything outside it.</div>`;
+$('#bandhelp').onclick = () => {
+  const l = $('#bandlegend'); l.hidden = !l.hidden;
+  $('#bandhelp').classList.toggle('on', !l.hidden);
+};
 let bandOn = null;
 $('#bands').addEventListener('click', e => {
   const b = e.target.closest('[data-b]'); if (!b) return;
@@ -578,6 +615,7 @@ function applyLens(){
   if (!active && !bandOn) {
     sums.forEach(s => s.classList.remove('dim'));
     $('#hits').textContent = '';
+    $('#clearlens').hidden = true;
     return;
   }
   const test = active ? FILTERS[active] : () => true;
@@ -589,6 +627,7 @@ function applyLens(){
   });
   const parts = [bandOn && D.bands[bandOn][0], active].filter(Boolean).join(' · ');
   $('#hits').textContent = `${n} — ${parts}`;
+  $('#clearlens').hidden = false;
 }
 
 /* ---------- breadcrumb: where am I in 54 levels ---------- */
@@ -703,6 +742,12 @@ function setView(v){
     window.scrollTo({top: bar.offsetTop, behavior: 'instant'});
   }
 }
+$('#clearlens').onclick = () => {
+  bandOn = null; active = null;
+  [...$('#bands').children].forEach(c => c.classList.remove('on'));
+  [...$('#filters').children].forEach(c => c.classList.remove('on'));
+  applyLens();
+};
 $('#vTree').onclick = () => setView('tree');
 $('#vCols').onclick = () => setView('cols');
 
