@@ -116,7 +116,7 @@ a Who's who, and source-grounded bands rather than invented centuries.
 - Only **17 women** are in the tree. The `bint` fix removed the structural cause; the remaining
   limit is that most women in the companion dictionaries have fathers not yet anchored.
 
-## Responsive: the plan for phones
+## Responsive: built
 
 Measured, not guessed, on iPhone 17 (393×852) and Galaxy S24 (360×780).
 
@@ -172,12 +172,27 @@ product. A sheet keeps both on one screen and is what a phone user already expec
 - Replace the hardcoded `top:110px` sticky offsets with a CSS variable set per breakpoint;
   they currently assume the desktop toolbar height and will mis-stick on any other.
 
-### 5. Verification
+### 5. Verification — `tools/check_responsive.js`
 
-Same discipline as the data: measure, do not eyeball. A check that asserts, at 393×852 and
-360×780, that chrome above the first name is under 200px, that no element overflows the
-viewport width, that the panel is reachable without scrolling past the tree, and that every
-control clears 44px.
+Same discipline as the data: measure, do not eyeball. Load it in the page and call
+`waslResponsiveCheck()` at each width.
+
+| Viewport | Chrome above the first name | Result |
+|---|---|---|
+| iPhone 17 · 393×852 | 855px → **198px** | 11/11 |
+| Galaxy S24 · 360×780 | 989px → **198px** | 11/11 |
+| iPad portrait · 768×1024 | — | 5/5 |
+| Desktop · 1440×900 | unchanged | 3/3 |
+
+Two things the check caught that inspection had not:
+
+- **A dead zone at 768px.** The grid collapses to one column at 1100px but the sheet only
+  began at 760px, so an iPad in portrait put the panel back under the tree at y=5592 —
+  the original unreachable-panel bug, in a narrower window. The sheet breakpoint now *is* the
+  grid breakpoint; any gap between them reintroduces it.
+- **A race in the check itself.** The sheet animates over 280ms, so measuring straight after
+  the click read a mid-transition position and reported a failure that was not there. The
+  check now disables the transition while measuring.
 
 ## What remains
 

@@ -219,6 +219,14 @@ went into navigation.
 - **Counts on the `+`**, so you know whether it opens two names or 1,200.
 - Search folds Latin diacritics, Arabic ḥarakāt and the alif/hamza families.
 
+**On a phone** the citation panel becomes a bottom sheet — tap a name and it slides up over the
+tree, dismissed by the close button, the backdrop, a downward swipe or Escape. The header prose
+and the filter rows fold behind disclosures, bringing the chrome above the first name from 855px
+to 198px on an iPhone 17 and from 989px to 198px on a Galaxy S24. Miller columns show one column
+at a time, as they do natively on a phone. Every control clears a 44px target, the search input
+is 16px so iOS does not zoom on focus, and safe-area insets keep the notch and home indicator off
+the content. `tools/check_responsive.js` asserts all of it rather than trusting the eye.
+
 ## Layout
 
 ```

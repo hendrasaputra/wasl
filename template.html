@@ -13,7 +13,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Wasl — the lineage of the Prophet Muḥammad, traced to its sources</title>
 <style>
 :root{{{CSSVARS}}
@@ -255,6 +255,97 @@ summary.hit .lat{color:var(--gold-lt)}
 .cl .flag{display:inline-block;font:600 10px/1.7 var(--sans);letter-spacing:.5px;padding:0 7px;
   border-radius:999px;background:rgba(169,139,66,.2);color:var(--gold-lt);margin-bottom:8px}
 .cl .tn{font-size:11.5px;color:var(--gold);margin-top:7px;font-style:italic}
+#backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:59;
+  opacity:0;transition:opacity .25s;pointer-events:none}
+#sheetbar{display:none}
+
+/* The panel becomes a sheet exactly when the grid stops having two columns. Any gap between
+   those two widths puts the citations back under the tree, where they cannot be reached - at
+   768px the panel was landing at y=5592. */
+@media (max-width: 1100px) {
+  /* the panel becomes a bottom sheet */
+  #panel{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:60;
+    height:min(78vh,720px);width:auto;border-left:0;border-top:1px solid var(--rule-s);
+    border-radius:16px 16px 0 0;box-shadow:0 -18px 44px rgba(0,0,0,.55);
+    transform:translateY(101%);transition:transform .28s ease;
+    padding:0 18px calc(18px + env(safe-area-inset-bottom));
+    overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+  body.sheet-open #panel{transform:translateY(0)}
+  body.sheet-open #backdrop{opacity:1;pointer-events:auto}
+  body.sheet-open{overflow:hidden}
+  #sheetbar{display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:2;background:var(--panel);
+    margin:0 -18px;padding:8px 18px 10px;border-bottom:1px solid var(--line)}
+  .grab{display:block;width:38px;height:4px;border-radius:99px;background:var(--rule);
+    margin:0 auto;position:absolute;left:0;right:0;top:6px}
+  #sheetclose{background:transparent;border:1px solid var(--line);color:var(--gold-lt);
+    border-radius:8px;padding:8px 14px;font:13px var(--sans);cursor:pointer;margin-left:auto;
+    min-height:44px;min-width:64px}
+  #panel .pname{font-size:33px}
+}
+
+/* ================= phones =================================================
+   The desktop layout does not degrade here, it inverts: measured on an iPhone
+   17 the chrome above the first name was 855px - a whole screen - and the
+   citation panel sat below a 3,500px tree where it could not be reached. So
+   on a phone the panel stops being a second row and becomes a sheet, and the
+   header and filters fold away until asked for. */
+@media (max-width: 760px) {
+  header{padding:10px 16px 8px}
+  header .rose.a{width:190px;top:-58px;right:-52px}
+  header .rose.b{display:none}
+  h1{font-size:21px}
+  h1 .ar{font-size:26px;margin-left:8px}
+  #about{display:none;margin-top:10px}
+  #about.open{display:block}
+  #about .sub{font-size:13px;margin-top:8px}
+  .stats{margin-top:8px;gap:5px}
+  .stats b{font-size:11px;padding:3px 9px}
+  #aboutbtn{margin-top:8px;min-height:36px;padding:7px 12px;font-size:12px}
+
+  .bar{padding:5px 12px 6px;gap:7px;top:0}
+  .searchwrap{flex:1 1 100%;order:-1}
+  /* 16px or iOS Safari zooms the page on focus and never zooms back */
+  .bar input{font-size:16px;padding:12px 13px;min-height:44px}
+  .hits{order:3;font-size:12px}
+  .bar2{display:none;top:auto}
+  .bar2.open{display:flex;padding:10px 12px 12px}
+  #bandlegend{padding:12px 16px 16px;grid-template-columns:1fr}
+  #dir{padding:14px 16px 18px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+
+  /* every control clears the 44px target */
+  .bar button,.chip,.seg button{min-height:44px;padding:10px 14px}
+  .bar .qm{min-height:0}
+  #crumb{top:0;padding:6px 16px;font-size:11.5px}
+
+  main{grid-template-columns:1fr}
+  #tree{padding:12px 14px 40vh}
+  .kids{margin-left:2px;padding-left:11px}
+  .kids.linear{margin-left:-11px}
+  summary{padding:9px 8px;gap:7px}
+  .ar{font-size:19px}
+  .gen{flex:0 0 20px;font-size:10px}
+  .badges{margin-left:8px}
+  .badges b{font-size:10px;padding:0 6px}
+
+  /* Miller columns one at a time, as they behave natively on a phone */
+  #cols{height:calc(100vh - 108px);padding-left:0}
+  .col{flex:0 0 100%;scroll-snap-align:start}
+  #cols{scroll-snap-type:x mandatory}
+  .col.back{display:none}
+  .ci{padding:10px 12px}
+
+  #panel .pname{font-size:31px}
+  #panel .meta span{font-size:11.5px}
+  .cl .q{font-size:17px}
+
+  footer{padding:20px 16px calc(20px + env(safe-area-inset-bottom))}
+}
+
+@media (max-width: 760px) and (orientation: landscape) {
+  #panel{height:92vh}
+}
+
 footer{padding:26px;border-top:1px solid var(--line);color:var(--ink-dim);font-size:12.5px;
   line-height:1.8}
 footer b{color:var(--gold-lt);font-weight:600}
@@ -265,17 +356,18 @@ footer b{color:var(--gold-lt);font-weight:600}
   <div class="rose a">{{ROSETTE}}</div>
   <div class="rose b">{{ROSETTE}}</div>
   <h1>Wasl<span class="ar" dir="rtl" lang="ar">وصل</span></h1>
-  <p class="sub">The lineage of the Prophet Muḥammad ﷺ, his household, the Ṣaḥāba and the
+  <div id="about"><p class="sub">The lineage of the Prophet Muḥammad ﷺ, his household, the Ṣaḥāba and the
   Arab tribes — back to Ādam on one side and to Qaḥṭān on the other. Every name, link and second
   name carries a quotation from a named critical edition, machine-checked against the page it
   cites before this file was written. Where the sources disagree, every reading is kept.</p>
   <div class="stats" id="stats"></div>
+  <button id="aboutbtn" class="chip" type="button" aria-expanded="false">About this ▾</button>
   <p class="sub" style="margin-top:12px">Search reaches any name in the tree and jumps to it;
   the trail under the toolbar shows where you have landed in up to 54 generations. A number
   beside <b class="tw" style="position:relative;display:inline-block;vertical-align:-1px"></b>
   is how many lie beneath it. Nodes badged <b class="ba" style="padding:0 7px;border-radius:999px;
   font:600 10.5px/1.6 var(--sans)">auto</b> were placed by the chain parser — the quotation is
-  verified, the placement rests on the anchor being the right man.</p>
+  verified, the placement rests on the anchor being the right man.</p></div>
 </header>
 
 <div class="bar">
@@ -286,6 +378,7 @@ footer b{color:var(--gold-lt);font-weight:600}
   </div>
   <span class="hits" id="hits"></span>
   <span class="seg"><button id="vTree" class="on">Tree</button><button id="vCols">Columns</button></span>
+  <button id="filterbtn" type="button" aria-expanded="false">Filter</button>
   <button id="none">Collapse</button>
 </div>
 <div class="bar bar2">
@@ -308,7 +401,12 @@ footer b{color:var(--gold-lt);font-weight:600}
     <div id="tree">{{TREE}}</div>
     <div id="cols" hidden></div>
   </div>
-  <aside id="panel"><div class="empty">Select a name to see every source that attests it.</div></aside>
+  <aside id="panel" aria-label="Citations">
+    <div id="sheetbar"><span class="grab" aria-hidden="true"></span>
+      <button id="sheetclose" type="button" aria-label="Close">Close</button></div>
+    <div id="paneltop"><div class="empty">Select a name to see every source that attests it.</div></div>
+  </aside>
+  <div id="backdrop" hidden></div>
 </main>
 
 <footer id="foot"></footer>
@@ -402,7 +500,7 @@ function show(pid){
     `generation ${pathTo(pid).length}`,
   ].filter(Boolean);
 
-  $('#panel').innerHTML =
+  $('#paneltop').innerHTML =
     `<div class="phead">
        <h2>${eyebrow.map(x => `<span>${x}</span>`).join('')}</h2>
        <div class="pname" dir="rtl" lang="ar">${esc(p.name_ar)}</div>
@@ -412,6 +510,7 @@ function show(pid){
      <div class="meta">${meta.map(x=>`<span>${x}</span>`).join('')}</div>
      ${navRow('Children', chn)}${navRow('Brothers and sisters', sibs)}${groups}`;
   $('#panel').scrollTop = 0;
+  openSheet();
   document.querySelectorAll('summary.sel').forEach(s => s.classList.remove('sel'));
   const s = document.querySelector(`summary[data-id="${pid}"]`);
   if (s) { s.classList.add('sel'); let d = s.parentElement.parentElement;
@@ -489,6 +588,7 @@ function openTo(pid){
 }
 function jump(pid){
   show(pid);
+  if (isSheet()) closeSheet();   // let them see where it landed before the sheet covers it
   if (view === 'cols') {
     colPath = pathTo(pid); renderCols();
     window.scrollTo({top: document.querySelector('.bar').offsetTop, behavior: 'instant'});
@@ -564,6 +664,41 @@ RES.addEventListener('click', e => {
 document.addEventListener('click', e => {
   if (!e.target.closest('.searchwrap')) RES.hidden = true;
 });
+
+/* ---------- the sheet: on a phone the citations slide up over the tree ----------
+   A full-screen overlay would lose the tree and make comparing siblings a round trip; tabs
+   would put the citations behind a mode switch, and the citations are the product. */
+const isPhone = () => matchMedia('(max-width: 760px)').matches;
+// the sheet exists wherever the panel is not beside the tree, which is the grid breakpoint
+const isSheet = () => matchMedia('(max-width: 1100px)').matches;
+
+function openSheet(){ if (isSheet()) document.body.classList.add('sheet-open'); }
+function closeSheet(){ document.body.classList.remove('sheet-open'); }
+
+$('#sheetclose').onclick = closeSheet;
+$('#backdrop').onclick = closeSheet;
+$('#backdrop').hidden = false;
+addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+// a sheet you cannot flick away is not a sheet
+let touchY = null;
+$('#sheetbar').addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, {passive:true});
+$('#sheetbar').addEventListener('touchmove', e => {
+  if (touchY !== null && e.touches[0].clientY - touchY > 60) { closeSheet(); touchY = null; }
+}, {passive:true});
+addEventListener('resize', () => { if (!isSheet()) closeSheet(); });
+
+/* ---------- disclosures: the header prose and the filter rows fold away ---------- */
+function toggle(btnSel, targetSel, labelOpen, labelShut){
+  const b = $(btnSel), t = $(targetSel);
+  b.onclick = () => {
+    const open = t.classList.toggle('open');
+    b.setAttribute('aria-expanded', open);
+    b.textContent = open ? labelOpen : labelShut;
+    b.classList.toggle('on', open);
+  };
+}
+toggle('#aboutbtn', '#about', 'About this ▴', 'About this ▾');
+toggle('#filterbtn', '.bar2', 'Filter ▴', 'Filter');
 
 /* ---------- who's who: the people a reader arrives looking for ---------- */
 $('#dir').innerHTML = D.directory.map(([g, rows]) =>
