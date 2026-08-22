@@ -215,8 +215,13 @@ def translit(ar):
         return "al-" + NAMES[bare], False
     parts, prov = [], False
     for word in ar.split():
-        w = word
-        pre = ""
+        # look the whole word up FIRST: 'al-Walid' is in the dictionary as one entry, and
+        # stripping the article before looking made it miss and fall back to a skeleton
+        hw = _look(word)
+        if hw:
+            parts.append(hw)
+            continue
+        w, pre = word, ""
         if w.startswith("ال") and len(w) > 2:
             pre, w = "al-", w[2:]
         hw = _look(w)

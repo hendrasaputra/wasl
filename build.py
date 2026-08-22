@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Wasl - generate index.html from people.jsonl + claims.jsonl. Run validate.py first."""
-import json, math, os, html, collections
+import json, math, os, sys, html, collections
 import nasab
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -64,6 +64,18 @@ def main():
 
     roots = [p for p in people if p not in father and p not in mother]
     via_mother = {c for c in mother if c not in father}
+
+    # how many sit beneath each node - shown on the [+] so you know what it opens
+    below = {}
+
+    def count(pid):
+        if pid not in below:
+            below[pid] = sum(1 + count(k) for k in kids.get(pid, ()))
+        return below[pid]
+
+    sys.setrecursionlimit(10000)
+    for r in roots:
+        count(r)
     spine = set()
     n = "p.muhammad"
     while n:
@@ -93,6 +105,8 @@ def main():
             badges.append('<b class="bd">ikhtilāf</b>')
         if edge_srcs:
             badges.append(f'<b class="bs" title="{" ".join(edge_srcs)}">{len(edge_srcs)}&#8239;src</b>')
+        if p.get("sahabi"):
+            badges.append('<b class="bc">ṣaḥābī</b>')
         alias = [c for c in cs if c["type"] == "alias" and c["subject"] == pid]
         al = ""
         if alias:
@@ -104,7 +118,7 @@ def main():
             if uniq:
                 al = f'<i class="alias">= {" / ".join(html.escape(u) for u in uniq)}</i>'
         summary = (f'<summary data-id="{pid}" data-gen="{gen}" data-search="{html.escape((p["name_lat"]+" "+p["name_ar"]+" "+p.get("kunya_lat","")+" "+p.get("kunya_ar","")+" "+" ".join(a.get("value_lat","")+" "+a.get("value_ar","") for a in alias)).lower())}">'
-                   f'<span class="tw{"" if children else " leaf"}"></span>'
+                   f'<span class="tw{"" if children else " leaf"}" data-n="{below.get(pid,0)}"></span>'
                    f'<span class="gen">{gen}</span>'
                    f'<span class="ar" dir="rtl" lang="ar">{html.escape(p["name_ar"])}</span>'
                    f'<span class="lat">{html.escape(p["name_lat"])}{al}</span>'
@@ -122,6 +136,8 @@ def main():
         "claims": claims,
         "works": {k: {kk: v[kk] for kk in ("author_lat", "title_lat", "title_ar", "author_ar", "edition", "death_ah", "version_uri")} for k, v in works.items()},
         "father": father, "mother": mother,
+        "below": {k: v for k, v in below.items() if v},
+        "kids": {k: v for k, v in kids.items() if v},
     }
     stats = {
         "people": len(people), "claims": len(claims), "works": len({c["work"] for c in claims}),

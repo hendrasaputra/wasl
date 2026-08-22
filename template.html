@@ -43,6 +43,47 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
 .bar button:hover{background:rgba(169,139,66,.14)}
 .bar .hits{color:var(--ink-dim);font-size:12.5px;min-width:80px}
 
+.searchwrap{position:relative;flex:1;min-width:220px}
+.searchwrap input{width:100%}
+#results{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:20;max-height:62vh;
+  overflow-y:auto;background:var(--panel);border:1px solid var(--rule-s);border-radius:10px;
+  box-shadow:0 18px 44px rgba(0,0,0,.5)}
+#results .rr{display:flex;align-items:baseline;gap:10px;padding:8px 12px;cursor:pointer;
+  border-bottom:1px solid rgba(201,165,95,.12)}
+#results .rr:last-child{border-bottom:0}
+#results .rr:hover,#results .rr.on{background:rgba(169,139,66,.2)}
+#results .rr .ar{font-size:18px}
+#results .rr .lat{flex:0 0 auto}
+#results .rr .path{margin-left:auto;color:var(--grn-1);font-size:11.5px;direction:ltr;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52%}
+#results .none{padding:12px;color:var(--ink-dim);font-size:13px}
+#results .more{padding:8px 12px;color:var(--grn-1);font-size:11.5px;border-top:1px solid var(--line)}
+.bar2{gap:6px;padding-top:0;padding-bottom:10px;border-bottom:1px solid var(--line);top:57px}
+.bar2 .lbl{color:var(--grn-1);font-size:11px;letter-spacing:.8px;text-transform:uppercase}
+.chip{background:transparent;border:1px solid var(--line);color:var(--ink-dim);border-radius:999px;
+  padding:4px 11px;font:12px var(--sans);cursor:pointer}
+.chip:hover{background:rgba(169,139,66,.12);color:var(--gold-lt)}
+.chip.on{background:rgba(169,139,66,.24);border-color:var(--gold);color:var(--gold-lt)}
+#crumb{position:sticky;top:110px;z-index:4;padding:9px 26px;background:rgba(10,58,39,.96);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);font-size:12.5px;
+  color:var(--ink-dim);overflow-x:auto;white-space:nowrap}
+#crumb a{color:var(--gold-lt);text-decoration:none;cursor:pointer}
+#crumb a:hover{text-decoration:underline}
+#crumb i{color:var(--grn-1);font-style:normal;margin:0 6px}
+@keyframes flash{0%,100%{box-shadow:inset 0 0 0 1px var(--gold)}
+  50%{box-shadow:inset 0 0 0 2px var(--gold),0 0 0 6px rgba(169,139,66,.28)}}
+summary.flash{animation:flash 1.1s ease-in-out 2}
+summary.dim{opacity:.32}
+.tw[data-n]:not([data-n="0"])::after{content:attr(data-n);position:absolute;left:15px;top:-1px;
+  font:500 9.5px/13px var(--sans);color:var(--grn-1);font-variant-numeric:tabular-nums}
+details[open]>summary .tw::after{content:"" !important}
+.bc{background:rgba(169,139,66,.3);color:var(--gold-lt)}
+.pnav{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 2px}
+.pnav b{font:500 12px/1.5 var(--sans);background:rgba(8,48,31,.6);border:1px solid var(--line);
+  color:var(--gold-lt);border-radius:6px;padding:3px 9px;cursor:pointer}
+.pnav b:hover{background:rgba(169,139,66,.2)}
+.pnav .m{color:var(--ink-dim);cursor:default;border-style:dashed}
+
 /* ---------- layout ---------- */
 main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,430px);gap:0;align-items:start}
 @media(max-width:960px){main{grid-template-columns:1fr}#panel{position:static;height:auto;
@@ -94,7 +135,7 @@ summary.hide{display:none}
 summary.hit .lat{color:var(--gold-lt)}
 
 /* ---------- citation panel ---------- */
-#panel{position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;
+#panel{position:sticky;top:110px;height:calc(100vh - 110px);overflow-y:auto;
   padding:22px;background:var(--panel);border-left:1px solid var(--line)}
 #panel h2{margin:0;font-size:15px;font-weight:600;color:var(--gold-lt);letter-spacing:.3px}
 #panel .pname{font-family:var(--arabic);font-size:38px;color:var(--ink);margin:2px 0 0;direction:rtl}
@@ -129,25 +170,35 @@ footer b{color:var(--gold-lt);font-weight:600}
   <div class="rose a">{{ROSETTE}}</div>
   <div class="rose b">{{ROSETTE}}</div>
   <h1>Wasl<span class="ar" dir="rtl" lang="ar">وصل</span></h1>
-  <p class="sub"><b>Phase 1 — the lineage of the Prophet Muḥammad ﷺ back to Ādam</b>, as it stands
-  in the primary Arabic sources. Every name, every link and every second name below carries a
-  quotation from a named critical edition, machine-checked against the text before this page was
-  written. Where the sources disagree, every reading is kept and shown side by side.</p>
+  <p class="sub">The lineage of the Prophet Muḥammad ﷺ, his household, the Ṣaḥāba and the
+  Arab tribes — back to Ādam on one side and to Qaḥṭān on the other. Every name, link and second
+  name carries a quotation from a named critical edition, machine-checked against the page it
+  cites before this file was written. Where the sources disagree, every reading is kept.</p>
   <div class="stats" id="stats"></div>
-  <p class="sub" style="margin-top:14px">Phases 2–5 widen the tree by parser: Quraysh under
-  Fihr, the household of the Prophet, the Ṣaḥāba from the two companion dictionaries, and the
-  Qaḥṭānī half down to al-Aws and al-Khazraj. Every quotation is still machine-checked against
-  the page it cites. Nodes marked <b class="ba" style="padding:0 7px;border-radius:999px;
-  font:600 10.5px/1.6 var(--sans)">auto</b> were placed by the chain parser: the quotation is
-  verified, but the placement rests on the anchor being the right man.</p>
+  <p class="sub" style="margin-top:12px">Search reaches any name in the tree and jumps to it;
+  the trail under the toolbar shows where you have landed in up to 54 generations. A number
+  beside <b class="tw" style="position:relative;display:inline-block;vertical-align:-1px"></b>
+  is how many lie beneath it. Nodes badged <b class="ba" style="padding:0 7px;border-radius:999px;
+  font:600 10.5px/1.6 var(--sans)">auto</b> were placed by the chain parser — the quotation is
+  verified, the placement rests on the anchor being the right man.</p>
 </header>
 
 <div class="bar">
-  <input id="q" type="search" placeholder="Search a name — Arabic or transliteration (e.g. قصي, Qusayy, Kilāb)" autocomplete="off">
+  <div class="searchwrap">
+    <input id="q" type="search" autocomplete="off" spellcheck="false"
+      placeholder="Search 1,607 names — Arabic or transliteration (قصي · Qusayy · Kilāb · Khazraj)">
+    <div id="results" hidden></div>
+  </div>
   <span class="hits" id="hits"></span>
-  <button id="all">Expand all</button>
-  <button id="none">Collapse to spine</button>
+  <button id="none">Collapse</button>
 </div>
+<div class="bar bar2">
+  <span class="lbl">Jump</span>
+  <span id="marks"></span>
+  <span class="lbl" style="margin-left:8px">Show only</span>
+  <span id="filters"></span>
+</div>
+<div id="crumb" hidden></div>
 
 <main>
   <div id="tree">{{TREE}}</div>
@@ -217,25 +268,41 @@ function show(pid){
   if (m) meta.push(`mother · ${esc(D.people[m].name_lat)}`);
   const birth = cs.filter(c => c.type === 'birth');
   meta.push(birth.length ? `born · ${esc(birth[0].event_lat || 'see below')}` : 'born · no year in these sources');
+  if (D.below[pid]) meta.push(`${D.below[pid]} descendants recorded`);
 
   const groups = ORDER.filter(t => cs.some(c => c.type === t)).map(t => {
     const own = cs.filter(c => c.type === t && (t === 'mother_of' ? true : c.subject === pid || c.object === pid));
     return `<div class="grp">${TYPES[t]||t} · ${own.length}</div>` + own.map(claimHTML).join('');
   }).join('');
 
+  const sibs = (D.father[pid] ? (D.kids[D.father[pid]]||[]) : []).filter(x => x !== pid);
+  const chn = D.kids[pid] || [];
+  const navRow = (label, ids) => ids.length
+    ? `<div class="grp">${label} · ${ids.length}</div><div class="pnav">` +
+      ids.slice(0,40).map(i => `<b data-go="${i}">${esc(D.people[i].name_lat)}</b>`).join('') +
+      (ids.length>40 ? `<b class="m">+${ids.length-40} more</b>` : '') + '</div>'
+    : '';
+
   $('#panel').innerHTML =
-    `<h2>${esc(p.id)}</h2>
+    `<h2>${esc(p.kunya_lat || p.tribe || (p.sahabi ? 'ṣaḥābī' : 'in the lineage'))}</h2>
      <div class="pname" dir="rtl" lang="ar">${esc(p.name_ar)}</div>
      <div class="plat">${esc(p.name_lat)}</div>
      ${p.note?`<div class="empty">${esc(p.note)}</div>`:''}
-     <div class="meta">${meta.map(x=>`<span>${x}</span>`).join('')}</div>${groups}`;
+     <div class="meta">${meta.map(x=>`<span>${x}</span>`).join('')}</div>
+     ${navRow('Children', chn)}${navRow('Brothers and sisters', sibs)}${groups}`;
   $('#panel').scrollTop = 0;
   document.querySelectorAll('summary.sel').forEach(s => s.classList.remove('sel'));
   const s = document.querySelector(`summary[data-id="${pid}"]`);
   if (s) { s.classList.add('sel'); let d = s.parentElement.parentElement;
            while (d) { if (d.tagName === 'DETAILS') d.open = true; d = d.parentElement; } }
   history.replaceState(null, '', '#' + pid);
+  crumb(pid);
 }
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('#panel [data-go]');
+  if (b) jump(b.dataset.go);
+});
 
 $('#tree').addEventListener('click', e => {
   const s = e.target.closest('summary');
@@ -243,34 +310,140 @@ $('#tree').addEventListener('click', e => {
 });
 
 /* ---------- search ---------- */
-/* Fold what a reader would not think of as a difference: Latin diacritics (Mughira /
-   Mughira), Arabic harakat, and the alif/hamza and ta-marbuta families. */
+/* Fold what a reader would not think of as a difference: Latin diacritics, Arabic harakat,
+   and the alif/hamza and ta-marbuta families. */
 const fold = s => s.normalize('NFD').replace(/[\u0300-\u036f\u0610-\u061a\u064b-\u065f\u0670\u0640]/g,'')
   .replace(/[\u0623\u0625\u0622\u0671]/g,'\u0627').replace(/\u0629/g,'\u0647')
   .replace(/\u0649/g,'\u064a').replace(/\u0626/g,'\u064a').replace(/\u0624/g,'\u0648')
   .replace(/[\u02bf\u02be'\u2018\u2019]/g,'').toLowerCase().trim();
 const sums = [...document.querySelectorAll('summary')];
-sums.forEach(s => s.dataset.search = fold(s.dataset.search));
+const byId = {};
+sums.forEach(s => { s.dataset.search = fold(s.dataset.search); byId[s.dataset.id] = s; });
+
+/* The tree is 54 levels deep, so a match is useless unless you can reach it. Every hit is a
+   row carrying its own line of descent, and clicking one opens the ancestors and jumps. */
+const lineage = (pid, n = 5) => {
+  const out = []; let c = D.father[pid] || D.mother[pid];
+  while (c && out.length < n) { out.push(D.people[c].name_lat); c = D.father[c] || D.mother[c]; }
+  return out.join(' ‹ ');
+};
+
+function openTo(pid){
+  let c = pid;
+  while (c) { const el = document.getElementById(c); if (el) el.open = true; c = D.father[c] || D.mother[c]; }
+}
+function jump(pid){
+  openTo(pid); show(pid);
+  const s = byId[pid];
+  if (s) { s.scrollIntoView({block:'center', behavior:'smooth'});
+           s.classList.add('flash'); setTimeout(()=>s.classList.remove('flash'), 2400); }
+}
+
+const RES = $('#results');
+let hits = [], cursor = -1;
+
+function renderResults(){
+  if (!hits.length) { RES.innerHTML = '<div class="none">No name matches.</div>'; RES.hidden = false; return; }
+  RES.innerHTML = hits.slice(0,60).map((pid,i) => {
+    const p = D.people[pid];
+    return `<div class="rr${i===cursor?' on':''}" data-id="${pid}">
+      <span class="ar" dir="rtl" lang="ar">${esc(p.name_ar)}</span>
+      <span class="lat">${esc(p.name_lat)}</span>
+      <span class="path">${esc(lineage(pid))||'—'}</span></div>`;
+  }).join('') + (hits.length>60 ? `<div class="more">${hits.length-60} more — narrow the search</div>` : '');
+  RES.hidden = false;
+}
+
 $('#q').addEventListener('input', e => {
   const q = fold(e.target.value);
-  sums.forEach(s => s.classList.remove('hit'));
-  if (!q) { $('#hits').textContent = ''; sums.forEach(s => s.classList.remove('hide')); return; }
+  if (!q) { hits=[]; cursor=-1; RES.hidden=true; $('#hits').textContent=''; return; }
+  hits = sums.filter(s => s.dataset.search.includes(q)).map(s => s.dataset.id);
+  // exact-ish matches first, then by how shallow they sit - the famous men are nearer the top
+  hits.sort((a,b) => (fold(D.people[a].name_lat)===q?-1:0) - (fold(D.people[b].name_lat)===q?-1:0));
+  cursor = -1;
+  $('#hits').textContent = `${hits.length} match${hits.length===1?'':'es'}`;
+  renderResults();
+});
+$('#q').addEventListener('keydown', e => {
+  if (!hits.length) return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    cursor = Math.max(0, Math.min(hits.length-1, cursor + (e.key==='ArrowDown'?1:-1)));
+    renderResults();
+    RES.querySelector('.rr.on')?.scrollIntoView({block:'nearest'});
+  } else if (e.key === 'Enter') {
+    e.preventDefault(); jump(hits[Math.max(0,cursor)]); RES.hidden = true;
+  } else if (e.key === 'Escape') { RES.hidden = true; }
+});
+RES.addEventListener('click', e => {
+  const r = e.target.closest('.rr');
+  if (r) { jump(r.dataset.id); RES.hidden = true; }
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.searchwrap')) RES.hidden = true;
+});
+
+/* ---------- jump marks: somewhere to start from ---------- */
+const MARKS = [['Muḥammad ﷺ','p.muhammad'],['Ādam','p.adam'],['ʿAdnān','p.adnan'],
+  ['Qaḥṭān','p.qahtan'],['Quraysh (Fihr)','p.fihr'],['Banū Hāshim','p.hashim'],
+  ['ʿAlī','p.ali'],['al-Aws','p.al-aws'],['al-Khazraj','p.al-khazraj']];
+$('#marks').innerHTML = MARKS.filter(([,id]) => D.people[id])
+  .map(([t,id]) => `<button class="chip" data-jump="${id}">${t}</button>`).join('');
+$('#marks').addEventListener('click', e => {
+  const b = e.target.closest('[data-jump]'); if (b) jump(b.dataset.jump);
+});
+
+/* ---------- filters: dim what you are not asking about ---------- */
+const nsrc = {};
+D.claims.forEach(c => { if (c.type==='father_of')
+  (nsrc[c.object] = nsrc[c.object] || new Set()).add(c.work); });
+const disputed = new Set(D.claims.filter(c => c.type==='dissent'||c.type==='variant_chain').map(c=>c.subject));
+const FILTERS = {
+  'ṣaḥāba':      p => D.people[p].sahabi,
+  'women':       p => D.people[p].sex === 'F',
+  'ikhtilāf':    p => disputed.has(p),
+  '2+ sources':  p => (nsrc[p]?.size || 0) >= 2,
+  'hand-checked':p => !byId[p]?.querySelector('.ba'),
+};
+let active = null;
+$('#filters').innerHTML = Object.keys(FILTERS)
+  .map(k => `<button class="chip" data-f="${k}">${k}</button>`).join('');
+$('#filters').addEventListener('click', e => {
+  const b = e.target.closest('[data-f]'); if (!b) return;
+  active = (active === b.dataset.f) ? null : b.dataset.f;
+  [...$('#filters').children].forEach(c => c.classList.toggle('on', c.dataset.f === active));
+  if (!active) { sums.forEach(s => s.classList.remove('dim')); $('#hits').textContent=''; return; }
+  const test = FILTERS[active];
   let n = 0;
   sums.forEach(s => {
-    if (s.dataset.search.includes(q)) {
-      n++; s.classList.add('hit');
-      let d = s.parentElement;
-      while (d) { if (d.tagName === 'DETAILS') d.open = true; d = d.parentElement; }
-    }
+    const keep = test(s.dataset.id);
+    s.classList.toggle('dim', !keep);
+    if (keep) { n++; openTo(s.dataset.id); }
   });
-  $('#hits').textContent = n ? `${n} match${n>1?'es':''}` : 'no match';
+  $('#hits').textContent = `${n} ${active}`;
 });
-$('#all').onclick = () => document.querySelectorAll('details').forEach(d => d.open = true);
+
+/* ---------- breadcrumb: where am I in 54 levels ---------- */
+function crumb(pid){
+  const line = []; let c = pid;
+  while (c) { line.unshift(c); c = D.father[c] || D.mother[c]; }
+  $('#crumb').innerHTML = line.map((id,i) =>
+    (i ? '<i>›</i>' : '') + (id===pid
+      ? `<b style="color:var(--ink)">${esc(D.people[id].name_lat)}</b>`
+      : `<a data-go="${id}">${esc(D.people[id].name_lat)}</a>`)).join('');
+  $('#crumb').hidden = false;
+}
+$('#crumb').addEventListener('click', e => {
+  const a = e.target.closest('[data-go]'); if (a) jump(a.dataset.go);
+});
+
 $('#none').onclick = () => {
   document.querySelectorAll('details').forEach(d => d.open = false);
   let n = 'p.muhammad';
   while (n) { const el = document.getElementById(n); if (el) el.open = true; n = D.father[n]; }
+  window.scrollTo({top:0, behavior:'smooth'});
 };
+
 if (location.hash && D.people[location.hash.slice(1)]) show(location.hash.slice(1));
 else show('p.muhammad');
 </script>
