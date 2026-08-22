@@ -18,7 +18,13 @@ before the page was written.**
 | 5 | Qaḥṭān and the tribes, down to al-Aws and al-Khazraj | 812 |
 | 6 | The Anṣār clans and the companions that could not anchor before | 2,394 |
 
-Open [`index.html`](index.html) in any browser. No server, no build step, no network.
+**Live at [wasl.hensap.id](https://wasl.hensap.id)** — or open [`index.html`](index.html) in
+any browser. No server, no build step, no network.
+
+[![verify](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml/badge.svg)](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml)
+
+Every push re-fetches the pinned source texts, re-proves all 5,604 quotations against them, and
+fails if the published page is stale relative to the data. See [DEPLOY.md](DEPLOY.md).
 
 ---
 
