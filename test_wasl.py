@@ -218,6 +218,26 @@ for f, ch in sibs.items():
         seen[key] = k
 check("no father has the same son twice", not clash, "; ".join(clash[:4]))
 
+# A run of four CONSECUTIVE names repeating inside one line of descent is not a genealogy, it
+# is a segment the parser copied. Ibn Hazm's real Nizar b. Mu'ays once collected the whole
+# Adnani spine beneath him - 644 duplicate nodes, including a second Fihr and a second Quraysh.
+father_of = {}
+for c in claims:
+    if c["type"] == "father_of":
+        father_of.setdefault(c["object"], c["subject"])
+copied = []
+for pid in byid:
+    seq, cur = [], pid
+    while cur:
+        seq.append(nasab.normalise(byid[cur]["name_ar"]))
+        cur = father_of.get(cur)
+    for i in range(len(seq) - 4):
+        if any(seq[i:i + 4] == seq[j:j + 4] for j in range(i + 4, len(seq) - 3)):
+            copied.append(byid[pid]["name_lat"])
+            break
+check("no lineage repeats a four-name run", not copied,
+      f"{len(copied)} lineages, e.g. {'; '.join(copied[:3])}")
+
 print("\nno honorific or unsplit chain ever became a person")
 HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه السلام", "رضي الله", "أمير المؤمنين")
 bad = [p["name_ar"] for p in byid.values() if any(h in p["name_ar"] for h in HON)]

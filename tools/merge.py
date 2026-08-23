@@ -58,6 +58,71 @@ def dist1(a, b):
     return False
 
 
+def uncopy(people, claims):
+    """Cut a spine the parser copied into the wrong place.
+
+    Ibn Hazm genuinely records a Nizar b. Mu'ays b. Amir b. Luayy - a Qurashi, and he stays.
+    But every later 'fa-walada Nizar ...' statement then resolved onto HIM, and the whole
+    Adnani spine was rebuilt underneath: Mudar, Ilyas, Mudrika, Khuzayma, Kinana, al-Nadr,
+    Malik, Fihr, and all of Quraysh below that - 644 nodes of duplicate.
+
+    The signature is decisive. Names recur across generations in a real genealogy, but a run of
+    four CONSECUTIVE names repeating inside one line of descent means a segment was copied. We
+    walk the two sequences up until they diverge; the last name that still agrees is the one the
+    source really attests, so it is KEPT, and its children are the copy.
+    """
+    by = {p["id"]: p for p in people}
+    fa, kids = {}, {}
+    for c in claims:
+        if c["type"] == "father_of":
+            fa.setdefault(c["object"], c["subject"])
+            kids.setdefault(c["subject"], []).append(c["object"])
+    N, RUN = nasab.normalise, 4
+
+    def line(pid):
+        out, cur = [], pid
+        while cur:
+            out.append(cur)
+            cur = fa.get(cur)
+        return out
+
+    tops = set()
+    for pid in list(by):
+        ids = line(pid)
+        nm = [N(by[x]["name_ar"]) for x in ids]
+        for i in range(len(nm) - RUN):
+            for j in range(i + RUN, len(nm) - RUN + 1):
+                if nm[i:i + RUN] == nm[j:j + RUN]:
+                    k = 0
+                    while i + k < len(nm) and j + k < len(nm) and nm[i + k] == nm[j + k]:
+                        k += 1
+                    tops.add(ids[i + k - 1])     # attested; its CHILDREN are the copy
+                    break
+            else:
+                continue
+            break
+    if not tops:
+        return people, claims
+    drop = set()
+    for t in tops:
+        if set(line(t)[1:]) & tops:
+            continue                            # an outer one already covers this
+        stack = list(kids.get(t, ()))
+        while stack:
+            x = stack.pop()
+            if x in drop:
+                continue
+            drop.add(x)
+            stack.extend(kids.get(x, ()))
+        print(f"   uncopy: keeping {by[t]['name_lat']} under "
+              f"{by[fa[t]]['name_lat'] if fa.get(t) else '-'}, cutting the copy beneath it")
+    people = [p for p in people if p["id"] not in drop]
+    claims = [c for c in claims
+              if c["subject"] not in drop and (not c.get("object") or c["object"] not in drop)]
+    print(f"   {len(drop)} copied nodes removed")
+    return people, claims
+
+
 def unweld(people, claims):
     """Undo a chain welded by a missing 'bn' in the printed edition.
 
@@ -116,6 +181,8 @@ def unweld(people, claims):
 def main(write=False):
     people = [json.loads(l) for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip()]
     claims = [json.loads(l) for l in open(f"{ROOT}/claims.jsonl", encoding="utf-8") if l.strip()]
+    print("cutting spines copied into the wrong place")
+    people, claims = uncopy(people, claims)
     print("unwelding chains broken by a missing bn in the edition")
     people, claims = unweld(people, claims)
 

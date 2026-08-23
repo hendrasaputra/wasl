@@ -45,7 +45,9 @@ SPINE = [
   "IbnHisham",
   "قبائل من ولد مازن بن الأسد ابن الغوث بن نبت بن مالك بن زيد بن كهلان بن سبأ بن يشجب بن يعرب ابن قحطان",
   "tribes of the offspring of Māzin b. al-Asd b. al-Ghawth b. Nabt b. Mālik b. Zayd b. Kahlān b. Sabaʾ b. Yashjub b. Yaʿrub b. Qaḥṭān"),
- ("حارثة بن ثعلبة بن عمرو بن عامر بن حارثة بن أمري القيس بن ثعلبة بن مازن",
+ # the chain runs on to al-Asd and al-Ghawth in the same sentence; include them, because a
+ # bare 'Mazin' is not an anchor once the tree holds four of them
+ ("حارثة بن ثعلبة بن عمرو بن عامر بن حارثة بن أمري القيس بن ثعلبة بن مازن بن الأسد بن الغوث",
   "IbnHisham",
   "والأنصار بنو الأوس والخزرج، ابني حارثة بن ثعلبة بن عمرو بن عامر بن حارثة بن أمري القيس بن ثعلبة بن مازن بن الأسد بن الغوث",
   "the Anṣār are the sons of al-Aws and al-Khazraj, the two sons of Ḥāritha b. Thaʿlaba b. ʿAmr b. ʿĀmir b. Ḥāritha b. Imriʾ al-Qays b. Thaʿlaba b. Māzin b. al-Asd b. al-Ghawth"),
@@ -79,11 +81,20 @@ def main(write=False):
     from extract_walad import BN, norm_name
     for chain_s, work, quote, en in SPINE:
         names = [norm_name(x) for x in BN.split(chain_s) if norm_name(x)]
-        cur = st.find_by_chain([names[-1]])
+        # Anchor on the deepest suffix that resolves UNIQUELY, not on the last name alone.
+        # A bare 'Mazin' was fine when the tree held one; once it held four the anchor went
+        # ambiguous, find_by_chain returned None, and the entire Ansar spine - al-Aws,
+        # al-Khazraj and everything under them - silently failed to seed.
+        cur, start = None, None
+        for k in range(len(names) - 1, 0, -1):
+            hit = st.find_by_chain(names[k:])
+            if hit:
+                cur, start = hit, k
+                break
         if cur is None:
-            print(f"  ! spine anchor {names[-1]} missing")
+            print(f"  ! spine anchor not found for {' b. '.join(names[-3:])}")
             continue
-        for i in range(len(names) - 2, -1, -1):
+        for i in range(start - 1, -1, -1):
             kid = st.person(names[i], father=cur)
             st.add("father_of", cur, quote,
                    f"{names[i]} son of {names[i+1]} — from: {en}", object=kid, work=work,
