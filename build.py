@@ -282,6 +282,24 @@ def main():
         print("  directory entries unresolved: " + ", ".join(missing))
 
     data["directory"] = directory
+    # the label -> id map the biography builder joins on. Written rather than recomputed:
+    # two resolutions of the same chain are two chances to disagree.
+    os.makedirs(f"{ROOT}/bio", exist_ok=True)
+    with open(f"{ROOT}/bio/_ids.json", "w", encoding="utf-8") as f:
+        json.dump({label: pid for _, rows in directory for label, pid in rows}, f,
+                  ensure_ascii=False, indent=0, sort_keys=True)
+    # which people have a biography page, and from how many books. Written from entries.jsonl
+    # so a link can never point at a page the build did not make.
+    ent = [json.loads(l) for l in open(f"{ROOT}/entries.jsonl", encoding="utf-8") if l.strip()] \
+        if os.path.exists(f"{ROOT}/entries.jsonl") else []
+    label_pid = {label: pid for _, rows in directory for label, pid in rows}
+    bios = collections.defaultdict(list)
+    for e in ent:
+        pid = label_pid.get(e["who"])
+        if pid:
+            bios[pid].append([e["work"], e["vol"], e["page"], e["page_end"], e["n_words"]])
+    data["bios"] = {k: sorted(v) for k, v in sorted(bios.items())}
+
     data["langs"] = LANGS
     data["ui"] = {lang: {k: v.get(lang, v["en"]) for k, v in UI.items()} for lang in LANGS}
     # every data string the page shows in prose - tribes, notes, verdicts, chain labels, isnads

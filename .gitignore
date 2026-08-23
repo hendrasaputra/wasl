@@ -10,3 +10,11 @@ corpus/*.txt
 
 __pycache__/
 *.pyc
+
+# English reference translations: fetched to locate pages, never vendored.
+# These are in copyright - see LICENSING.md. refs/SHA256SUMS IS committed.
+refs/*.txt
+
+# Biography pages are generated in CI from the fetched corpus and deployed from the
+# artifact, so no corpus text is ever committed.
+bio/

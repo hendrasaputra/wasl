@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
+"""Render one biography page per Who's who person, into bio/.
+
+Built in CI and deployed from the artifact, never committed. The pages carry several hundred
+thousand words of OpenITI's Arabic, and LICENSING.md says plainly that Wasl fetches the
+corpus and does not vendor it. Generating at deploy time keeps that true: the repository
+holds pins and checksums, the published site holds the text, and both are built from
+OpenITI's own file.
+
+This phase shows the entry and says where it is. It does not summarise, gloss or translate
+it - that is 8c - and it deliberately does not link names in the prose into the tree, because
+matching a name in running text to a person is the single thing this project has got wrong
+most often.
+"""
+import html, json, os, re, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+sys.path.insert(0, HERE)
+sys.path.insert(0, ROOT)
+import nasab, entries, i18n
+from directory import DIRECTORY
+from build import PALETTE
+
+PAGE = re.compile(r'PageV(\d+)P(\d+)[AB]?')
+DROP = re.compile(r'\bms\d+\b|%~%')
+# Ibn Sa'd and al-Isti'ab open most reports with a chain of transmission. It is a fixed shape,
+# so it can be set apart without parsing it: dim the isnad, leave the report at full weight.
+ISNAD = re.compile(r'^(?:\d+\s*-\s*)?((?:أخبرنا|حدثنا|أنبأنا|أخبرني|حدثني|نا)\b.{0,600}?(?:قال[^:]{0,25}|قالت)\s*:)')
+UI = {"back": {"en": "Back to the tree", "id": "Kembali ke pohon", "ms": "Kembali ke pokok"},
+      "src":  {"en": "the entry as the book prints it",
+               "id": "entri sebagaimana tercetak dalam kitab",
+               "ms": "entri sebagaimana tercetak dalam kitab"},
+      "vol":  {"en": "vol.", "id": "jil.", "ms": "jil."},
+      "pp":   {"en": "pp.", "id": "hlm.", "ms": "hlm."},
+      "words":{"en": "words", "id": "kata", "ms": "perkataan"},
+      "note": {"en": "Arabic only. Nothing here is translated or summarised: what the page "
+                     "shows is the entry itself, at the pages named.",
+               "id": "Hanya bahasa Arab. Tidak ada yang diterjemahkan atau diringkas di sini: "
+                     "yang ditampilkan adalah entri itu sendiri, pada halaman yang disebutkan.",
+               "ms": "Bahasa Arab sahaja. Tiada apa-apa di sini yang diterjemah atau "
+                     "diringkaskan: yang dipaparkan ialah entri itu sendiri, pada halaman "
+                     "yang dinyatakan."}}
+
+
+def paragraphs(work, line_no, depth):
+    """The entry as (kind, text, page) blocks. mARkdown: '#' opens a paragraph, '~~'
+    continues it, '###' is a subheading, and a page milestone CLOSES the page it ends."""
+    raw = entries.body(work, line_no, depth)
+    out, buf = [], []
+    page = entries.page_span(work, line_no, depth)[1]
+
+    def flush():
+        if buf:
+            t = DROP.sub(' ', ' '.join(buf))
+            t = re.sub(r'\s+', ' ', PAGE.sub(' ', t)).strip()
+            if t:
+                out.append(('p', t, page))
+            buf.clear()
+
+    for ln in raw:
+        if ln.startswith('###'):
+            flush()
+            h = re.sub(r'^###\s*[|$]*\s*(?:\(\d+\))?\s*\d*\s*-?\s*', '', ln).strip()
+            if h:
+                out.append(('h', DROP.sub(' ', PAGE.sub(' ', h)).strip(), page))
+        else:
+            if ln.startswith('~~'):
+                buf.append(ln[2:])
+            else:
+                flush()
+                buf.append(ln.lstrip('# '))
+            m = PAGE.search(ln)
+            if m:                       # this line ends a page; what follows is the next
+                flush()
+                page = int(m.group(2)) + 1
+    flush()
+    return out
+
+
+def block_html(kind, text, page, seen):
+    if kind == 'h':
+        return f'<h3 dir="rtl" lang="ar">{html.escape(text)}</h3>'
+    mark = ''
+    if page not in seen:
+        seen.add(page)
+        mark = f'<a class="pg" id="p{page}" href="#p{page}">{page}</a>'
+    m = ISNAD.match(text)
+    if m:
+        body = (html.escape(text[:m.start(1)])
+                + f'<span class="isnad">{html.escape(m.group(1))}</span>'
+                + html.escape(text[m.end():]))
+    else:
+        body = html.escape(text)
+    return f'<p dir="rtl" lang="ar">{mark}{body}</p>'
+
+
+def main():
+    works = nasab.sources()
+    people = {p["id"]: p for p in (json.loads(l) for l in
+              open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip())}
+    rows = [json.loads(l) for l in open(f"{ROOT}/entries.jsonl", encoding="utf-8") if l.strip()]
+    pid_of = json.load(open(f"{ROOT}/bio/_ids.json", encoding="utf-8")) \
+        if os.path.exists(f"{ROOT}/bio/_ids.json") else {}
+    if not pid_of:
+        print("FAIL - run build.py first: it writes bio/_ids.json mapping labels to ids",
+              file=sys.stderr)
+        return 1
+    shell = open(f"{HERE}/bio_template.html", encoding="utf-8").read()
+    os.makedirs(f"{ROOT}/bio", exist_ok=True)
+
+    by_who = {}
+    for r in rows:
+        by_who.setdefault(r["who"], []).append(r)
+    made = 0
+    for who, rs in by_who.items():
+        pid = pid_of.get(who)
+        if not pid:
+            print(f"  ! no person for {who}")
+            continue
+        p = people[pid]
+        secs = []
+        for r in rs:
+            hit, _ = entries.find(r["work"], r["pin"])
+            seen = set()
+            blocks = "\n".join(block_html(k, t, pg, seen)
+                               for k, t, pg in paragraphs(r["work"], hit[0], hit[1]))
+            w = works[r["work"]]
+            pages = r["page"] if r["page"] == r["page_end"] else f'{r["page"]}–{r["page_end"]}'
+            secs.append(
+                f'<section><div class="src"><b>{html.escape(w["title_lat"])}</b> — '
+                f'{html.escape(w["author_lat"])}, <span data-k="vol"></span> {r["vol"]}, '
+                f'<span data-k="pp"></span> {pages} · {r["n_words"]:,} <span data-k="words"></span>'
+                f'<i>{html.escape(w["edition"])}</i><i>{html.escape(w["version_uri"])}</i></div>'
+                f'<div class="ar-head" dir="rtl" lang="ar">{html.escape(r["heading_ar"])}</div>'
+                f'{blocks}</section>')
+        out = (shell.replace("{{NAME_AR}}", html.escape(p["name_ar"]))
+                    .replace("{{NAME_LAT}}", html.escape(p["name_lat"]))
+                    .replace("{{WHO}}", html.escape(who))
+                    .replace("{{PID}}", html.escape(pid))
+                    .replace("{{BODY}}", "\n".join(secs))
+                    .replace("{{UI}}", json.dumps(UI, ensure_ascii=False))
+                    .replace("{{PALETTE}}", "\n".join(f"  --{k}: {v};" for k, v in PALETTE.items())))
+        open(f"{ROOT}/bio/{pid}.html", "w", encoding="utf-8").write(out)
+        made += 1
+    total = sum(os.path.getsize(f"{ROOT}/bio/{f}") for f in os.listdir(f"{ROOT}/bio")
+                if f.endswith(".html"))
+    print(f"wrote {made} biography pages, {total//1024:,} KB "
+          f"({sum(r['n_words'] for r in rows):,} words of Arabic)")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

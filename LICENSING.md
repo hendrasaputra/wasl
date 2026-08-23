@@ -57,6 +57,29 @@ This is deliberate. It keeps the repository small, it keeps provenance honest, a
 verification in `validate.py` runs against OpenITI's text rather than against a private copy of
 it that might have drifted.
 
+## 4. The English references — fetched to find a page, never republished
+
+`refs/*.txt` is gitignored on the same principle as `corpus/`, and for a stronger reason.
+The corpus is public-domain classical Arabic in OpenITI's machine-readable editions;
+`references.tsv` pins modern translations that are **still in copyright** — A. Guillaume's
+*The Life of Muhammad* is Oxford, 1955, and the scan Wasl fetches carries no licence.
+
+Wasl reads it to establish **which page treats which person**, records that page number, and
+publishes nothing from it. A page number is a fact and citing it is ordinary scholarship;
+the prose is not ours to redistribute. `fetch_refs.sh` writes `refs/SHA256SUMS`, which is
+committed, so the exact copy a citation was checked against stays identifiable.
+
+The deployment enforces this rather than trusting it: the CI job that stages the site deletes
+`corpus/` and `refs/` from the artifact and fails if either survives.
+
+## 5. The biography pages are built, not stored
+
+`bio/*.html` carries roughly 255,000 words of OpenITI's Arabic — the entries themselves, at
+the pages cited. Committing them would vendor the corpus through the back door, so they are
+generated in CI from the freshly fetched, checksummed text and deployed from the artifact.
+The repository holds the pins in `entries.jsonl`; the published site holds the text; both come
+from OpenITI's own file.
+
 ## Why GPL rather than something permissive
 
 The point of this project is that every claim can be checked. A fork that kept the interface but

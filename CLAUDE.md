@@ -32,10 +32,31 @@ generated output. Everything asserted must be traceable to an Arabic primary tex
 ## Workflow
 ```
 ./fetch.sh          # pull pinned corpus into corpus/ (gitignored, checksummed)
+./fetch_refs.sh     # pull pinned English references into refs/ (gitignored, IN COPYRIGHT)
 python3 validate.py  # MUST pass before every commit - proves every quote against the corpus
 python3 test_wasl.py # independent checks: re-derives page boundaries without nasab.py
 python3 build.py     # regenerate index.html
+python3 tools/build_entries.py --write   # re-pin the biographical entries
+python3 tools/build_bios.py              # bio/*.html - CI-built, never committed
 ```
+
+`bio/` and `refs/` are gitignored. The biography pages carry a quarter of a million words of
+OpenITI's Arabic, so CI builds them from the fetched corpus and deploys from the artifact;
+the staging step deletes `corpus/` and `refs/` and fails if either survives. Guillaume is in
+copyright: fetched to locate a page, never quoted.
+
+**A page milestone can have four digits.** `PAGE_RE` read `\d{3}` and al-Isti'ab paginates
+1..1969 in one run across its four volumes, so 286 published claims named a page a tenth of
+the true one. Every quote still verified, because the claim and the checker read the same
+truncated index and agreed. `test_wasl.py` now re-derives the last page of every volume with
+a plain scan. A citation nobody can look up is the failure this project exists to prevent.
+
+**An entry heading is not a unique key.** `locate()` is sound for a claim, whose quote is
+long and distinctive, and unsound for a heading: 'Umar b. al-Khattab' as a string occurs on
+hundreds of pages of Usd al-Ghaba, so searching for it put his entry on page 13 spanning 665
+pages. Entry spans come from milestone POSITIONS in the file, never from a text search. And
+Ibn Sa'd files one man once per tabaqa, so a heading can legitimately repeat - `tools/
+entries.py` pins with `=exact` and `#ordinal` and refuses to guess between matches.
 `index.html` is generated and committed so the repo is browsable without a toolchain. Never
 hand-edit it — edit `build.py`, `template.html`, or the JSONL.
 

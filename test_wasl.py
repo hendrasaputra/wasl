@@ -317,6 +317,28 @@ for work in sorted({c["work"] for c in claims}):
     diff = [(v, max(plain[v]), max(idx[v])) for v in sorted(idx) if max(plain[v]) != max(idx[v])]
     check(f"{work}: every milestone read to its last digit", not diff, str(diff))
 
+entries_rows = [json.loads(l) for l in open(f"{ROOT}/entries.jsonl", encoding="utf-8") if l.strip()]
+check("every entry names a work in sources.tsv",
+      all(e["work"] in works for e in entries_rows))
+check("no entry ends before it begins", all(e["page_end"] >= e["page"] for e in entries_rows))
+# A printed page holds a few hundred words. A span that implies thousands means the page
+# numbers are wrong even though every quote on them verifies - which is exactly what a
+# truncated milestone looks like from the inside.
+dense = [f'{e["who"]}/{e["work"]} {e["n_words"]}w over {e["page_end"]-e["page"]+1}pp'
+         for e in entries_rows if e["n_words"] / (e["page_end"] - e["page"] + 1) > 700]
+check("no entry implies an impossible number of words per page", not dense, "; ".join(dense[:4]))
+
+sys.path.insert(0, f"{ROOT}/tools")
+import entries as _e
+from directory import DIRECTORY as _D
+_labels = [l for _, items in _D for l, _ in items]
+check("every Who's who person has an entry or a stated reason for having none",
+      all(l in _e.PINS or l in __import__("build_entries").NO_ENTRY for l in _labels),
+      ", ".join(l for l in _labels if l not in _e.PINS))
+check("the heading recorded is the heading in the file",
+      all(_e.headings(e["work"])[0][_e.find(e["work"], e["pin"])[0][0]].strip().endswith(
+          e["heading_ar"].split()[-1]) for e in entries_rows))
+
 print("\nno honorific or unsplit chain ever became a person")
 HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه السلام", "رضي الله", "أمير المؤمنين")
 bad = [p["name_ar"] for p in byid.values() if any(h in p["name_ar"] for h in HON)]

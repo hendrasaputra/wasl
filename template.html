@@ -199,6 +199,11 @@ summary.sel{background:rgba(169,139,66,.2);box-shadow:inset 0 0 0 1px var(--gold
   font-variant-numeric:tabular-nums}
 .ar{font-family:var(--arabic);font-size:21px;line-height:1.25;color:var(--ink)}
 .lat{color:var(--ink-dim);font-size:13.5px}
+.biolink{display:block;margin:12px 0 4px;padding:11px 13px;border:1px solid var(--line);
+  border-radius:7px;color:var(--gold-lt);text-decoration:none;font-size:13.5px;min-height:44px}
+.biolink:hover{background:rgba(169,139,66,.14);border-color:var(--gold)}
+.biolink i{display:block;font-style:normal;font-size:11.5px;color:var(--ink-dim);margin-top:2px}
+.hasbio{color:var(--gold);font-size:8px;vertical-align:middle;margin-left:6px;opacity:.75}
 .pnav s{text-decoration:none;opacity:.6;font-weight:400;font-size:.9em}
 .alias{color:var(--grn-1);font-style:normal;font-size:12.5px;margin-left:7px}
 .kunya{color:var(--gold);font-style:normal;font-size:12.5px;margin-left:8px;opacity:.85}
@@ -641,6 +646,7 @@ function show(pid){
        ${p.note?`<div class="pnote">${esc(dtr(p.note))}</div>`:''}
      </div>
      <div class="meta">${meta.map(x=>`<span>${x}</span>`).join('')}</div>
+     ${(D.bios&&D.bios[pid])?`<a class="biolink" href="bio/${encodeURIComponent(pid)}.html">${esc(tr('bio_read'))} &#8594;<i>${esc(tr('bio_from', D.bios[pid].length))}</i></a>`:''}
      ${navRow(tr(p.sex === 'F' ? 'g_husband' : 'g_spouses'), wives)}${navRow(tr('g_children'), chn)}${navRow(tr('g_siblings'), sibs)}${groups}`;
   $('#panel').scrollTop = 0;
   openSheet();
@@ -873,7 +879,9 @@ $('#langs').addEventListener('click', e => {
 function renderDir(){
   $('#dir').innerHTML = D.directory.map(([g, rows]) =>
     `<div><h4>${esc(dtr(g))}</h4>` +
-    rows.map(([label, id]) => `<a data-go="${id}">${esc(label)}</a>`).join('') + '</div>').join('');
+    rows.map(([label, id]) =>
+      `<a data-go="${id}">${esc(label)}${(D.bios&&D.bios[id])?'<b class="hasbio" title="'+esc(tr('bio_read'))+'">&#9670;</b>':''}</a>`
+    ).join('') + '</div>').join('');
 }
 renderDir();
 
