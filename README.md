@@ -330,6 +330,12 @@ English**, because here the English is the original rather than a gloss of Arabi
 else a gloss is generated per language from the structured fields; see
 [CLAUDE.md](CLAUDE.md).
 
+## Taking this over
+
+If you are picking the project up — human or agent — start with
+[HANDOFF.md](HANDOFF.md): where things stand, how to run it, the traps that keep recurring,
+and what is worth doing next. [CLAUDE.md](CLAUDE.md) holds the rules.
+
 ## Reading these books in English
 
 There is no complete English translation of **Usd al-Ghāba** or **al-Istīʿāb**, which carry

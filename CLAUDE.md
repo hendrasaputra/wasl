@@ -1,6 +1,9 @@
 # CLAUDE.md — working rules for Wasl
 
 ## What this is
+
+**New here? Read [HANDOFF.md](HANDOFF.md) first** — state, map, traps, open threads.
+This file is the rules.
 **Wasl** (وصل, "the link") — a verifiable genealogy (nasab) explorer. Source of truth is two JSONL files; the HTML is
 generated output. Everything asserted must be traceable to an Arabic primary text.
 

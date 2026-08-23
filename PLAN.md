@@ -1,3 +1,6 @@
+<!-- The record of what each phase did. For current state and what to do next, see
+     HANDOFF.md; for the rules, CLAUDE.md. -->
+
 # Wasl · وصل — Plan and record
 
 Living document. What was decided and why stays here, so nothing is re-argued.
