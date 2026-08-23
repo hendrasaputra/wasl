@@ -12,8 +12,11 @@ import csv, os, re, unicodedata
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CORPUS = os.path.join(ROOT, "corpus")
 
-PAGE_RE = re.compile(r"PageV(\d{2})P(\d{3})[AB]?")
-NOISE_RE = re.compile(r"PageV\d{2}P\d{3}[AB]?|\bms\d+\b|%~%|\[\d+\]")
+# \d{3} truncated every four-digit page: al-Isti'ab runs to 1969 in one sequence, so
+# PageV03P1132 was read as page 113 and left a stray "2" in the text. 961 markers in that
+# work alone. Page numbers are what a reader checks a citation by, so this was not cosmetic.
+PAGE_RE = re.compile(r"PageV(\d{2})P(\d+)[AB]?")
+NOISE_RE = re.compile(r"PageV\d{2}P\d+[AB]?|\bms\d+\b|%~%|\[\d+\]")
 DIACRITICS = re.compile(r"[ؐ-ًؚ-ٰٟۖ-ۭـ]")
 
 
@@ -47,7 +50,7 @@ def clean(work):
             if line.startswith("#META#"):
                 continue
             line = re.sub(r"^###\s*\|+\s*|^#\s*|^~~", " ", line.rstrip("\n"))
-            line = re.sub(r"PageV\d{2}P\d{3}[AB]?|\bms\d+\b|%~%|\[\d+\]|«\d+»|/\s*\d+\s*/", " ", line)
+            line = re.sub(r"PageV\d{2}P\d+[AB]?|\bms\d+\b|%~%|\[\d+\]|«\d+»|/\s*\d+\s*/", " ", line)
             out.append(line)
     _clean[work] = re.sub(r"[ \t]+", " ", " ".join(out))
     return _clean[work]

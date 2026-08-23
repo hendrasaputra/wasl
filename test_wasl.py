@@ -299,6 +299,24 @@ check("Ṣafiyya bt. Ḥuyayy is not inside Quraysh", wids["Ṣafiyya"] not in q
 counts = [c for c in claims if c["type"] == "dissent" and c["subject"] == "p.muhammad"]
 check("the disputed count is recorded, not resolved", len(counts) >= 4, f"{len(counts)} readings")
 
+print("\npage milestones are read whole, and the entries sit where they claim")
+# Re-derived with a plain scan that shares nothing with nasab.py. PAGE_RE captured \d{3}, so
+# al-Isti'ab - paginated 1..1969 in one run across four volumes - reported page 1819 as 181
+# on 286 published claims. The Arabic was right; the number a reader checks it by was not.
+import collections as _c
+for work in sorted({c["work"] for c in claims}):
+    raw = open(f"{ROOT}/corpus/{work}.txt", encoding="utf-8").read()
+    plain = _c.defaultdict(set)
+    for v, pg in re.findall(r"PageV(\d+)P(\d+)", raw):
+        plain[int(v)].add(int(pg))
+    idx = _c.defaultdict(set)
+    for _, v, pg in nasab.index(work)[1]:
+        idx[v].add(pg)
+    # only volumes the index actually carries: a stray PageV00P000 ahead of any text is
+    # dropped by the indexer on purpose and is not a truncation
+    diff = [(v, max(plain[v]), max(idx[v])) for v in sorted(idx) if max(plain[v]) != max(idx[v])]
+    check(f"{work}: every milestone read to its last digit", not diff, str(diff))
+
 print("\nno honorific or unsplit chain ever became a person")
 HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه السلام", "رضي الله", "أمير المؤمنين")
 bad = [p["name_ar"] for p in byid.values() if any(h in p["name_ar"] for h in HON)]
