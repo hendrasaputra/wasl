@@ -184,6 +184,11 @@ Same discipline as the data: measure, do not eyeball. Load it in the page and ca
 | iPad portrait · 768×1024 | — | 5/5 |
 | Desktop · 1440×900 | unchanged | 3/3 |
 
+Indentation was measured separately and cut afterwards: 25 fork levels at a flat 28px reached
+570px, halved to 305px by a diminishing scale, with the tree's horizontal scroll going from
+335px to 0 at 1440px. The check asserts both the bound and that every child still indents right
+of its parent — a diminishing scale is only safe while it stays strictly monotonic.
+
 Two things the check caught that inspection had not:
 
 - **A dead zone at 768px.** The grid collapses to one column at 1100px but the sheet only

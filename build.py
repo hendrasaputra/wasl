@@ -121,7 +121,7 @@ def main():
         spine.add(n)
         n = father.get(n)
 
-    def node(pid, depth=0, gen=1):
+    def node(pid, depth=0, gen=1, ind=0):
         p = people[pid]
         cs = by_person[pid]
         srcs = sorted({c["work"] for c in cs})
@@ -171,9 +171,13 @@ def main():
                    f'<span class="lat">{html.escape(p["name_lat"])}{al}</span>'
                    f'<span class="badges">{"".join(badges)}</span></summary>')
         open_attr = " open" if pid in spine else ""
-        inner = subtree(children, depth + 1, gen + 1)
-        # a lineage forks rarely; indent only where it actually does
-        cls = "kids linear" if len(children) == 1 else "kids"
+        # `ind` counts only the levels that actually indent - a fork. It drives a diminishing
+        # scale: 25 forks at a flat 28px put the deepest name 570px from the margin, which is
+        # most of a phone screen and a third of a desktop column. Every level still steps
+        # right, so nothing is ever ambiguous; the steps just get smaller as they go.
+        nxt = ind + (1 if len(children) > 1 else 0)
+        inner = subtree(children, depth + 1, gen + 1, nxt)
+        cls = "kids linear" if len(children) == 1 else f"kids kd{min(nxt // 5, 3)}"
         return f'<details{open_attr} id="{pid}">{summary}{f'<div class="{cls}">{inner}</div>' if inner else ""}</details>'
 
     RUN_MIN = 3   # a run shorter than this is cheaper to read as rows than as a ribbon
@@ -193,23 +197,23 @@ def main():
         return (f'<div class="ribbon inline"><span class="rl">{len(run)}&nbsp;gen</span>'
                 f'{links}</div>')
 
-    def subtree(children, depth, gen):
+    def subtree(children, depth, gen, ind=0):
         """Render a set of children, folding any single-child chain among them into a ribbon."""
         out = []
         for c in children:
             run = run_from(c)
             if len(run) - 1 >= RUN_MIN:
                 # ribbon the chain, then resume the tree at the node that forks
-                out.append(ribbon(run[:-1], gen) + node(run[-1], depth, gen + len(run) - 1))
+                out.append(ribbon(run[:-1], gen) + node(run[-1], depth, gen + len(run) - 1, ind))
             else:
-                out.append(node(c, depth, gen))
+                out.append(node(c, depth, gen, ind))
         return "".join(out)
 
     # ---- the unbranching prologue. Adam to Udad is 28 links with exactly one child each: a
     # sequence, not a tree, and it currently eats half the scroll depth carrying no branching
     # information at all. Render it as a ribbon and start the tree where the tree begins.
     ordered = sorted(roots, key=lambda x: (x != "p.adam", x))
-    tree = subtree(ordered, 0, 1)
+    tree = subtree(ordered, 0, 1, 0)
     prologue = {r: run_from(r) for r in ordered if len(run_from(r)) - 1 >= RUN_MIN}
     starts = [run_from(r)[-1] if r in prologue else r for r in ordered]
 

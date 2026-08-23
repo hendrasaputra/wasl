@@ -82,6 +82,30 @@ function waslResponsiveCheck() {
     document.querySelector('#aboutbtn').click();
   }
 
+  // 8. indentation: bounded, and still strictly monotonic. The diminishing scale is only safe
+  //    because every child stays right of its parent - if a band ever flattened that, the tree
+  //    would start lying about who descends from whom.
+  const openState = [...document.querySelectorAll('#tree details')].map(d => d.open);
+  document.querySelectorAll('#tree details').forEach(d => d.open = true);
+  let bad = 0, pairs = 0;
+  document.querySelectorAll('#tree details').forEach(d => {
+    const ps = d.querySelector(':scope > summary');
+    const kd = d.querySelector(':scope > .kids:not(.linear)');
+    if (!ps || !kd) return;
+    const cs = kd.querySelector(':scope > details > summary');
+    if (!cs) return;
+    pairs++;
+    if (cs.getBoundingClientRect().left <= ps.getBoundingClientRect().left) bad++;
+  });
+  t('every child indents right of its parent', bad === 0, `${bad} of ${pairs} pairs`);
+  const tre = document.querySelector('#tree');
+  const tl = tre.getBoundingClientRect().left;
+  const maxIndent = Math.max(...[...document.querySelectorAll('#tree summary')]
+    .map(s => s.getBoundingClientRect().left - tl));
+  const budget = phone ? 240 : 320;
+  t(`deepest indent under ${budget}px`, maxIndent <= budget, Math.round(maxIndent) + 'px');
+  document.querySelectorAll('#tree details').forEach((d, i) => d.open = openState[i]);
+
   console.log(`${innerWidth}x${innerHeight}  ${ok.length} ok, ${fail.length} failed`);
   fail.forEach(f => console.log('  FAIL ' + f));
   return { w: innerWidth, h: innerHeight, chrome, passed: ok.length, failed: fail };

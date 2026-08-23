@@ -205,6 +205,12 @@ went into navigation.
   *Columns* (Miller columns: one column per generation, but only a five-wide window around the
   selection, with the generations above folded into a back-column). Bounded by the viewport
   rather than by the data.
+- **Indentation diminishes with depth.** 25 forks at a flat 28px put the deepest name 570px
+  from the margin — most of a phone screen, a third of a desktop column. The step now shrinks in
+  bands (15 → 12 → 10 → 9px on desktop, tighter on a phone), which halves the deepest indent to
+  305px and takes the tree's own horizontal scroll from 335px to nothing at 1440px. Every level
+  still steps right of its parent, so the tree never becomes ambiguous about who descends from
+  whom — asserted, 362/362 pairs.
 - **Linear runs are ribbons.** Any chain of single-child links folds to one line: 209 ribbons
   absorb ~950 rows. Lossless — a run of one child has no branching to lose. A fork of two or
   three does, so forks always keep a branching layout.
