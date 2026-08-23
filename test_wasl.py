@@ -28,7 +28,7 @@ def raw_page(work, vol, page):
     report, so a page is several disjoint segments; take all of them."""
     txt = open(f"{ROOT}/corpus/{work}.txt", encoding="utf-8").read()
     mark = f"PageV{int(vol):02d}P{int(page):03d}"
-    any_mark = re.compile(r"PageV\d{2}P\d{3}")
+    any_mark = re.compile(r"PageV\d{2}P\d+")   # \d+: al-Isti'ab pages run past 999
     out, at = [], 0
     while True:
         end = txt.find(mark, at)
@@ -338,6 +338,49 @@ check("every Who's who person has an entry or a stated reason for having none",
 check("the heading recorded is the heading in the file",
       all(_e.headings(e["work"])[0][_e.find(e["work"], e["pin"])[0][0]].strip().endswith(
           e["heading_ar"].split()[-1]) for e in entries_rows))
+
+print("\nthe summaries rest on text that is really there")
+# The one place in this repository where prose is composed rather than quoted, so the one
+# place a plausible sentence could pass unchecked. Each anchored sentence is re-read here out
+# of the raw page slice - plain string operations, no nasab.py index - and must be inside the
+# entry the summary claims to be reading.
+spath = f"{ROOT}/summaries.jsonl"
+if os.path.exists(spath):
+    srows = [json.loads(l) for l in open(spath, encoding="utf-8") if l.strip()]
+    erows = {(e["who"], e["work"]): e for e in
+             (json.loads(l) for l in open(f"{ROOT}/entries.jsonl", encoding="utf-8") if l.strip())}
+    missing, outside = [], []
+    for sr in srows:
+        e = erows[(sr["who"], sr["work"])]
+        pages = " ".join(raw_page(sr["work"], e["vol"], pg)
+                         for pg in range(e["page"], e["page_end"] + 1))
+        blob = nasab.normalise(pages)
+        for ln in sr["lines"]:
+            if ln["basis"] != "anchored":
+                continue
+            if nasab.normalise(ln["ar"]) not in blob:
+                outside.append(f'{sr["who"]}: {ln["ar"][:40]}')
+    check(f"every anchored sentence is inside its own entry's pages", not outside,
+          "; ".join(outside[:3]))
+    check("no editorial sentence smuggles in a number",
+          not [l for sr in srows for l in sr["lines"]
+               if l["basis"] == "editorial" and any(c.isdigit() for c in l["en"])])
+    over = [f'{sr["who"]} {sr["n_editorial"]}/{len(sr["lines"])}' for sr in srows
+            if sr["n_editorial"] / len(sr["lines"]) > 0.20]
+    check("editorial sentences stay under a fifth of each summary", not over, "; ".join(over))
+    long = [f'{sr["who"]} {sr["n_words"]}w' for sr in srows if sr["n_words"] > 400]
+    check("no summary runs past its word cap", not long, "; ".join(long))
+    labels = {l for _, items in _D for l, _ in items}
+    check("every summary belongs to somebody in the Who's who",
+          all(sr["who"] in labels for sr in srows),
+          ", ".join(sr["who"] for sr in srows if sr["who"] not in labels))
+    # the check must be able to fail: a real phrase from another entry must be rejected
+    other = nasab.normalise("فابتنى دار الندوة، وجعل بابها إلى البيت")
+    saf = [e for e in erows.values() if e["who"] == "Ṣafiyya bt. Ḥuyayy" and e["work"] == "IbnSad"]
+    if saf:
+        blob = nasab.normalise(" ".join(raw_page("IbnSad", saf[0]["vol"], pg)
+                                        for pg in range(saf[0]["page"], saf[0]["page_end"] + 1)))
+        check("and a genuine phrase from a DIFFERENT entry is rejected", other not in blob)
 
 print("\nno honorific or unsplit chain ever became a person")
 HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه السلام", "رضي الله", "أمير المؤمنين")

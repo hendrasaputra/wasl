@@ -30,13 +30,39 @@ DROP = re.compile(r'\bms\d+\b|%~%')
 # so it can be set apart without parsing it: dim the isnad, leave the report at full weight.
 ISNAD = re.compile(r'^(?:\d+\s*-\s*)?((?:أخبرنا|حدثنا|أنبأنا|أخبرني|حدثني|نا)\b.{0,600}?(?:قال[^:]{0,25}|قالت)\s*:)')
 UI = {"back": {"en": "Back to the tree", "id": "Kembali ke pohon", "ms": "Kembali ke pokok"},
+      "sum":  {"en": "In brief", "id": "Ringkasnya", "ms": "Ringkasnya"},
+      "show": {"en": "show what each sentence rests on",
+               "id": "tampilkan dasar setiap kalimat",
+               "ms": "tunjukkan asas setiap ayat"},
+      "edit": {"en": "editorial — rests on no single passage",
+               "id": "redaksional — tidak bersandar pada satu nas",
+               "ms": "editorial — tidak bersandar pada satu nas"},
+      "sumnote": {"en": "Written from the entry below, not from anywhere else. Every sentence "
+                        "but the marked ones carries the Arabic phrase it rests on, and "
+                        "validate.py re-reads that phrase at the pages cited.",
+                  "id": "Ditulis dari entri di bawah, bukan dari sumber lain. Setiap kalimat "
+                        "kecuali yang ditandai membawa frasa Arab yang menjadi dasarnya, dan "
+                        "validate.py membaca ulang frasa itu pada halaman yang disebutkan.",
+                  "ms": "Ditulis daripada entri di bawah, bukan dari mana-mana sumber lain. "
+                        "Setiap ayat kecuali yang ditanda membawa frasa Arab yang menjadi "
+                        "asasnya, dan validate.py membaca semula frasa itu pada halaman "
+                        "yang dinyatakan."},
       "src":  {"en": "the entry as the book prints it",
                "id": "entri sebagaimana tercetak dalam kitab",
                "ms": "entri sebagaimana tercetak dalam kitab"},
       "vol":  {"en": "vol.", "id": "jil.", "ms": "jil."},
       "pp":   {"en": "pp.", "id": "hlm.", "ms": "hlm."},
       "words":{"en": "words", "id": "kata", "ms": "perkataan"},
-      "note": {"en": "Arabic only. Nothing here is translated or summarised: what the page "
+      "note": {"en": "The entry itself, at the pages named. It is not translated — only the "
+                     "brief above it is written in English, and every sentence of that is "
+                     "anchored to a phrase below.",
+               "id": "Entri itu sendiri, pada halaman yang disebutkan. Tidak diterjemahkan — "
+                     "hanya ringkasan di atasnya yang ditulis dalam bahasa Inggris, dan "
+                     "setiap kalimatnya bersandar pada frasa di bawah.",
+               "ms": "Entri itu sendiri, pada halaman yang dinyatakan. Tidak diterjemah — "
+                     "hanya ringkasan di atasnya yang ditulis dalam bahasa Inggeris, dan "
+                     "setiap ayatnya bersandar pada frasa di bawah."},
+      "note0":{"en": "Arabic only. Nothing here is translated or summarised: what the page "
                      "shows is the entry itself, at the pages named.",
                "id": "Hanya bahasa Arab. Tidak ada yang diterjemahkan atau diringkas di sini: "
                      "yang ditampilkan adalah entri itu sendiri, pada halaman yang disebutkan.",
@@ -108,6 +134,12 @@ def main():
         print("FAIL - run build.py first: it writes bio/_ids.json mapping labels to ids",
               file=sys.stderr)
         return 1
+    summaries = {}
+    if os.path.exists(f"{ROOT}/summaries.jsonl"):
+        for l in open(f"{ROOT}/summaries.jsonl", encoding="utf-8"):
+            if l.strip():
+                r = json.loads(l)
+                summaries[r["who"]] = r
     shell = open(f"{HERE}/bio_template.html", encoding="utf-8").read()
     os.makedirs(f"{ROOT}/bio", exist_ok=True)
 
@@ -136,7 +168,28 @@ def main():
                 f'<i>{html.escape(w["edition"])}</i><i>{html.escape(w["version_uri"])}</i></div>'
                 f'<div class="ar-head" dir="rtl" lang="ar">{html.escape(r["heading_ar"])}</div>'
                 f'{blocks}</section>')
-        out = (shell.replace("{{NAME_AR}}", html.escape(p["name_ar"]))
+        srow = summaries.get(who)
+        if srow:
+            bits = []
+            for ln in srow["lines"]:
+                if ln["basis"] == "editorial":
+                    bits.append(f'<span class="sl ed" data-k-t="edit">{html.escape(ln["en"])}</span>')
+                else:
+                    pg = ln["page"] if ln["page"] == ln["page_end"] else f'{ln["page"]}–{ln["page_end"]}'
+                    bits.append(
+                        f'<span class="sl">{html.escape(ln["en"])}'
+                        f'<a class="sp" href="#p{ln["page"]}">{pg}</a>'
+                        f'<q dir="rtl" lang="ar">{html.escape(ln["ar"])}</q></span>')
+            summary = ('<div id="sum"><h2 data-k="sum"></h2>'
+                       '<p class="sumnote" data-k="sumnote"></p>'
+                       '<button id="anch" data-k="show"></button>'
+                       '<div class="prose">' + " ".join(bits) + "</div></div>")
+        else:
+            summary = ""
+        # the standing note must not claim nothing is summarised on a page that summarises
+        out = (shell.replace("{{NOTEKEY}}", "note" if srow else "note0")
+                    .replace("{{SUMMARY}}", summary)
+                    .replace("{{NAME_AR}}", html.escape(p["name_ar"]))
                     .replace("{{NAME_LAT}}", html.escape(p["name_lat"]))
                     .replace("{{WHO}}", html.escape(who))
                     .replace("{{PID}}", html.escape(pid))

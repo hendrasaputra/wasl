@@ -304,6 +304,22 @@ Three people have no entry and say so: Qaḥṭān, al-Aws and al-Khazraj are ep
 with a life. al-ʿAbbās b. ʿAbd al-Muṭṭalib has none in Usd al-Ghāba or al-Istīʿāb either —
 OpenITI's markup never opens one for him, though the printed books do.
 
+## The summaries
+
+Every biography page opens with a brief written from the entry below it — and nowhere else.
+It is the only composed prose on the site, so it carries its evidence with it: **every
+sentence but the marked editorial ones is anchored to the Arabic phrase it rests on**, and
+"show what each sentence rests on" puts that phrase under the sentence. `validate.py` re-reads
+each anchor at the pages cited; `test_wasl.py` re-reads it again independently and checks that
+a real phrase from a *different* entry is rejected.
+
+That proves each statement points at text that is really there. It does not prove the English
+renders the Arabic fairly — that is a human judgement, and the anchors are shown so it can be
+checked by eye.
+
+Where an entry contradicts itself, the summary says so rather than choosing. Ibn Saʿd gives
+Ṣafiyya's death as the year 50 and, in the closing line of the same chapter, as 52.
+
 ## Reading these books in English
 
 There is no complete English translation of **Usd al-Ghāba** or **al-Istīʿāb**, which carry

@@ -107,9 +107,40 @@ def main():
         if len({c["work"] for c in cs}) == 1:
             warn.append(f"{chi} <- {par}: attested by {cs[0]['work']} only")
 
+    # 7. the summaries. Every anchored sentence must point at text that really is inside the
+    # entry it claims to read. This does not prove the English is a fair rendering - that is
+    # a human judgement - but it does prove nothing was written about a passage that is not
+    # there, which is the failure a fluent draft would otherwise slip past.
+    spath = os.path.join(ROOT, "summaries.jsonl")
+    n_anchor = n_edit = 0
+    if os.path.exists(spath):
+        ent = {(e["who"], e["work"]): e for e in jsonl("entries.jsonl")}
+        for srow in jsonl("summaries.jsonl"):
+            e = ent.get((srow["who"], srow["work"]))
+            if not e:
+                E(f"summary {srow['who']}: no pinned entry in {srow['work']}")
+                continue
+            for i, line in enumerate(srow["lines"]):
+                if line["basis"] == "editorial":
+                    n_edit += 1
+                    continue
+                span = nasab.locate(srow["work"], line["ar"])
+                if span is None:
+                    E(f"summary {srow['who']} line {i}: anchor NOT in {srow['work']}")
+                    continue
+                v, p1, p2 = span
+                if v != e["vol"] or not (e["page"] <= p1 and p2 <= e["page_end"]):
+                    E(f"summary {srow['who']} line {i}: anchor at {v}:{p1}-{p2} is outside "
+                      f"the entry ({e['vol']}:{e['page']}-{e['page_end']})")
+                    continue
+                n_anchor += 1
+
     print(f"people   {len(people)}")
     print(f"claims   {len(claims)}  ({checked} quotes re-read from corpus)")
     print(f"edges    {len(edges)}   works cited: {len({c['work'] for c in claims})}")
+    if n_anchor or n_edit:
+        print(f"summary  {n_anchor} anchored sentences re-read from the entries they read"
+              f", {n_edit} editorial")
     corr = collections.Counter(len({c['work'] for c in cs}) for cs in edges.values())
     print("corrob.  " + "  ".join(f"{n} work(s): {k} edges" for n, k in sorted(corr.items())))
     if warn:

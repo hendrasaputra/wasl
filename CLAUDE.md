@@ -36,6 +36,7 @@ python3 validate.py  # MUST pass before every commit - proves every quote agains
 python3 test_wasl.py # independent checks: re-derives page boundaries without nasab.py
 python3 build.py     # regenerate index.html
 python3 tools/build_entries.py --write   # re-pin the biographical entries
+python3 tools/build_summaries.py --write # check the anchors, write summaries.jsonl
 python3 tools/build_bios.py              # bio/*.html - CI-built, never committed
 ```
 
@@ -211,6 +212,36 @@ the tree: `identifies()`, never `find_by_chain` alone. `test_wasl.py` names that
 `ingest.Store.person(force=True)` mints a root. Only a hand-quoted pass may use it, because
 it asserts 'the top of this chain is nobody we already hold' - which a parser cannot know.
 
+## Summaries: the one place prose is written, not quoted
+
+`tools/summaries.py` holds a hand-written brief per Who's who person. It is the only composed
+prose in the repository, so it is the only place a plausible sentence could pass unchecked,
+and the format exists to stop that. A summary is not a paragraph: it is a list of lines, and
+an `anchored` line carries the Arabic phrase from its own entry that it rests on. `validate.py`
+re-reads that phrase and fails if it is not inside the pages the entry claims; `test_wasl.py`
+re-reads it again from the raw page slice, sharing no code with the index, and asserts that a
+genuine phrase from a DIFFERENT entry is rejected.
+
+What that proves: every statement points at text that exists where it says. What it does not
+prove: that the English is a fair rendering of the Arabic. That stays a human judgement -
+Rule 6 exactly - and the docs should never imply otherwise.
+
+Drafting rules, all of which exist because the alternative is worse:
+
+- **Anchor first, sentence second.** These lives are well known; writing from memory produces
+  fluent detail that anchors to nothing and reads perfectly.
+- **`editorial` lines carry no number and no name**, are counted, and are capped at a fifth.
+- **Where the entry disagrees with itself, the summary says so.** Ibn Sa'd gives Safiyya's
+  death as 50 and, in the same chapter, as 52. Ibn al-Athir reports four different counts of
+  who preceded 'Umar into Islam and two readings of his mother's name that turn on one letter.
+  Ibn Sa'd gives three accounts of how Qusayy got the House. Smoothing any of that is editing
+  the source, which Rule 3 forbids.
+- **Nothing enters that is not in THIS entry**, however well attested elsewhere.
+
+An anchor must be at least 25 normalised characters. `locate()` returns the FIRST occurrence
+in a work, so a phrase common enough to appear earlier fails the span check - which is the
+point: it was not distinctive enough to cite.
+
 ## Translations
 
 `tools/i18n.py` holds the interface strings and gloss templates; `tools/translate_claims.py`
@@ -219,6 +250,9 @@ writes an `id` and `ms` gloss onto every claim. Regenerate after any data change
 ```bash
 python3 tools/translate_claims.py --write
 ```
+
+The summaries are the exception to the rule below, and deliberately: there the English is the
+original, not a gloss of Arabic, so `id` and `ms` are translated FROM it. Everywhere else:
 
 Templated glosses are GENERATED per language from the structured fields, never translated from
 the English - a translation of a translation drifts for no reason when the fact is 'X, son of
