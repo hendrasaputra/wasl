@@ -22,6 +22,9 @@
   --arabic:"Amiri","Scheherazade New","Noto Naskh Arabic","Geeza Pro","Traditional Arabic",serif;
 }
 *{box-sizing:border-box}
+/* An element with its own display beats the user agent's [hidden]{display:none}, so #dir and
+   #bandlegend stayed on screen however often the button was pressed. Make hidden mean hidden. */
+[hidden]{display:none !important}
 body{margin:0;background:var(--grn-4);color:var(--ink);font:15px/1.5 var(--sans);
   -webkit-font-smoothing:antialiased}
 a{color:var(--gold-lt)}
@@ -53,9 +56,20 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
 .bar{position:sticky;top:0;z-index:5;display:flex;gap:10px;flex-wrap:wrap;align-items:center;
   padding:12px 26px;background:rgba(8,48,31,.94);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line)}
-.bar input{flex:1;min-width:190px;background:var(--grn-4);color:var(--ink);
-  border:1px solid var(--line);border-radius:8px;padding:9px 13px;font:14px var(--sans)}
-.bar input:focus{outline:2px solid var(--gold);outline-offset:-1px}
+/* The field used to be the same green as everything round it and read as decoration. It is the
+   main way into 1,941 names, so it looks like something you type in. */
+.searchwrap{position:relative}
+.searchwrap .mag{position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  width:15px;height:15px;pointer-events:none;color:#4A6B58}
+.bar input{flex:1;width:100%;min-width:190px;background:#F6F1E6;color:#123125;
+  border:1px solid var(--rule-s);border-radius:9px;padding:10px 40px 10px 36px;
+  font:14.5px var(--sans);box-shadow:inset 0 1px 3px rgba(0,0,0,.18)}
+.bar input::placeholder{color:#5C7A68;opacity:1}
+.bar input:focus{outline:2px solid var(--gold);outline-offset:1px;background:#fff}
+#qclear{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#DCD3C2;
+  color:#123125;width:24px;height:24px;border-radius:50%;font:700 13px/1 var(--sans);
+  cursor:pointer;padding:0;display:none;align-items:center;justify-content:center;min-height:0}
+#qclear.on{display:flex}
 .bar button{background:transparent;color:var(--gold-lt);border:1px solid var(--line);
   border-radius:8px;padding:8px 13px;font:13px var(--sans);cursor:pointer}
 .bar button:hover{background:rgba(169,139,66,.14)}
@@ -83,10 +97,11 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
 .sep{width:1px;height:20px;background:var(--line);margin:0 4px}
 /* the label is uppercase with letter-spacing; without resetting it the '?' is pushed off
    centre inside the circle and clips against the border-radius, which reads as an arrow */
-.bar .qm, .qm{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;
-  border:1px solid var(--line);border-radius:50%;background:transparent;color:var(--grn-1);
-  font:600 11px/1 var(--sans);letter-spacing:0;text-transform:none;cursor:pointer;padding:0;
-  margin-left:2px;vertical-align:-4px;flex:0 0 auto}
+.bar .qm, .qm{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;
+  border:0;background:transparent;color:var(--grn-1);font:11px/1 var(--sans);letter-spacing:0;
+  text-transform:none;cursor:pointer;padding:0;margin-left:1px;vertical-align:-4px;flex:0 0 auto;
+  transition:transform .18s ease,color .18s}
+.bar .qm.on,.qm.on{transform:rotate(90deg)}
 .bar .qm:hover,.bar .qm.on,.qm:hover,.qm.on{color:var(--gold-lt);border-color:var(--gold);background:rgba(169,139,66,.14)}
 #bandlegend{padding:14px 26px 18px;background:rgba(10,58,39,.75);border-bottom:1px solid var(--line);
   display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px 24px}
@@ -313,8 +328,7 @@ summary.hit .lat{color:var(--gold-lt)}
   header .rose.b{display:none}
   h1{font-size:21px}
   h1 .ar{font-size:26px;margin-left:8px}
-  #about{display:none;margin-top:10px}
-  #about.open{display:block}
+  #about{margin-top:10px}
   #about .sub{font-size:13px;margin-top:8px}
   .stats{margin-top:8px;gap:5px}
   .stats b{font-size:11px;padding:3px 9px}
@@ -325,8 +339,7 @@ summary.hit .lat{color:var(--gold-lt)}
   /* 16px or iOS Safari zooms the page on focus and never zooms back */
   .bar input{font-size:16px;padding:12px 13px;min-height:44px}
   .hits{order:3;font-size:12px}
-  .bar2{display:none;top:auto}
-  .bar2.open{display:flex;padding:10px 12px 12px}
+  .bar2{top:auto;padding:10px 12px 12px}
   #bandlegend{padding:12px 16px 16px;grid-template-columns:1fr}
   #dir{padding:14px 16px 18px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 
@@ -393,8 +406,12 @@ footer b{color:var(--gold-lt);font-weight:600}
 
 <div class="bar">
   <div class="searchwrap">
+    <svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+         stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/>
+         <line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>
     <input id="q" type="search" autocomplete="off" spellcheck="false"
       placeholder="Search names — Arabic or transliteration (ʿUmar · Abū Bakr · قصي · Khazraj)">
+    <button id="qclear" type="button" aria-label="Clear search">×</button>
     <div id="results" hidden></div>
   </div>
   <span class="hits" id="hits"></span>
@@ -405,8 +422,8 @@ footer b{color:var(--gold-lt);font-weight:600}
 <div class="bar bar2">
   <button id="dirbtn" class="chip primary">Who&#39;s who ▾</button>
   <span class="sep"></span>
-  <span class="lbl">Filter to <button id="bandhelp" class="qm" type="button"
-    aria-label="What do these filters do?" title="What do these filters do?">?</button></span>
+  <span class="lbl"><span id="filterlabel">Filter to</span> <button id="bandhelp" class="qm" type="button" aria-expanded="false"
+    aria-label="What do these filters do?" title="What do these filters do?">&#9654;</button></span>
   <span id="bands"></span>
   <span id="filters"></span>
   <button id="clearlens" class="chip clear" hidden>clear</button>
@@ -425,7 +442,7 @@ footer b{color:var(--gold-lt);font-weight:600}
   <aside id="panel" aria-label="Citations">
     <div id="sheetbar"><span class="grab" aria-hidden="true"></span>
       <button id="sheetclose" type="button" aria-label="Close">Close</button></div>
-    <div id="paneltop"><div class="empty">Select a name to see every source that attests it.</div></div>
+    <div id="paneltop"><div class="empty" id="pickmsg">Select a name to see every source that attests it.</div></div>
   </aside>
   <div id="backdrop" hidden></div>
 </main>
@@ -460,9 +477,7 @@ function paintChrome(){
   $('#none').textContent = tr('collapse');
   $('#sheetclose').textContent = tr('close');
   $('#langlabel').textContent = tr('lang_label');
-  $('#dirbtn').textContent = tr('whoswho') + ' ▾';
-  $('#aboutbtn').textContent = tr('about') + ' ▾';
-  $('#filterbtn').textContent = tr('filter');
+
   $('#clearlens').textContent = tr('clear');
   $('#about').querySelector('.sub').textContent = tr('title_sub');
   $('#panel').setAttribute('lang', LANG);
@@ -483,16 +498,24 @@ function paintChrome(){
   document.querySelectorAll('#tree .rl').forEach(el => {
     const n = el.dataset.n; if (n) el.textContent = tr('gen_short', n);
   });
+  $('#filterlabel').textContent = tr('filter_to');
+  const pick = $('#pickmsg'); if (pick) pick.textContent = tr('pick');
+  $('#about').querySelectorAll('.sub')[1].textContent = tr('howto');
+  // badges live in generated HTML, so they are relabelled in place
+  document.querySelectorAll('[data-k]').forEach(el => {
+    const k = el.dataset.k;
+    el.textContent = el.dataset.n ? `${el.dataset.n}\u202f${tr(k)}` : tr(k);
+    if (el.dataset.tk) el.title = tr(el.dataset.tk);
+  });
+  $('#foot').innerHTML = `<b>${esc(tr('sources_head'))}</b><br>` + Object.entries(D.works)
+    .map(([, w]) => `<b>${esc(w.title_lat)}</b>, ${esc(w.author_lat)} `
+       + `(${esc(tr('died_ah', w.death_ah))}) · ${esc(w.edition)}`).join('<br>')
+    + `<br><br>${esc(tr('footer_note'))}`;
+  if (typeof paintAbout === 'function') { paintAbout(); paintFilter(); paintDir(); }
   if (curPid) show(curPid);
 }
 let curPid = null;
 
-
-$('#foot').innerHTML = 'Sources — ' + Object.entries(D.works).map(([k,w]) =>
-  `<b>${esc(w.title_lat)}</b>, ${esc(w.author_lat)} (d. ${w.death_ah} AH) · ${esc(w.edition)}`
-).join('<br>') + '<br><br>Texts are the pinned OpenITI machine-readable editions; page numbers ' +
-'are those of the printed edition named. Every quotation on this page was re-read out of the ' +
-'source file at the cited page by <b>validate.py</b> before this file was generated.';
 
 /* ---------- claim panel ---------- */
 const TYPEKEY = {father_of:'g_father_of', mother_of:'g_mother_of', chain:'g_chain',
@@ -686,7 +709,11 @@ function renderResults(){
   RES.hidden = false;
 }
 
+$('#qclear').onclick = () => {
+  $('#q').value = ''; $('#q').dispatchEvent(new Event('input')); $('#q').focus();
+};
 $('#q').addEventListener('input', e => {
+  $('#qclear').classList.toggle('on', !!e.target.value);
   const q = fold(e.target.value);
   if (!q) { hits=[]; cursor=-1; RES.hidden=true; $('#hits').textContent=''; return; }
   hits = IDX.filter(([, t]) => t.includes(q)).map(([id]) => id);
@@ -748,18 +775,33 @@ $('#sheetbar').addEventListener('touchmove', e => {
 }, {passive:true});
 addEventListener('resize', () => { if (!isSheet()) closeSheet(); });
 
-/* ---------- disclosures: the header prose and the filter rows fold away ---------- */
-function toggle(btnSel, targetSel, labelOpen, labelShut){
+/* ---------- disclosures ----------------------------------------------------------
+   All of these use the hidden ATTRIBUTE, not a class. A class only works if some rule happens
+   to hide the element, and #dir and #bandlegend carry display:grid, so for a while pressing
+   their buttons did nothing at all. */
+function disclose(btnSel, targetSel, label){
   const b = $(btnSel), t = $(targetSel);
-  b.onclick = () => {
-    const open = t.classList.toggle('open');
+  const paint = () => {
+    const open = !t.hidden;
     b.setAttribute('aria-expanded', open);
-    b.textContent = open ? labelOpen() : labelShut();
     b.classList.toggle('on', open);
+    if (label) b.textContent = label() + (open ? ' ▴' : ' ▾');
   };
+  b.onclick = () => { t.hidden = !t.hidden; paint(); };
+  return paint;
 }
-toggle('#aboutbtn', '#about', () => tr('about') + ' ▴', () => tr('about') + ' ▾');
-toggle('#filterbtn', '.bar2', () => tr('filter') + ' ▴', () => tr('filter'));
+const paintAbout  = disclose('#aboutbtn', '#about', () => tr('about'));
+const paintFilter = disclose('#filterbtn', '.bar2', () => tr('filter'));
+const paintDir    = disclose('#dirbtn', '#dir', () => tr('whoswho'));
+
+/* The prose and the filter rows are worth showing outright where there is room, and folded
+   away where there is not. Set that once, from the viewport, not from a guess. */
+function defaultDisclosures(){
+  $('#about').hidden = isPhone();
+  $('.bar2').hidden = isPhone();
+  $('#filterbtn').hidden = !isPhone();     // on a wide screen the filters are already visible
+  paintAbout(); paintFilter(); paintDir();
+}
 
 /* ---------- the picker ---------- */
 $('#langs').innerHTML = Object.entries(D.langs)
@@ -778,12 +820,10 @@ $('#langs').addEventListener('click', e => {
 $('#dir').innerHTML = D.directory.map(([g, rows]) =>
   `<div><h4>${esc(g)}</h4>` +
   rows.map(([label, id]) => `<a data-go="${id}">${esc(label)}</a>`).join('') + '</div>').join('');
-$('#dirbtn').onclick = () => {
-  const d = $('#dir'); d.hidden = !d.hidden; $('#dirbtn').classList.toggle('on', !d.hidden);
-};
+
 $('#dir').addEventListener('click', e => {
   const a = e.target.closest('[data-go]');
-  if (a) { jump(a.dataset.go); $('#dir').hidden = true; $('#dirbtn').classList.remove('on'); }
+  if (a) { jump(a.dataset.go); $('#dir').hidden = true; paintDir(); }
 });
 
 /* ---------- bands ---------- */
@@ -795,6 +835,7 @@ Object.entries(D.band).forEach(([, b]) => bandCount[b] = (bandCount[b] || 0) + 1
 $('#bandhelp').onclick = () => {
   const l = $('#bandlegend'); l.hidden = !l.hidden;
   $('#bandhelp').classList.toggle('on', !l.hidden);
+  $('#bandhelp').setAttribute('aria-expanded', !l.hidden);
 };
 let bandOn = null;
 $('#bands').addEventListener('click', e => {
@@ -973,6 +1014,8 @@ $('#none').onclick = () => {
   window.scrollTo({top:0, behavior:'smooth'});
 };
 
+defaultDisclosures();
+addEventListener('resize', defaultDisclosures);
 setLang(LANG);           // paints all chrome in the chosen language
 if (location.hash && D.people[location.hash.slice(1)]) show(location.hash.slice(1));
 else show('p.muhammad');

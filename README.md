@@ -238,7 +238,8 @@ the content. `tools/check_responsive.js` asserts all of it rather than trusting 
 ## Languages
 
 English, **Bahasa Indonesia** and **Bahasa Melayu**, chosen from the header and remembered
-between visits.
+between visits. Everything moves: chrome, panel headings, band labels and their explanations,
+filter chips, node badges, the footer, and the gloss under every quotation.
 
 Two rules govern the translations:
 

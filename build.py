@@ -132,22 +132,22 @@ def main():
         children = kids.get(pid, [])
         badges = []
         if p.get("prophet"):
-            badges.append('<b class="bp">nabī</b>')
+            badges.append('<b class="bp" data-k="b_nabi">nabī</b>')
         if p["sex"] == "F":
-            badges.append('<b class="bf">f</b>')
+            badges.append('<b class="bf" data-k="b_f">f</b>')
         if pid in via_mother:
-            badges.append('<b class="bm">via mother</b>')
+            badges.append('<b class="bm" data-k="b_viamother">via mother</b>')
         auto = {c.get("source_pattern") for c in cs
                 if c["type"] == "father_of" and c["object"] == pid}
         if auto and not (auto & {None, "spine"}):
-            badges.append('<b class="ba" title="attached by the chain parser: the quote is '
-                          'verified, the placement rests on the anchor being right">auto</b>')
+            badges.append('<b class="ba" data-k="b_auto" data-tk="b_auto_t">auto</b>')
         if disputed:
-            badges.append('<b class="bd">ikhtilāf</b>')
+            badges.append('<b class="bd" data-k="b_ikhtilaf">ikhtilāf</b>')
         if edge_srcs:
-            badges.append(f'<b class="bs" title="{" ".join(edge_srcs)}">{len(edge_srcs)}&#8239;src</b>')
+            badges.append(f'<b class="bs" data-k="b_src" data-n="{len(edge_srcs)}" '
+                          f'title="{" ".join(edge_srcs)}">{len(edge_srcs)}&#8239;src</b>')
         if p.get("sahabi"):
-            badges.append('<b class="bc">ṣaḥābī</b>')
+            badges.append('<b class="bc" data-k="b_sahabi">ṣaḥābī</b>')
         kun = []
         for c in cs:
             if c["type"] == "kunya" and c["subject"] == pid and c.get("value_lat") \

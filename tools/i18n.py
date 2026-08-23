@@ -189,6 +189,35 @@ UI = {
                         "sebelum fail ini ditulis. Apabila sumber berbeza, setiap bacaan "
                         "disimpan."},
  "lang_label":   {"en": "Language", "id": "Bahasa", "ms": "Bahasa"},
+ "howto":        {"en": "Search reaches any name in the tree and jumps to it; the trail under "
+                        "the toolbar shows where you have landed in up to 56 generations. A "
+                        "number beside + is how many lie beneath it. Nodes badged auto were "
+                        "placed by the chain parser — the quotation is verified, the placement "
+                        "rests on the anchor being the right man.",
+                  "id": "Pencarian menjangkau setiap nama dalam pohon dan melompat ke sana; "
+                        "jejak di bawah bilah alat menunjukkan posisi Anda dalam hingga 56 "
+                        "generasi. Angka di samping + adalah jumlah yang ada di bawahnya. Simpul "
+                        "bertanda otomatis ditempatkan oleh pengurai rantai — kutipannya "
+                        "terverifikasi, penempatannya bergantung pada ketepatan titik sambung.",
+                  "ms": "Carian menjangkau setiap nama dalam pokok dan melompat ke sana; jejak "
+                        "di bawah bar alat menunjukkan kedudukan anda dalam sehingga 56 "
+                        "generasi. Nombor di sebelah + ialah bilangan yang ada di bawahnya. Nod "
+                        "bertanda automatik diletakkan oleh penghurai rantaian — petikannya "
+                        "disahkan, penempatannya bergantung pada ketepatan titik sauh."},
+ "sources_head": {"en": "Sources", "id": "Sumber", "ms": "Sumber"},
+ "footer_note":  {"en": "Texts are the pinned OpenITI machine-readable editions; page numbers "
+                        "are those of the printed edition named. Every quotation on this page "
+                        "was re-read out of the source file at the cited page by validate.py "
+                        "before this file was generated.",
+                  "id": "Teks adalah edisi terbaca-mesin OpenITI yang dipatok; nomor halaman "
+                        "mengikuti edisi cetak yang disebutkan. Setiap kutipan di halaman ini "
+                        "dibaca ulang dari berkas sumber pada halaman yang dirujuk oleh "
+                        "validate.py sebelum berkas ini dihasilkan.",
+                  "ms": "Teks ialah edisi boleh-baca-mesin OpenITI yang dipasak; nombor halaman "
+                        "mengikut edisi cetak yang dinamakan. Setiap petikan di halaman ini "
+                        "dibaca semula daripada fail sumber pada halaman yang dirujuk oleh "
+                        "validate.py sebelum fail ini dihasilkan."},
+ "died_ah":      {"en": "d. {n} AH", "id": "w. {n} H", "ms": "w. {n} H"},
 }
 
 
