@@ -33,12 +33,18 @@ def canon(k):
     return k
 
 
+def quote_stem(k):
+    return re.escape(k) if not k.startswith("أبو") else r"أب[اوي]" + re.escape(k[3:])
+
+
 def entries_with_body(work, text):
     """Heading plus the first lines of the entry. al-Isti'ab puts the chain in the heading and
     the kunya in the body, so reading only the heading finds almost nothing."""
     pat = extract_entry.ISTIAB if work == "IbnAbdAlBarr" else extract_entry.USD
-    for m in pat.finditer(text):
-        body = text[m.end():m.end() + 520].replace("\n", " ")
+    matches = list(pat.finditer(text))
+    for i, m in enumerate(matches):
+        next_heading = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        body = text[m.end():min(m.end() + 520, next_heading)].replace("\n", " ")
         body = re.sub(r"\(\s*[بدعس\s]+\s*\)", " ", body)
         # Usd repeats the name in its first body line, so heading+body would break the chain in
         # two; al-Isti'ab puts the chain only in the heading and needs it prepended
@@ -75,8 +81,7 @@ def run(work, store, quiet=True):
                 continue
             already.add(k)
             # quote the sentence that states it, so the claim carries its own evidence
-            stem = re.escape(k) if not k.startswith("أبو") else \
-                   r"أب[اوي]" + re.escape(k[3:])
+            stem = quote_stem(k)
             m = re.search(r"[^.]{0,80}(?:يكنى|كنيته|ويكنى|وكنيته|تكنى|كنيتها)\s+" + stem, ent)
             q = m.group(0).strip() if m else None
             if not q or nasab.locate(work, q) is None:

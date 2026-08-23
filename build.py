@@ -371,7 +371,7 @@ def main():
         if rows:
             directory.append([group, rows])
     if missing:
-        print("  directory entries unresolved: " + ", ".join(missing))
+        raise RuntimeError("directory entries unresolved: " + ", ".join(missing))
 
     data["directory"] = directory
     # the label -> id map the biography builder joins on. Written rather than recomputed:

@@ -41,14 +41,21 @@ def attach(st, chain_s, work, note=None, quiet=False):
         print(f"  ! not in {work}: {chain_s[:40]}")
         return 0
     anchor = idx = None
+    unsafe = False
     for k in range(len(names) - 1, 0, -1):
         hit = st.find_by_chain(names[k:])
         if hit:
+            if st.copied_line(hit):
+                unsafe = True
+                continue
             anchor, idx = hit, k
             break
     if anchor is None:
-        print(f"  ! no anchor for {chain_s[:50]}")
-        return 0
+        if unsafe:
+            anchor, idx = st.person(names[-1], force=True), len(names) - 1
+        else:
+            print(f"  ! no anchor for {chain_s[:50]}")
+            return 0
     cur, made = anchor, 0
     for i in range(idx - 1, -1, -1):
         pair = f"{names[i]} بن {names[i+1]}"

@@ -429,8 +429,19 @@ HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه الس
 bad = [p["name_ar"] for p in byid.values() if any(h in p["name_ar"] for h in HON)]
 check("no name contains an honorific", not bad, "; ".join(bad[:4]))
 unsplit = [p["name_ar"] for p in byid.values()
-           if re.search(r"\s+(?:ابنة|بنت|ابن|بن)\s+", p["name_ar"])]
+           if re.search(r"(?:^|\s)(?:ابنة|بنت|ابن|بن)(?:\s|$)", p["name_ar"])]
 check("no name is an unsplit chain", not unsplit, "; ".join(unsplit[:4]))
+artifacts = {"سيف الله", "أسلم يوم الفتح", "زوج زينب بنت", "ابن خالتها هالة",
+             "الأبجر- والأبجر هو خدرة", "أبى عمرو- ذكوان", "الحارث علي",
+             "العنبس يسير", "بنت صفوان", "كلدة درج", "محمد بنو جعفر",
+             "مات في أول خلافة", "الحكم الجواد", "فأما زمعة", "لي اليمن لعبد الله",
+             "داود لأم", "عميرة مبايعة", "السمين بإسناده عن يونس"}
+bad = sorted(p["name_ar"] for p in byid.values() if p["name_ar"] in artifacts)
+check("known commentary and title fragments are absent", not bad, "; ".join(bad))
+known_women = {"p.hind-2", "p.aisha", "p.fatima-2", "p.maymuna",
+               "p.arwa-2", "p.barra-2", "p.hind-3"}
+wrong = [pid for pid in sorted(known_women & set(byid)) if byid[pid]["sex"] != "F"]
+check("known surviving women are female", not wrong, "; ".join(wrong))
 
 print("\nnormalisation folds printings, not readings")
 check("hamza forms fold", nasab.normalise("إلياس") == nasab.normalise("الياس"))

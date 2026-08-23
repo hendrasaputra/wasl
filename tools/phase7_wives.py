@@ -111,7 +111,7 @@ def anchor(st, names, work):
         if len(suffix) < 3 and not identifies(work, suffix, st):
             continue
         hit = st.find_by_chain(suffix)
-        if hit:
+        if hit and not st.copied_line(hit):
             return hit, k
     return None, len(names) - 1
 
@@ -172,9 +172,13 @@ if __name__ == "__main__":
     st = ingest.Store()
     p0, c0 = len(st.people), len(st.claims)
     got = [seed(st, w) for w in WIVES]
+    n_got = sum(1 for g in got if g)
+    print(f"\nwives seeded: {n_got}/{len(WIVES)}")
+    if n_got != len(WIVES):
+        missing = [w["chain"] for w, pid in zip(WIVES, got) if pid is None]
+        raise RuntimeError("wives unresolved: " + "; ".join(missing))
     for work, ar, en in COUNTS:
         st.add("dissent", "p.muhammad", ar, en, work=work, source_pattern="wives")
-    print(f"\nwives seeded: {sum(1 for g in got if g)}/{len(WIVES)}")
     print(f"new: {len(st.people)-p0} people, {len(st.claims)-c0} claims")
     st.report("phase7")
     if "--write" in sys.argv:

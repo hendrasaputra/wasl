@@ -11,7 +11,7 @@ the rungs between - never guessing at the anchor, and never accepting a short ta
 import os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ingest, nasab
-from extract_walad import norm_name, identifies, BN, FEM_LINK
+from extract_walad import norm_name, identifies, BN, FEM_LINK, KUNYA_TAIL
 from translit import translit
 
 # nisbas and the clauses that end a chain
@@ -19,6 +19,7 @@ TAIL = re.compile(r"\s*(?:القرشي|الأنصاري|الأموي|الهاش�
                   r"الجمحي|الأسدي|الخزرجي|الأوسي|الكناني|الثقفي|التميمي|الكلبي|الفهري|النوفلي|"
                   r"المطلبي|العامري|الحارثي|الدوسي|المزني|السلمي|الغفاري|الجهني|البكري|"
                   r"وأمه|وأمها|أمه|أمها|يجتمع|أسلم|شهد|روى|قال|وكان|كان|له صحبة|رضي الله|"
+                  r"أخي|مولى|من بني|بإسناده|عن|امرأة|النجاري|"
                   r"وهو|وهي|ويقال|قيل|توفي|مات|استشهد|يكنى|أبو |[(\[]).*$", re.S)
 NUM = re.compile(r"^\s*[(\[]?\d+[)\]]?\s*[-.]?\s*")
 ISTIAB = re.compile(r"^###\s*\|\s*(.+)$", re.M)
@@ -29,9 +30,13 @@ def chain_of(raw, want_sex=False):
     """The chain, and whether its head is female - 'X bint Y' says so outright."""
     s = NUM.sub("", raw.strip())
     s = TAIL.sub("", s)
+    s = re.sub(r"\b(?:ابن|بن)\s+(?=(?:ابن|بن)\s+)", "", s)
     links = FEM_LINK.findall(" " + s + " ")
     fem = bool(re.match(r"^[^ء-ي]*[ء-ي\s]+?\s+(?:ابنة|بنت)\s+", " " + s))
-    parts = [norm_name(x) for x in BN.split(s)]
+    parts = [norm_name(KUNYA_TAIL.sub("", re.split(r"\s*[-–—]\s*", x, 1)[0]))
+             for x in BN.split(s)]
+    if parts and re.match(r"^(?:ابنة|بنت|ابن|بن)\b", parts[0]):
+        parts = []
     parts = [p for p in parts if p and re.match(r"^[ء-ي]", p) and len(p) <= 26]
     return (parts, fem) if want_sex else parts
 
@@ -42,11 +47,16 @@ def entries(work, text):
         for m in ISTIAB.finditer(text):
             yield m.group(1).strip()
     else:
-        for m in USD.finditer(text):
-            body = text[m.end():m.end() + 400].replace("\n", " ")
+        matches = list(USD.finditer(text))
+        for i, m in enumerate(matches):
+            next_heading = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+            body = text[m.end():min(m.end() + 400, next_heading)].replace("\n", " ")
             body = re.sub(r"^\s*[#~]+\s*|\(\s*[بدعس\s]+\s*\)", " ", body)
             head = NUM.sub("", m.group(1).strip())
-            yield (head + " " + body) if head else body
+            flat = re.sub(r"[#~]+", " ", body)
+            same_head = nasab.normalise(BN.split(flat.strip())[0]) == \
+                        nasab.normalise(BN.split(head)[0])
+            yield body if same_head else head + " " + body
 
 
 def run(work, store, limit=None, quiet=True, min_anchor=2):

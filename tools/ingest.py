@@ -71,6 +71,11 @@ class Store:
 
     def save(self):
         """Write both files back. Called once, at the end of a pass, and only with --write."""
+        for c in self.claims:
+            span = nasab.locate(c["work"], c["ar"])
+            if span is None:
+                raise RuntimeError(f"{c['cid']} quote vanished from {c['work']}: {c['ar'][:60]}")
+            c["vol"], c["page"], c["page_end"] = span
         with open(f"{ROOT}/people.jsonl", "w", encoding="utf-8") as f:
             for pid in self.order:
                 f.write(json.dumps(self.people[pid], ensure_ascii=False) + "\n")
@@ -145,6 +150,16 @@ class Store:
                     seen.add(k)
                     stack.append(k)
         return seen
+
+    def copied_line(self, pid):
+        """Whether this person's ancestry repeats a four-name parser-copied run."""
+        father = {c["object"]: c["subject"] for c in self.claims if c["type"] == "father_of"}
+        seq = []
+        while pid:
+            seq.append(nasab.normalise(self.people[pid]["name_ar"]))
+            pid = father.get(pid)
+        return any(seq[i:i + 4] == seq[j:j + 4]
+                   for i in range(len(seq) - 4) for j in range(i + 4, len(seq) - 3))
 
     def person(self, name_ar, father=None, force=False, **extra):
         """Get or mint. Identity is (name, father); a bare name with no father is ambiguous

@@ -34,7 +34,8 @@ STOP = re.compile(r"^(?:و?في|و?هو|و?هم|و?هي|و?كان|و?قد|و?ق�
                   r"و?ليس|و?منهم|و?من\b|و?إلي|و?به|و?لم|درج|و?الله|و?أما|و?قال|و?يقال|"
                   r"و?هؤلاء|و?هذ|و?بنو|و?بني|[وف]?ولد|و?إخوت|و?سائر|و?جميع|و?رهط|و?عقب|"
                   r"و?انقرض|و?له|و?لها|و?لهم|و?عدد|و?بطن|و?فيهم|ابن(?:ه|اه)?\b|بن\b|"
-                  r"بنت\b|ابنة\b|زوج\b|سيف\s+الله|أسلم\b|قتل\b|هاجر\b)")
+                  r"بنت\b|ابنة\b|زوج\b|سيف\s+الله|أسلم\b|قتل\b|هاجر\b|مات\b|فأما\b|لي\b)")
+CHILD_TAIL = re.compile(r"\s+(?:درج|بنو|لأم|مبايعة|الجواد)\b.*$")
 ACC = re.compile(r"ا$")
 HUWA = re.compile(r"^\s*و?ه[وي]\s+(?P<alias>[ء-ي][^،؛.]{1,22})")
 
@@ -81,10 +82,11 @@ PARTICLE = re.compile(r"\s+(?:لم|له|لها|لهم|لا|قد|ثم|من|في|�
 
 def norm_name(w):
     """Undo the accusative these lists are written in: nizaran -> nizar, aba talib -> abu talib."""
+    w = w.replace("ما عض", "ماعض")
     # kunya only when a name follows: bare 'Ubayy' is a name in its own right, and turning it
     # into a bare 'Abu' made it look like a stray particle and got it pruned
     w = re.sub(r"^أبا\s+", "أبو ", w.strip())
-    w = re.sub(r"^أبي\s+", "أبو ", w)
+    w = re.sub(r"^أب[يى]\s+", "أبو ", w)
     w = re.sub(r"\bابنة\b", "بنت", w)
     w = re.sub(r"[#~*]+", " ", w).strip(" ،؛.()[]«»-")
     prev = None
@@ -114,7 +116,7 @@ def children(work, blob):
         piece = re.sub(r"([ء-ي])\s+و(?=[ء-ي])", r"\1، و", piece)
         parts = re.split(r"،", piece)
         for i, sub in enumerate(parts):
-            raw = norm_name(re.sub(r"^\s*و", "", sub.strip()))
+            raw = norm_name(CHILD_TAIL.sub("", re.sub(r"^\s*و", "", sub.strip())))
             if not raw:
                 continue
             if STOP.match(raw):

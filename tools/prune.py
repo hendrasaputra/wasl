@@ -35,14 +35,25 @@ def repair(name):
 # --- step 2: prune what was never a name -----------------------------------
 # a verb, a relative clause, or a kinship pointer to someone who is NOT the child
 JUNK = re.compile(
-    r"قتل|تزوج|هاجر|سكن|يسمى|سميت|خلف علي|فولد|"
-    r"^عمه|^عمة|^ابن عم|^أخت|^أخو|^بنو|^بني|^فهم|^أن |^أنت|^لعمر|"
+    r"قتل|تزوج|هاجر|سكن|يسمى|سميت|خلف علي|فولد|درج|بإسناده|\sعن\s|"
+    r"^عمه|^عمة|^(?:ابنة|بنت|ابن|بن)\b|^أخت|^أخو|^بنو|^بني|^فهم|^أن |^أنت|^لعمر|"
     r"^الناس$|محدث|الفقيه|^بطن|ثقة|الترجمان|^أبو$|^أبا$|لا بقية|"   # not ^أبي$: that is Ubayy
     
     r"منا فأما|^فمن$|^اسمه|أحق به|^معهم$|^فقتله$|^هر$|^لغن$|^غضيا$|^الأغوز$|"
-    r"زوجة|ابنا |بطن ضخم|^رسول الله$|\sبه\s|^أمة بنت")
+    r"زوجة|ابنا |بطن ضخم|^رسول الله$|\sبه\s|^أمة بنت|^مات\b|^فأما\b|^لي\s|"
+    r"\sمولى\s|\sمن بني\s|\sأخي\s")
 # one character cannot be a name; two can - 'Udd' and 'Murr' are ancestors of Tamim
 SHORT = re.compile(r"^.$")
+
+# Explicit `bint father` phrases for women first reached through gender-neutral child lists.
+FEMALE_EVIDENCE = {
+    "p.barra-2": ("IbnKalbi", "برة بنت عبد العزى بن عثمان"),
+    "p.arwa-2": ("IbnAlAthir", "أروى بنت ربيعة"),
+    "p.maymuna": ("IbnSad", "ميمونة بنت سعد"),
+    "p.hind-2": ("IbnKalbi", "هند بنت عتبة بن ربيعة"),
+    "p.fatima-2": ("IbnAbdAlBarr", "فاطمة بنت الوليد بن عتبة"),
+    "p.hind-3": ("Baladhuri", "هند بنت سهيل بن عمرو"),
+}
 
 
 def is_junk(name):
@@ -67,6 +78,16 @@ def main(write=False):
     people = [json.loads(l) for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip()]
     claims = [json.loads(l) for l in open(f"{ROOT}/claims.jsonl", encoding="utf-8") if l.strip()]
     by_id = {p["id"]: p for p in people}
+    sex_fixed = 0
+    for pid, (work, quote) in FEMALE_EVIDENCE.items():
+        if pid not in by_id:
+            continue
+        if nasab.locate(work, quote) is None:
+            raise RuntimeError(f"female evidence vanished for {pid}: {work} / {quote}")
+        if by_id[pid]["sex"] != "F":
+            by_id[pid]["sex"] = "F"
+            sex_fixed += 1
+    print(f"corrected {sex_fixed} sex fields from explicit bint evidence")
     kids = {}
     for c in claims:
         if c["type"] == "father_of":
