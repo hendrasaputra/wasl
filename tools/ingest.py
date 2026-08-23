@@ -117,13 +117,17 @@ class Store:
                     stack.append(k)
         return seen
 
-    def person(self, name_ar, father=None, **extra):
+    def person(self, name_ar, father=None, force=False, **extra):
         """Get or mint. Identity is (name, father); a bare name with no father is ambiguous
-        and must already exist."""
+        and must already exist - unless force=True, which mints a fresh root. Only a
+        hand-quoted pass may force: it means 'the book gives this chain and its top name is
+        nobody we already hold', which a parser is in no position to assert."""
         name_ar = re.sub(r"\s+", " ", name_ar).strip()
         key = nasab.normalise(name_ar)
         alias = extra.pop("_alias", None)
-        if father:
+        if force:
+            pass
+        elif father:
             hit = self.child_of(father, [name_ar, alias])
             if hit:
                 return hit

@@ -199,6 +199,7 @@ summary.sel{background:rgba(169,139,66,.2);box-shadow:inset 0 0 0 1px var(--gold
   font-variant-numeric:tabular-nums}
 .ar{font-family:var(--arabic);font-size:21px;line-height:1.25;color:var(--ink)}
 .lat{color:var(--ink-dim);font-size:13.5px}
+.pnav s{text-decoration:none;opacity:.6;font-weight:400;font-size:.9em}
 .alias{color:var(--grn-1);font-style:normal;font-size:12.5px;margin-left:7px}
 .kunya{color:var(--gold);font-style:normal;font-size:12.5px;margin-left:8px;opacity:.85}
 .badges{margin-left:14px;display:flex;gap:5px;flex-shrink:0}
@@ -526,17 +527,25 @@ function paintChrome(){
     .map(([, w]) => `<b>${esc(w.title_lat)}</b>, ${esc(w.author_lat)} `
        + `(${esc(tr('died_ah', w.death_ah))}) · ${esc(w.edition)}`).join('<br>')
     + `<br><br>${esc(tr('footer_note'))}`;
-  if (typeof paintAbout === 'function') { paintAbout(); paintFilter(); paintDir(); }
+  if (typeof paintAbout === 'function') { paintAbout(); paintFilter(); paintDir(); renderDir(); }
   if (curPid) show(curPid);
 }
 let curPid = null;
 
 
+/* A marriage is a graph edge, not a tree edge: it cannot live in D.kids without making the
+   tree claim descent it never asserted. So it is its own two-way index, read off the claims. */
+const SPOUSE = new Map();
+D.claims.forEach(c => { if (c.type === 'married_to' && c.object) {
+  for (const [a, b] of [[c.subject, c.object], [c.object, c.subject]])
+    { if (!SPOUSE.has(a)) SPOUSE.set(a, []); if (!SPOUSE.get(a).includes(b)) SPOUSE.get(a).push(b); }
+} });
+
 /* ---------- claim panel ---------- */
-const TYPEKEY = {father_of:'g_father_of', mother_of:'g_mother_of', chain:'g_chain',
+const TYPEKEY = {father_of:'g_father_of', mother_of:'g_mother_of', married_to:'g_married', chain:'g_chain',
   kunya:'g_kunya', alias:'g_alias', dissent:'g_dissent', variant_chain:'g_variant',
   isnad:'g_isnad', birth:'g_birth', age_at_death:'g_age'};
-const ORDER = ['father_of','mother_of','kunya','alias','birth','age_at_death','chain','variant_chain','dissent','isnad'];
+const ORDER = ['father_of','mother_of','married_to','kunya','alias','birth','age_at_death','chain','variant_chain','dissent','isnad'];
 
 function claimHTML(c){
   const w = D.works[c.work] || {};
@@ -583,12 +592,23 @@ function show(pid){
   }).join('');
 
   const sibs = (D.father[pid] ? (D.kids[D.father[pid]]||[]) : []).filter(x => x !== pid);
+  const wives = (SPOUSE.get(pid) || []);
   const chn = D.kids[pid] || [];
-  const navRow = (label, ids) => ids.length
-    ? `<div class="grp">${label} · ${ids.length}</div><div class="pnav">` +
-      ids.slice(0,40).map(i => `<b data-go="${i}">${esc(D.people[i].name_lat)}</b>`).join('') +
-      (ids.length>40 ? `<b class="m">+${ids.length-40} more</b>` : '') + '</div>'
-    : '';
+  // Two of the Prophet's wives are called Zaynab and two of his children are called after
+  // each other's mothers; a row of identical links is a row the reader cannot use. When a name
+  // repeats inside one row, and only then, name the father alongside it.
+  const navRow = (label, ids) => {
+    if (!ids.length) return '';
+    const seen = {};
+    ids.forEach(i => seen[D.people[i].name_lat] = (seen[D.people[i].name_lat]||0) + 1);
+    const lbl = i => {
+      const n = D.people[i].name_lat, f = D.father[i];
+      return seen[n] > 1 && f ? `${esc(n)} <s>b. ${esc(D.people[f].name_lat)}</s>` : esc(n);
+    };
+    return `<div class="grp">${label} · ${ids.length}</div><div class="pnav">` +
+      ids.slice(0,40).map(i => `<b data-go="${i}">${lbl(i)}</b>`).join('') +
+      (ids.length>40 ? `<b class="m">+${ids.length-40} more</b>` : '') + '</div>';
+  };
 
   // eyebrow: what this person IS, from the data - not a placeholder phrase
   const eyebrow = [
@@ -597,16 +617,23 @@ function show(pid){
     p.tribe ? esc(dtr(p.tribe)) : null,
     esc(tr('m_gen', pathTo(pid).length)),
   ].filter(Boolean);
+  // 'sahabi' and the companions band are one word in Indonesian and Malay, so the eyebrow read
+  // SAHABAT · SAHABAT - two true facts that look like a bug. Fold on the text, not the markup.
+  const eseen = new Set();
+  const eyebrow2 = eyebrow.filter(x => {
+    const k = String(x).replace(/<[^>]*>/g, '').toLowerCase();
+    return eseen.has(k) ? false : (eseen.add(k), true);
+  });
 
   $('#paneltop').innerHTML =
     `<div class="phead">
-       <h2>${eyebrow.map(x => `<span>${x}</span>`).join('')}</h2>
+       <h2>${eyebrow2.map(x => `<span>${x}</span>`).join('')}</h2>
        <div class="pname" dir="rtl" lang="ar">${esc(p.name_ar)}</div>
        <div class="plat">${esc(p.name_lat)}</div>
        ${p.note?`<div class="pnote">${esc(dtr(p.note))}</div>`:''}
      </div>
      <div class="meta">${meta.map(x=>`<span>${x}</span>`).join('')}</div>
-     ${navRow(tr('g_children'), chn)}${navRow(tr('g_siblings'), sibs)}${groups}`;
+     ${navRow(tr(p.sex === 'F' ? 'g_husband' : 'g_spouses'), wives)}${navRow(tr('g_children'), chn)}${navRow(tr('g_siblings'), sibs)}${groups}`;
   $('#panel').scrollTop = 0;
   openSheet();
   document.querySelectorAll('summary.sel').forEach(s => s.classList.remove('sel'));
@@ -832,9 +859,12 @@ $('#langs').addEventListener('click', e => {
 });
 
 /* ---------- who's who: the people a reader arrives looking for ---------- */
-$('#dir').innerHTML = D.directory.map(([g, rows]) =>
-  `<div><h4>${esc(g)}</h4>` +
-  rows.map(([label, id]) => `<a data-go="${id}">${esc(label)}</a>`).join('') + '</div>').join('');
+function renderDir(){
+  $('#dir').innerHTML = D.directory.map(([g, rows]) =>
+    `<div><h4>${esc(dtr(g))}</h4>` +
+    rows.map(([label, id]) => `<a data-go="${id}">${esc(label)}</a>`).join('') + '</div>').join('');
+}
+renderDir();
 
 $('#dir').addEventListener('click', e => {
   const a = e.target.closest('[data-go]');

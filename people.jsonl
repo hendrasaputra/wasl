@@ -2607,3 +2607,64 @@
 {"id": "p.al-jarrah", "name_ar": "الجراح", "name_lat": "al-Jarrāḥ", "sex": "M", "sahabi": null, "note": null}
 {"id": "p.abd-allah-21", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "sahabi": null, "note": null}
 {"id": "p.amir-6", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M", "sahabi": true, "note": "Abū ʿUbayda b. al-Jarrāḥ, of the ten"}
+{"id": "p.wudd", "name_ar": "ود", "name_lat": "Wudd", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.abd-shams-5", "name_ar": "عبد شمس", "name_lat": "ʿAbd Shams", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.qays-2", "name_ar": "قيس", "name_lat": "Qays", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.zama-4", "name_ar": "زمعة", "name_lat": "Zamʿa", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.sawda", "name_ar": "سودة", "name_lat": "Sawda", "sex": "F", "sahabi": true, "note": null}
+{"id": "p.aisha-2", "name_ar": "عائشة", "name_lat": "ʿĀʾisha", "sex": "F", "sahabi": true, "note": null}
+{"id": "p.hafsa", "name_ar": "حفصة", "name_lat": "Ḥafṣa", "sex": "F", "sahabi": true, "note": null}
+{"id": "p.hind", "name_ar": "هند", "name_lat": "Hind", "sex": "F", "sahabi": true, "note": null}
+{"id": "p.ramla", "name_ar": "رملة", "name_lat": "Ramla", "sex": "F", "sahabi": true, "note": null}
+{"id": "p.khuzayma-2", "name_ar": "خزيمة", "name_lat": "Khuzayma", "sex": "M"}
+{"id": "p.asad-3", "name_ar": "أسد", "name_lat": "Asad", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.dudan", "name_ar": "دودان", "name_lat": "Dūdān", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.ghanm-6", "name_ar": "غنم", "name_lat": "Ghanm", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.kabir", "name_ar": "كبير", "name_lat": "Kabīr", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.murra-2", "name_ar": "مرة", "name_lat": "Murra", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.sabra", "name_ar": "صبرة", "name_lat": "Ṣabra", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.yamar", "name_ar": "يعمر", "name_lat": "Yaʿmar", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.riyab-3", "name_ar": "رياب", "name_lat": "Riyāb", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.jahsh", "name_ar": "جحش", "name_lat": "Jaḥsh", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.zaynab-3", "name_ar": "زينب", "name_lat": "Zaynab", "sex": "F", "sahabi": true, "note": null}
+{"id": "p.sasaa", "name_ar": "صعصعة", "name_lat": "Ṣaʿṣaʿa", "sex": "M"}
+{"id": "p.amir-7", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.hilal-3", "name_ar": "هلال", "name_lat": "Hilāl", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.abd-manaf-5", "name_ar": "عبد مناف", "name_lat": "ʿAbd Manāf", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.amr-8", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.abd-allah-22", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.al-harith-15", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.khuzayma-5", "name_ar": "خزيمة", "name_lat": "Khuzayma", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.zaynab-4", "name_ar": "زينب", "name_lat": "Zaynab", "sex": "F", "sahabi": true, "note": null}
+{"id": "p.judhayma", "name_ar": "جذيمة", "name_lat": "Judhayma", "sex": "M"}
+{"id": "p.malik-4", "name_ar": "مالك", "name_lat": "Mālik", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.aidh-4", "name_ar": "عائذ", "name_lat": "ʿĀʾidh", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.habib-4", "name_ar": "حبيب", "name_lat": "Ḥabīb", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.abu-dirar", "name_ar": "أبو ضرار", "name_lat": "Abū Ḍirār", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.al-harith-16", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.juwayriya", "name_ar": "جويرية", "name_lat": "Juwayriya", "sex": "F", "sahabi": true, "note": null}
+{"id": "p.yanhum", "name_ar": "ينحوم", "name_lat": "Yanḥūm", "sex": "M"}
+{"id": "p.al-nahham", "name_ar": "النحام", "name_lat": "al-Naḥḥām", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.al-nadir-2", "name_ar": "النضير", "name_lat": "al-Naḍīr", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.abu-habib", "name_ar": "أبو حبيب", "name_lat": "Abū Ḥabīb", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.al-khazraj-3", "name_ar": "الخزرج", "name_lat": "al-Khazraj", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.kab-2", "name_ar": "كعب", "name_lat": "Kaʿb", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.ubayd-2", "name_ar": "عبيد", "name_lat": "ʿUbayd", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.amir-8", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.saya", "name_ar": "سعية", "name_lat": "Saʿya", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.akhtab", "name_ar": "أخطب", "name_lat": "Akhṭab", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.huyayy", "name_ar": "حيي", "name_lat": "Ḥuyayy", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.safiyya-2", "name_ar": "صفية", "name_lat": "Ṣafiyya", "sex": "F", "sahabi": true, "note": "of Banū al-Naḍīr, of the Children of Israel, of the line of Hārūn"}
+{"id": "p.zayd", "name_ar": "زيد", "name_lat": "Zayd", "sex": "M"}
+{"id": "p.shamun", "name_ar": "شمعون", "name_lat": "Shamʿūn", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.khunafa", "name_ar": "خنافة", "name_lat": "Khunāfa", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.amr-9", "name_ar": "عمرو", "name_lat": "ʿAmr", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.zayd-9", "name_ar": "زيد", "name_lat": "Zayd", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.rayhana", "name_ar": "ريحانة", "name_lat": "Rayḥāna", "sex": "F", "sahabi": true, "note": "of Banū al-Naḍīr; the lists that count thirteen wives are the lists that leave her out"}
+{"id": "p.abd-allah-23", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.ruwayba", "name_ar": "رويبة", "name_lat": "Ruwayba", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.al-hazm", "name_ar": "الهزم", "name_lat": "al-Hazm", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.bujayr", "name_ar": "بجير", "name_lat": "Bujayr", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.hazn", "name_ar": "حزن", "name_lat": "Ḥazn", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.al-harith-17", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M", "sahabi": null, "note": null}
+{"id": "p.maymuna-2", "name_ar": "ميمونة", "name_lat": "Maymūna", "sex": "F", "sahabi": true, "note": null}

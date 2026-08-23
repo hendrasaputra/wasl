@@ -129,6 +129,7 @@ python3 tools/phase2_quraysh.py   --write      # Quraysh, under Fihr
 python3 tools/phase5_tribes.py    --write      # Qahtan seed + tribes
 python3 tools/phase6_ansar.py     --write      # Ansar clans + companion entries
 python3 tools/phase6b_notables.py --write      # marquee companions, by hand-quoted chain
+python3 tools/phase7_wives.py     --write      # the Ummahat al-Mu'minin, hand-quoted
 python3 tools/extract_kunya.py    --write      # kunyas from entry bodies
 python3 tools/kunya_notables.py   --write      # kunyas for the directory people
 python3 tools/prune.py            --write      # repair names, then drop what was never a name
@@ -145,6 +146,24 @@ to end.
 amuhu al-Shayba` becomes `Umar` - and a repair can turn two differently-named siblings into
 duplicates. Run the other way round, merge never sees them: Ali ended up with two sons called
 Umar exactly this way. `retranslit` is last because it only relabels.
+
+## Marriage is not descent
+
+`married_to` is the one claim type that is not a tree edge, and it must stay out of `kids`:
+a wife hung under her husband would make the page assert that she descends from him. It is
+indexed both ways in the template and rendered as its own row.
+
+A wife reaches the tree only by her FATHER's chain, so every route in is a route in wrong.
+Most of their fathers are outside what the parsers built - Banu Asad b. Khuzayma, `Amir b.
+Sa`sa`a, Khuza`a and the Jewish Banu al-Nadir are not Quraysh and not Ansar - so where a
+chain does not anchor, its own top name becomes a root. **Forcing an anchor is worse than
+having none.** A one-name suffix match put Safiyya bt. Huyayy of Banu al-Nadir onto
+`p.al-nadir`, which is al-Nadir b. al-Harith of `Abd al-Dar - a Qurashi - and would have
+placed the Prophet's Jewish wife inside Quraysh. Below three names the corpus decides, not
+the tree: `identifies()`, never `find_by_chain` alone. `test_wasl.py` names that trap.
+
+`ingest.Store.person(force=True)` mints a root. Only a hand-quoted pass may use it, because
+it asserts 'the top of this chain is nobody we already hold' - which a parser cannot know.
 
 ## Translations
 

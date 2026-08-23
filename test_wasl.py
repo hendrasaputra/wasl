@@ -238,6 +238,67 @@ for pid in byid:
 check("no lineage repeats a four-name run", not copied,
       f"{len(copied)} lineages, e.g. {'; '.join(copied[:3])}")
 
+print("\nthe Ummahat al-Mu'minin")
+# The marquee names again. A wife reaches the tree by her FATHER's chain and by nothing else,
+# so every way of getting her there is a way of getting her there wrong: an early draft hung
+# Safiyya bt. Huyayy of Banu al-Nadir on p.al-nadir, which is al-Nadir b. al-Harith of 'Abd
+# al-Dar, a Qurashi. Assert them one by one, by the chain the books print.
+WIVES = [
+ ("Khadīja",   ["خديجة", "خويلد", "أسد"]),
+ ("Sawda",     ["سودة", "زمعة", "قيس"]),
+ ("ʿĀʾisha",   ["عائشة", "عبد الله", "عثمان"]),
+ ("Ḥafṣa",     ["حفصة", "عمر", "الخطاب"]),
+ ("Hind",      ["هند", "أبو أمية", "المغيرة"]),
+ ("Ramla",     ["رملة", "أبو سفيان", "حرب"]),
+ ("Zaynab",    ["زينب", "جحش", "رياب"]),
+ ("Zaynab",    ["زينب", "خزيمة", "الحارث"]),
+ ("Juwayriya", ["جويرية", "الحارث", "أبو ضرار"]),
+ ("Ṣafiyya",   ["صفية", "حيي", "أخطب"]),
+ ("Rayḥāna",   ["ريحانة", "زيد", "عمرو"]),
+ ("Maymūna",   ["ميمونة", "الحارث", "حزن"]),
+]
+married = {c["object"] for c in claims if c["type"] == "married_to" and c["subject"] == "p.muhammad"}
+wids = {}
+for lat, chain in WIVES:
+    pid = person(chain)
+    wids[lat] = pid
+    check(f"{lat} b. {chain[1]} stands where the books put her",
+          pid is not None and byid[pid]["name_lat"] == lat and byid[pid]["sex"] == "F"
+          and pid in married,
+          "not found" if pid is None else
+          f"{byid[pid]['name_lat']}/{byid[pid]['sex']}/married={pid in married}")
+check("twelve wives, no more and no fewer", len(married) == 12, f"{len(married)}")
+
+# A marriage is not descent. If one ever became a father_of, the tree would assert that the
+# Prophet's wives descend from him.
+fmap = {c["object"]: c["subject"] for c in claims if c["type"] == "father_of"}
+line = set()
+n = "p.muhammad"
+while n:
+    line.add(n)
+    n = fmap.get(n)
+def below(pid):
+    out, stack = set(), [pid]
+    while stack:
+        for k in kids.get(stack.pop(), ()):
+            if k not in out:
+                out.add(k)
+                stack.append(k)
+    return out
+desc = below("p.muhammad")
+check("no wife is placed in the Prophet's own line",
+      not (married & (line | desc)),
+      ", ".join(byid[x]["name_lat"] for x in (married & (line | desc))))
+
+# The al-Nadir trap, named: Safiyya is of Banu al-Nadir of the Children of Israel, and must not
+# have been anchored inside Quraysh.
+quraysh = below(person(["فهر", "مالك", "النضر"]) or "p.__none__")
+check("Ṣafiyya bt. Ḥuyayy is not inside Quraysh", wids["Ṣafiyya"] not in quraysh)
+
+# Rule 3: the books count the wives differently in the same chapter, so all the counts stand.
+counts = [c for c in claims if c["type"] == "dissent" and c["subject"] == "p.muhammad"]
+check("the disputed count is recorded, not resolved", len(counts) >= 4, f"{len(counts)} readings")
+
 print("\nno honorific or unsplit chain ever became a person")
 HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه السلام", "رضي الله", "أمير المؤمنين")
 bad = [p["name_ar"] for p in byid.values() if any(h in p["name_ar"] for h in HON)]

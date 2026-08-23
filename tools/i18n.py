@@ -26,6 +26,8 @@ GLOSS = {
                     "id": "diberi kunyah {k}", "ms": "diberi kunyah {k}"},
     "alias":       {"en": "{a}, also called {k}",
                     "id": "{a}, disebut juga {k}", "ms": "{a}, disebut juga {k}"},
+    "married_to":  {"en": "the Messenger of God married {a}",
+                    "id": "Rasulullah ﷺ menikahi {a}", "ms": "Rasulullah ﷺ mengahwini {a}"},
     "chain":       {"en": "Full chain as given: {a} back to {b}.",
                     "id": "Rantai lengkap sebagaimana disebutkan: {a} hingga {b}.",
                     "ms": "Rantaian lengkap sebagaimana disebut: {a} hingga {b}."},
@@ -42,6 +44,9 @@ UI = {
  "filter":      {"en": "Filter", "id": "Saring", "ms": "Tapis"},
  "filter_to":   {"en": "Filter to", "id": "Saring ke", "ms": "Tapis kepada"},
  "clear":       {"en": "clear", "id": "hapus", "ms": "kosongkan"},
+ "g_married":   {"en": "marriage", "id": "pernikahan", "ms": "perkahwinan"},
+ "g_spouses":   {"en": "Wives", "id": "Istri", "ms": "Isteri"},
+ "g_husband":   {"en": "Married to", "id": "Menikah dengan", "ms": "Berkahwin dengan"},
  "whoswho":     {"en": "Who's who", "id": "Tokoh utama", "ms": "Tokoh utama"},
  "about":       {"en": "About this", "id": "Tentang ini", "ms": "Mengenai ini"},
  "close":       {"en": "Close", "id": "Tutup", "ms": "Tutup"},
@@ -225,6 +230,23 @@ UI = {
 # Tribes, notes and editorial verdicts live in the data rather than the interface, but a reader
 # in Indonesian should not meet them in English. There are few enough to translate by hand.
 DATA = {
+ # Who's who group headings. These were printed straight from directory.py, so an Indonesian
+ # reader met 'The four caliphs' between two translated panels.
+ "The four caliphs":       {"id": "Empat khalifah", "ms": "Empat khalifah"},
+ "The Prophet's household":{"id": "Keluarga Nabi ﷺ", "ms": "Keluarga Nabi ﷺ"},
+ "Ummahāt al-Muʾminīn":    {"id": "Ummahātul Muʾminīn (para istri Nabi ﷺ)",
+                            "ms": "Ummahātul Muʾminīn (para isteri Nabi ﷺ)"},
+ "Among the ten":          {"id": "Sepuluh yang dijamin surga", "ms": "Sepuluh yang dijamin syurga"},
+ "Anṣār":                  {"id": "Kaum Anṣār", "ms": "Kaum Anṣār"},
+ "of Banū al-Naḍīr, of the Children of Israel, of the line of Hārūn":
+   {"id": "dari Banū al-Naḍīr, dari Bani Israil, dari keturunan Hārūn",
+    "ms": "dari Banū al-Naḍīr, dari Bani Israil, dari keturunan Hārūn"},
+ "of Banū al-Naḍīr; the lists that count thirteen wives are the lists that leave her out":
+   {"id": "dari Banū al-Naḍīr; daftar yang menghitung tiga belas istri adalah daftar yang tidak memasukkannya",
+    "ms": "dari Banū al-Naḍīr; senarai yang mengira tiga belas isteri ialah senarai yang tidak memasukkannya"},
+ "Landmarks of the chain": {"id": "Penanda dalam rantai nasab",
+                            "ms": "Penanda dalam rantaian nasab"},
+
  # tribes
  "Quraysh": {"id": "Quraisy", "ms": "Quraisy"},
  "Quraysh / Banū Hāshim": {"id": "Quraisy / Banū Hāsyim", "ms": "Quraisy / Banū Hāsyim"},

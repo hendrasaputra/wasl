@@ -292,6 +292,8 @@ def main():
     for c in claims:
         seen |= {c.get(k) for k in ("note", "author_verdict", "chain_label", "text_note",
                                     "event_lat", "isnad_lat")}
+    # the Who's who headings are prose the page prints, so they translate like any other
+    seen |= {g for g, _ in directory}
     seen.discard(None)
     # sorted, not set order: Python randomises string hashing per process, so iterating the
     # set gave a different key order on every build and index.html was never twice the same

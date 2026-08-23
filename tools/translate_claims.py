@@ -137,6 +137,8 @@ def main(write=False):
                 g = i18n.gloss("kunya", lang, k=c["value_lat"])
             elif c["type"] == "alias" and c.get("value_lat"):
                 g = i18n.gloss("alias", lang, a=subj.get("name_lat", ""), k=c["value_lat"])
+            elif c["type"] == "married_to" and obj:
+                g = i18n.gloss("married_to", lang, a=obj["name_lat"])
             elif c["type"] == "chain":
                 m = re.match(r"Full chain as given: (.+?) back to (.+?)\.", c["en"])
                 if m:

@@ -199,9 +199,21 @@ Two things the check caught that inspection had not:
   the click read a mid-transition position and reported a failure that was not there. The
   check now disables the transition while measuring.
 
+## Phase 7 — the Ummahāt al-Muʾminīn
+
+Twelve wives, hand-quoted from Ibn Saʿd's *dhikr azwāj rasūl Allāh* and Ibn Hishām's chapter,
+each with the paternal nasab her book gives and a `married_to` claim taken from the marriage
+sentence. A new claim type that is not a tree edge, a `force=True` root for the chains whose
+tribes the parsers never reached, and 16 new checks in `test_wasl.py` asserting each woman by
+name, by sex, and by the fact that no marriage became descent. See README for why Ṣafiyya bt.
+Ḥuyayy must not resolve inside Quraysh.
+
+The books disagree on the count in the same breath — nine, thirteen, fourteen, fifteen — and
+every reading is recorded rather than reconciled.
+
 ## What remains
 
-Not a Phase 7 so much as more of Phase 6: each hand-seeded trunk unlocks a further tranche of
+Not a Phase 8 so much as more of Phase 6: each hand-seeded trunk unlocks a further tranche of
 companion entries that previously had nothing to anchor to. Purely additive — nothing already in
 the file has to change. Beyond that: GEDCOM export (~40 lines), and more transliteration
 readings.

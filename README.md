@@ -5,8 +5,8 @@
 *waṣl* — "the link, the joining". Every link in this tree is joined to a page of a printed
 critical edition, and the join is checked by machine, not by trust.
 
-**2,609 persons · 3,983 sourced claims · 2,611 links · 7 primary works** — the lineage of the
-Prophet Muḥammad ﷺ back to Ādam, his household, 432 Ṣaḥāba, and the Arab tribes down to
+**2,670 persons · 4,077 sourced claims · 2,667 links · 7 primary works** — the lineage of the
+Prophet Muḥammad ﷺ back to Ādam, his household, 443 Ṣaḥāba, and the Arab tribes down to
 al-Aws and al-Khazraj on the Qaḥṭānī side. Every Arabic quotation is re-read out of the source
 text at the cited page before the page is written.
 
@@ -15,7 +15,7 @@ browser. No server, no build step, no network.
 
 [![verify](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml/badge.svg)](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml)
 
-Every push re-fetches the pinned texts, re-proves all 3,983 quotations against them, runs 31
+Every push re-fetches the pinned texts, re-proves all 4,077 quotations against them, runs 56
 independent checks, and fails if the published page is stale. See [DEPLOY.md](DEPLOY.md).
 
 ---
@@ -250,11 +250,37 @@ Two rules govern the translations:
   people, which every language can state directly. Rendering them through English first would
   let a translation of a translation drift for no reason. Only the 100 bespoke prose lines — the
   objections, the competing chains, the birth notices — are hand-translated, and those from the
-  Arabic. Coverage is 3,983 of 3,983; a gap would keep the English and be reported rather than
+  Arabic. Coverage is 4,077 of 4,077; a gap would keep the English and be reported rather than
   machine-filled.
 
 Indonesian and Malay differ where they genuinely differ (*putra/putri* against *putera/puteri*,
 *Pohon* against *Pokok*, *tsabit* against *sabit*) and coincide where they do.
+
+## The Ummahāt al-Muʾminīn
+
+A tree of fathers cannot reach a wife: marriage is not descent, and no *fa-walada* line leads
+to one. Ibn Saʿd and Ibn Hishām both set the wives out in a dedicated chapter with each
+woman's full paternal nasab, so `tools/phase7_wives.py` quotes those chapters by hand rather
+than parsing them. Twelve women, each anchored by the chain her book prints, each carrying a
+`married_to` claim quoted from the marriage sentence itself.
+
+`married_to` is deliberately not a tree edge. Placing a wife under her husband would make the
+page assert that she descends from him, so it is indexed separately and shown as its own row
+on both panels.
+
+Their fathers mostly lie outside what the parsers built — Banū Asad b. Khuzayma, ʿĀmir b.
+Ṣaʿṣaʿa, Khuzāʿa and the Jewish Banū al-Naḍīr are neither Quraysh nor Anṣār — so where a
+chain finds nothing to hang on, its own top name becomes a root. That is the honest outcome:
+an early draft matched Ṣafiyya bt. Ḥuyayy's chain on the single name *al-Naḍīr* and hung the
+Prophet's Jewish wife inside Quraysh, because the al-Naḍīr in the tree is al-Naḍīr b.
+al-Ḥārith of ʿAbd al-Dār. Below three names the corpus decides how ambiguous its own phrase
+is; the tree does not get a vote.
+
+**The count is disputed and stays disputed.** Ibn Hishām: nine survived him, thirteen in all.
+Ibn Saʿd, in one chapter, reports thirteen (his informants leaving Rayḥāna out), fourteen and
+fifteen. All five readings are recorded as claims against the Prophet; none is chosen. Ibn
+Saʿd's own chapter divisions are followed — the women he places among those married but not
+brought together, and those proposed to but never married, are not here.
 
 ## Layout
 
@@ -266,7 +292,7 @@ people.jsonl     source of truth — identity only
 claims.jsonl     source of truth — every relationship, name, kunya and date, each cited
 nasab.py         corpus index: resolves a quote to its true volume and page span
 validate.py      the proof. Must pass before every commit
-test_wasl.py     40 independent checks, sharing no code with the indexer
+test_wasl.py     56 independent checks, sharing no code with the indexer
 build.py         renders index.html
 template.html    the page shell: palette, layout, views, search
 tools/           extraction and maintenance; the replay pipeline is in CLAUDE.md

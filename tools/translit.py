@@ -292,3 +292,16 @@ NAMES.update({
  "يغوث": "Yaghūth", "ياليل": "Yālīl", "كلال": "Kulāl", "المطلب": "al-Muṭṭalib",
  "الكعبة": "al-Kaʿba", "الأشهل": "al-Ashhal", "قيس": "Qays", "ود": "Wudd",
 })
+
+# The Ummahat al-Mu'minin and their fathers. These are the most-read names on the site, so
+# none of them may fall back to the consonant skeleton.
+NAMES.update({
+ "ريحانة":"Rayḥāna","جويرية":"Juwayriya","ميمونة":"Maymūna","حفصة":"Ḥafṣa","سودة":"Sawda",
+ "رملة":"Ramla","زينب":"Zaynab","عائشة":"ʿĀʾisha","خديجة":"Khadīja","صفية":"Ṣafiyya",
+ "حيي":"Ḥuyayy","أخطب":"Akhṭab","سعية":"Saʿya","النحام":"al-Naḥḥām","ينحوم":"Yanḥūm",
+ "خنافة":"Khunāfa","شمعون":"Shamʿūn","صعصعة":"Ṣaʿṣaʿa","بجير":"Bujayr","الهزم":"al-Hazm",
+ "رويبة":"Ruwayba","حزن":"Ḥazn","جحش":"Jaḥsh","رياب":"Riyāb","رئاب":"Riʾāb","دودان":"Dūdān",
+ "أبي ضرار":"Abū Ḍirār","عائذ":"ʿĀʾidh","زمعة":"Zamʿa","الشموس":"al-Shamūs","خويلد":"Khuwaylid",
+ "أم المساكين":"Umm al-Masākīn","أبو أمية":"Abū Umayya","أبي أمية":"Abū Umayya",
+ "أبي بكر الصديق":"Abū Bakr al-Ṣiddīq","مسافع":"Musāfiʿ","برة":"Barra",
+})
