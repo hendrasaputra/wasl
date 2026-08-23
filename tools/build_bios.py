@@ -140,6 +140,10 @@ def main():
             if l.strip():
                 r = json.loads(l)
                 summaries[r["who"]] = r
+    # Khadija stands in the Who's who twice - under the household and under the wives - and
+    # both rows resolve to one person. Key the lookup by id so whichever label carries the
+    # summary reaches the page.
+    by_pid = {}
     shell = open(f"{HERE}/bio_template.html", encoding="utf-8").read()
     os.makedirs(f"{ROOT}/bio", exist_ok=True)
 
@@ -153,6 +157,9 @@ def main():
             print(f"  ! no person for {who}")
             continue
         p = people[pid]
+        for _lbl, _r in summaries.items():
+            if pid_of.get(_lbl) == pid:
+                by_pid[pid] = _r
         secs = []
         for r in rs:
             hit, _ = entries.find(r["work"], r["pin"])
@@ -168,7 +175,7 @@ def main():
                 f'<i>{html.escape(w["edition"])}</i><i>{html.escape(w["version_uri"])}</i></div>'
                 f'<div class="ar-head" dir="rtl" lang="ar">{html.escape(r["heading_ar"])}</div>'
                 f'{blocks}</section>')
-        srow = summaries.get(who)
+        srow = summaries.get(who) or by_pid.get(pid)
         if srow:
             bits = []
             for ln in srow["lines"]:

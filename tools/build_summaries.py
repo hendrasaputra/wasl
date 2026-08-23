@@ -18,17 +18,21 @@ MAX_EDITORIAL = 0.20
 
 
 def main():
+    # a person can have SEVERAL entries in one work - Ibn Sa'd files a man once per tabaqa,
+    # so Sa'id b. Zayd and Anas b. Malik each have two. Keying on (who, work) kept only the
+    # last and silently failed every anchor that sat in the other one.
     entries = {}
     for l in open(f"{ROOT}/entries.jsonl", encoding="utf-8"):
         if l.strip():
             e = json.loads(l)
-            entries[(e["who"], e["work"])] = e
+            entries.setdefault((e["who"], e["work"]), []).append(e)
     rows, err = [], []
     for who, (work, lines) in SUMMARIES.items():
-        e = entries.get((who, work))
-        if not e:
+        es = entries.get((who, work))
+        if not es:
             err.append(f"{who}: no pinned entry in {work}")
             continue
+        e = es[0]
         out, edit = [], 0
         for en, ar in lines:
             if ar is None:
@@ -48,9 +52,10 @@ def main():
             # the anchor must sit inside the entry this summary claims to read. locate() finds
             # the FIRST occurrence in the work, so a phrase common enough to appear earlier
             # fails here - which is the point: it was not distinctive enough to cite.
-            if v != e["vol"] or not (e["page"] <= p1 and p2 <= e["page_end"]):
+            if not any(v == x["vol"] and x["page"] <= p1 and p2 <= x["page_end"] for x in es):
                 err.append(f"{who}: anchor at {v}:{p1}-{p2}, outside the entry "
-                           f"({e['vol']}:{e['page']}-{e['page_end']}) - {ar[:44]}")
+                           + " or ".join(f"{x['vol']}:{x['page']}-{x['page_end']}" for x in es)
+                           + f" - {ar[:44]}")
                 continue
             out.append({"en": en, "ar": ar, "basis": "anchored",
                         "vol": v, "page": p1, "page_end": p2})

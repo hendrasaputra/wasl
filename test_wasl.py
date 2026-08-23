@@ -347,14 +347,18 @@ print("\nthe summaries rest on text that is really there")
 spath = f"{ROOT}/summaries.jsonl"
 if os.path.exists(spath):
     srows = [json.loads(l) for l in open(spath, encoding="utf-8") if l.strip()]
-    erows = {(e["who"], e["work"]): e for e in
-             (json.loads(l) for l in open(f"{ROOT}/entries.jsonl", encoding="utf-8") if l.strip())}
+    # a person can have several entries in one work - Ibn Sa'd files one man once per tabaqa -
+    # so gather them all. Keying on (who, work) kept the last and failed every anchor in the
+    # rest, which is exactly how Sa'id b. Zayd's summary came out empty.
+    erows = {}
+    for e in (json.loads(l) for l in open(f"{ROOT}/entries.jsonl", encoding="utf-8") if l.strip()):
+        erows.setdefault((e["who"], e["work"]), []).append(e)
     missing, outside = [], []
     for sr in srows:
-        e = erows[(sr["who"], sr["work"])]
-        pages = " ".join(raw_page(sr["work"], e["vol"], pg)
-                         for pg in range(e["page"], e["page_end"] + 1))
-        blob = nasab.normalise(pages)
+        blob = nasab.normalise(" ".join(
+            raw_page(sr["work"], e["vol"], pg)
+            for e in erows[(sr["who"], sr["work"])]
+            for pg in range(e["page"], e["page_end"] + 1)))
         for ln in sr["lines"]:
             if ln["basis"] != "anchored":
                 continue
@@ -376,7 +380,7 @@ if os.path.exists(spath):
           ", ".join(sr["who"] for sr in srows if sr["who"] not in labels))
     # the check must be able to fail: a real phrase from another entry must be rejected
     other = nasab.normalise("فابتنى دار الندوة، وجعل بابها إلى البيت")
-    saf = [e for e in erows.values() if e["who"] == "Ṣafiyya bt. Ḥuyayy" and e["work"] == "IbnSad"]
+    saf = erows.get(("Ṣafiyya bt. Ḥuyayy", "IbnSad"))
     if saf:
         blob = nasab.normalise(" ".join(raw_page("IbnSad", saf[0]["vol"], pg)
                                         for pg in range(saf[0]["page"], saf[0]["page_end"] + 1)))

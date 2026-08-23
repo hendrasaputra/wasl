@@ -114,10 +114,12 @@ def main():
     spath = os.path.join(ROOT, "summaries.jsonl")
     n_anchor = n_edit = 0
     if os.path.exists(spath):
-        ent = {(e["who"], e["work"]): e for e in jsonl("entries.jsonl")}
+        ent = {}
+        for e in jsonl("entries.jsonl"):        # several entries per work is normal
+            ent.setdefault((e["who"], e["work"]), []).append(e)
         for srow in jsonl("summaries.jsonl"):
-            e = ent.get((srow["who"], srow["work"]))
-            if not e:
+            es = ent.get((srow["who"], srow["work"]))
+            if not es:
                 E(f"summary {srow['who']}: no pinned entry in {srow['work']}")
                 continue
             for i, line in enumerate(srow["lines"]):
@@ -129,9 +131,10 @@ def main():
                     E(f"summary {srow['who']} line {i}: anchor NOT in {srow['work']}")
                     continue
                 v, p1, p2 = span
-                if v != e["vol"] or not (e["page"] <= p1 and p2 <= e["page_end"]):
+                if not any(v == x["vol"] and x["page"] <= p1 and p2 <= x["page_end"]
+                           for x in es):
                     E(f"summary {srow['who']} line {i}: anchor at {v}:{p1}-{p2} is outside "
-                      f"the entry ({e['vol']}:{e['page']}-{e['page_end']})")
+                      + " or ".join(f"{x['vol']}:{x['page']}-{x['page_end']}" for x in es))
                     continue
                 n_anchor += 1
 
