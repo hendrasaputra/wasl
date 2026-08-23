@@ -177,7 +177,7 @@ def main():
                 f'{blocks}</section>')
         srow = summaries.get(who) or by_pid.get(pid)
         if srow:
-            bits = []
+            bits, last_pg = [], None
             for ln in srow["lines"]:
                 # the sentence carries its own id/ms, swapped in by the picker. The English is
                 # the original here, so these are translated FROM it - see tools/i18n.py for
@@ -189,9 +189,14 @@ def main():
                     bits.append(f'<span class="sl ed" data-k-t="edit">{txt}</span>')
                 else:
                     pg = ln["page"] if ln["page"] == ln["page_end"] else f'{ln["page"]}–{ln["page_end"]}'
+                    # 12 of Safiyya's 21 marks repeated the one before them: a page number
+                    # that has not changed is noise in running prose, and the sentence above
+                    # already carries the link
+                    mark = ("" if pg == last_pg else
+                            f'<a class="sp" href="#p{ln["page"]}">{pg}</a>')
+                    last_pg = pg
                     bits.append(
-                        f'<span class="sl">{txt}'
-                        f'<a class="sp" href="#p{ln["page"]}">{pg}</a>'
+                        f'<span class="sl">{txt}{mark}'
                         f'<q dir="rtl" lang="ar">{html.escape(ln["ar"])}</q></span>')
             summary = ('<div id="sum"><h2 data-k="sum"></h2>'
                        '<p class="sumnote" data-k="sumnote"></p>'
@@ -200,11 +205,16 @@ def main():
         else:
             summary = ""
         # the standing note must not claim nothing is summarised on a page that summarises
-        out = (shell.replace("{{NOTEKEY}}", "note" if srow else "note0")
+        # with a brief present the note sits above the Arabic, where it applies; without one
+        # it stays at the top, because then it describes the whole page
+        note = f'<p class="note" data-k="{"note" if srow else "note0"}"></p>'
+        secs = ([note] + secs) if srow else secs
+        out = (shell.replace("{{NOTE}}", "" if srow else note)
                     .replace("{{SUMMARY}}", summary)
                     .replace("{{NAME_AR}}", html.escape(p["name_ar"]))
                     .replace("{{NAME_LAT}}", html.escape(p["name_lat"]))
-                    .replace("{{WHO}}", html.escape(who))
+                    .replace("{{WHO}}", "" if who.startswith(p["name_lat"])
+                             else " · " + html.escape(who))
                     .replace("{{PID}}", html.escape(pid))
                     .replace("{{BODY}}", "\n".join(secs))
                     .replace("{{UI}}", json.dumps(UI, ensure_ascii=False))
