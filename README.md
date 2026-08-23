@@ -304,6 +304,24 @@ Three people have no entry and say so: Qaḥṭān, al-Aws and al-Khazraj are ep
 with a life. al-ʿAbbās b. ʿAbd al-Muṭṭalib has none in Usd al-Ghāba or al-Istīʿāb either —
 OpenITI's markup never opens one for him, though the printed books do.
 
+## Reading these books in English
+
+There is no complete English translation of **Usd al-Ghāba** or **al-Istīʿāb**, which carry
+most of the entries above. What exists covers the other two:
+
+- A. Guillaume, *The Life of Muhammad* (Oxford, 1955) — Ibn Hishām, complete.
+- S. Moinul Haq and H. K. Ghazanfar, *Kitāb al-Ṭabaqāt al-Kabīr* I–II — Ibn Saʿd on the
+  Prophet and his forefathers.
+- Aisha Bewley, *The Women of Madina* — Ibn Saʿd's volume of women, abridged.
+- Ella Landau-Tasseron, *The History of al-Ṭabarī* vol. 39 (SUNY, 1998) — a different work,
+  but a biographical dictionary of the same people.
+
+Wasl deliberately cites **none of these per person**. Each translates a different edition, so
+no volume or page number transfers to the ones cited here, and `validate.py` cannot open a
+printed book to check a claim about one. An unverifiable citation is the thing this project
+exists to avoid, so the list stays general. [LICENSING.md](LICENSING.md) records the attempt
+that was made and withdrawn.
+
 ## Layout
 
 ```

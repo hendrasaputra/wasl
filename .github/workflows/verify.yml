@@ -22,12 +22,8 @@ jobs:
 
       - name: Fetch the pinned source texts
         run: ./fetch.sh
-      - name: Fetch the pinned English references
-        run: ./fetch_refs.sh
       - name: Confirm the fetched texts are the ones pinned
-        run: |
-          cd corpus && shasum -a 256 -c SHA256SUMS
-          cd ../refs && shasum -a 256 -c SHA256SUMS
+        run: cd corpus && shasum -a 256 -c SHA256SUMS
 
       - name: Prove every quote against the corpus
         run: python3 validate.py
@@ -52,13 +48,12 @@ jobs:
         run: |
           mkdir -p _site
           rsync -a --exclude='.git' --exclude='.github' --exclude='.claude' \
-                --exclude='corpus' --exclude='refs' \
-                --exclude='_site' --exclude='__pycache__' \
+                --exclude='corpus' --exclude='_site' --exclude='__pycache__' \
                 ./ _site/
-          # belt and braces: the corpus is OpenITI's and Guillaume is in copyright. Neither
-          # is ours to redistribute, and a stray copy in the artifact would publish it.
-          rm -rf _site/corpus _site/refs
-          test ! -e _site/refs -a ! -e _site/corpus
+          # belt and braces: the corpus is OpenITI's, not ours to redistribute, and a stray
+          # copy in the artifact would publish it.
+          rm -rf _site/corpus
+          test ! -e _site/corpus
           test -f _site/index.html -a -f _site/CNAME -a -f _site/.nojekyll
           echo "staged $(find _site -name '*.html' | wc -l) html files"
 

@@ -57,20 +57,17 @@ This is deliberate. It keeps the repository small, it keeps provenance honest, a
 verification in `validate.py` runs against OpenITI's text rather than against a private copy of
 it that might have drifted.
 
-## 4. The English references — fetched to find a page, never republished
+## 4. There are no English references here, and that was a decision
 
-`refs/*.txt` is gitignored on the same principle as `corpus/`, and for a stronger reason.
-The corpus is public-domain classical Arabic in OpenITI's machine-readable editions;
-`references.tsv` pins modern translations that are **still in copyright** — A. Guillaume's
-*The Life of Muhammad* is Oxford, 1955, and the scan Wasl fetches carries no licence.
+Wasl pinned A. Guillaume's *The Life of Muhammad* (Oxford, 1955) for a while, to cite which
+of its pages treats which person. It was removed. The reasoning is in CLAUDE.md; the
+licensing half of it is worth stating here: that translation is in copyright until 2035, the
+scans on archive.org carry no licence, and nothing about "we only fetch it, we never quote
+it" would have made a wrong citation acceptable.
 
-Wasl reads it to establish **which page treats which person**, records that page number, and
-publishes nothing from it. A page number is a fact and citing it is ordinary scholarship;
-the prose is not ours to redistribute. `fetch_refs.sh` writes `refs/SHA256SUMS`, which is
-committed, so the exact copy a citation was checked against stays identifiable.
-
-The deployment enforces this rather than trusting it: the CI job that stages the site deletes
-`corpus/` and `refs/` from the artifact and fails if either survives.
+If English references are added later they should be **bibliographic** — a work and an entry
+name, entered from a copy in hand — and marked as unverifiable by script, because
+`validate.py` cannot open a printed book.
 
 ## 5. The biography pages are built, not stored
 
