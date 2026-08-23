@@ -211,6 +211,17 @@ name, by sex, and by the fact that no marriage became descent. See README for wh
 The books disagree on the count in the same breath — nine, thirteen, fourteen, fifteen — and
 every reading is recorded rather than reconciled.
 
+## Phase 8a — where the biographies are
+
+112 entries pinned by hand for 45 people, 255,221 words, spans derived from milestone
+positions rather than text search. Bio pages built in CI, deployed from the artifact, never
+committed. `references.tsv` pins Guillaume — fetched to locate a page, never quoted.
+
+Found on the way: `PAGE_RE` read three digits of a page milestone, so 286 published claims
+named a page a tenth of the true one. Fixed and re-derived; `test_wasl.py` guards it.
+
+Next: 8b hand-verifies Guillaume page ranges per person; 8c writes the anchored summaries.
+
 ## What remains
 
 Not a Phase 8 so much as more of Phase 6: each hand-seeded trunk unlocks a further tranche of

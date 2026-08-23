@@ -15,7 +15,7 @@ browser. No server, no build step, no network.
 
 [![verify](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml/badge.svg)](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml)
 
-Every push re-fetches the pinned texts, re-proves all 4,077 quotations against them, runs 56
+Every push re-fetches the pinned texts, re-proves all 4,077 quotations against them, runs 68
 independent checks, and fails if the published page is stale. See [DEPLOY.md](DEPLOY.md).
 
 ---
@@ -282,6 +282,28 @@ fifteen. All five readings are recorded as claims against the Prophet; none is c
 Saʿd's own chapter divisions are followed — the women he places among those married but not
 brought together, and those proposed to but never married, are not here.
 
+## The biographical entries
+
+The tree gives edges. A life is prose, and these books keep it in a named entry — a numbered
+notice in Usd al-Ghāba and al-Istīʿāb, a `dhikr X` chapter in Ibn Saʿd's first volume for the
+men who died before Islam. [`entries.jsonl`](entries.jsonl) pins **112 entries for 45 of the
+47 Who's who people — 255,221 words**, and each Who's who row opens onto the entry itself at
+the pages cited.
+
+Arabic only. Nothing on those pages is translated or summarised; the reading aids are page
+anchors and a dimmed isnād, and names in the running text are deliberately **not** linked into
+the tree, because matching a name in prose to a person is the one thing this project has got
+wrong most often.
+
+They are **built in CI and deployed from the artifact, never committed**. A quarter of a
+million words of OpenITI's Arabic in the repository would vendor the corpus by the back door,
+and [LICENSING.md](LICENSING.md) says Wasl does not. The staging step deletes `corpus/` and
+`refs/` and fails if either survives.
+
+Three people have no entry and say so: Qaḥṭān, al-Aws and al-Khazraj are eponyms, not men
+with a life. al-ʿAbbās b. ʿAbd al-Muṭṭalib has none in Usd al-Ghāba or al-Istīʿāb either —
+OpenITI's markup never opens one for him, though the printed books do.
+
 ## Layout
 
 ```
@@ -292,7 +314,7 @@ people.jsonl     source of truth — identity only
 claims.jsonl     source of truth — every relationship, name, kunya and date, each cited
 nasab.py         corpus index: resolves a quote to its true volume and page span
 validate.py      the proof. Must pass before every commit
-test_wasl.py     56 independent checks, sharing no code with the indexer
+test_wasl.py     68 independent checks, sharing no code with the indexer
 build.py         renders index.html
 template.html    the page shell: palette, layout, views, search
 tools/           extraction and maintenance; the replay pipeline is in CLAUDE.md
