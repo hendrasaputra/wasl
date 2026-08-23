@@ -293,7 +293,9 @@ def main():
         seen |= {c.get(k) for k in ("note", "author_verdict", "chain_label", "text_note",
                                     "event_lat", "isnad_lat")}
     seen.discard(None)
-    data["dtr"] = {lang: {s: _i18n.data(s, lang) for s in seen
+    # sorted, not set order: Python randomises string hashing per process, so iterating the
+    # set gave a different key order on every build and index.html was never twice the same
+    data["dtr"] = {lang: {s: _i18n.data(s, lang) for s in sorted(seen)
                           if _i18n.data(s, lang) != s} for lang in ("id", "ms")}
 
     tpl = open(f"{ROOT}/template.html", encoding="utf-8").read()
