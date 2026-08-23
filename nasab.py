@@ -30,7 +30,13 @@ CORPUS = os.path.join(ROOT, "corpus")
 # work alone. Page numbers are what a reader checks a citation by, so this was not cosmetic.
 PAGE_RE = re.compile(r"PageV(\d{2})P(\d+)[AB]?")
 NOISE_RE = re.compile(r"PageV\d{2}P\d+[AB]?|\bms\d+\b|%~%|\[\d+\]")
+MARKUP_RE = re.compile(r"</?span\b[^>]*>", re.I)
 DIACRITICS = re.compile(r"[ؐ-ًؚ-ٰٟۖ-ۭـ]")
+
+
+def strip_noise(s):
+    """Remove corpus milestones and stray HTML without changing the quoted Arabic."""
+    return MARKUP_RE.sub(" ", NOISE_RE.sub(" ", s))
 
 
 def sources():
@@ -69,7 +75,8 @@ def clean(work):
             if line.startswith("#META#"):
                 continue
             line = re.sub(r"^###\s*\|+\s*|^#\s*|^~~", " ", line.rstrip("\n"))
-            line = re.sub(r"PageV\d{2}P\d+[AB]?|\bms\d+\b|%~%|\[\d+\]|«\d+»|/\s*\d+\s*/", " ", line)
+            line = strip_noise(line)
+            line = re.sub(r"«\d+»|/\s*\d+\s*/", " ", line)
             out.append(line)
     _clean[work] = re.sub(r"[ \t]+", " ", " ".join(out))
     return _clean[work]
@@ -92,7 +99,7 @@ def index(work):
             if line.startswith("#META#"):
                 continue
             m = PAGE_RE.search(line)
-            buf.append(NOISE_RE.sub(" ", line))
+            buf.append(strip_noise(line))
             if m:
                 txt = normalise(" ".join(buf))
                 if txt:

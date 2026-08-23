@@ -91,8 +91,11 @@ def main(write=False):
     p0, c0 = len(st.people), len(st.claims)
 
     # people the household hangs on, created before the families that need them
-    khuwaylid = st.person("خويلد", father=st.find_by_chain(["أسد", "عبد العزى", "قصي"]))
-    st.add("father_of", st.find_by_chain(["أسد", "عبد العزى", "قصي"]),
+    asad = st.find_by_chain(["أسد", "عبد العزى", "قصي"])
+    if asad is None:
+        raise RuntimeError("required household anchor Asad b. Abd al-Uzza b. Qusayy is missing")
+    khuwaylid = st.person("خويلد", father=asad)
+    st.add("father_of", asad,
            "خديجة بنت خويلد بن أسد بن عبد العزى بن قصي",
            "Khuwaylid son of Asad b. ʿAbd al-ʿUzzā b. Quṣayy", object=khuwaylid, work="IbnSad")
     kh = st.person("خديجة", father=khuwaylid, sex="F")
@@ -107,8 +110,7 @@ def main(write=False):
     for father, work, quote, en, kids, extra in FAMILIES:
         fid = rid(father)
         if fid is None:
-            print(f"  ! father {father} not in tree - skipped")
-            continue
+            raise RuntimeError(f"required household father is missing: {father}")
         for name, sex, alias in kids:
             kid = st.person(name, father=fid, sex=sex, _alias=alias)
             lat = st.people[kid]["name_lat"]
@@ -126,7 +128,7 @@ def main(write=False):
            "إبراهيم بن النبي صلى الله عليه وآله وسلم، ولدته أمه مارية القبطية",
            "Ibrāhīm son of the Prophet; his mother Māriya the Copt bore him",
            object=ib, work="IbnAbdAlBarr")
-    mar = st.person("مارية القبطية", sex="F") if not rid("p.mariya-al-qibtiyya") else rid("p.mariya-al-qibtiyya")
+    mar = rid("p.mariya-al-qibtiyya") or st.person("مارية القبطية", sex="F", force=True)
     st.add("mother_of", mar,
            "إبراهيم بن النبي صلى الله عليه وآله وسلم، ولدته أمه مارية القبطية",
            "Māriya the Copt, mother of Ibrāhīm son of the Prophet",
@@ -137,14 +139,14 @@ def main(write=False):
         if mid and cid:
             st.add("mother_of", mid, q, en, object=cid, work=work)
         else:
-            print(f"  ! mother link unresolved: {m} -> {c}")
+            raise RuntimeError(f"required mother link is unresolved: {m} -> {c}")
 
     for typ, subj, obj, work, q, en, extra in SINGLE:
         sid = rid(subj)
         if sid:
             st.add(typ, sid, q, en, object=rid(obj) if obj else None, work=work, **extra)
         else:
-            print(f"  ! single claim unresolved: {subj}")
+            raise RuntimeError(f"required household claim subject is unresolved: {subj}")
 
     # now let the parser widen Banu Hashim from the household it can now see
     for _ in range(4):

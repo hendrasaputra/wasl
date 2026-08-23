@@ -164,8 +164,7 @@ class Store:
             hits = [pid for pid, p in self.people.items() if nasab.normalise(p["name_ar"]) == key]
             if len(hits) == 1:
                 return hits[0]
-            if len(hits) > 1:
-                return None
+            return None
         lat, prov = translit(name_ar)
         base = "p." + slug(lat)
         pid, n = base, 1

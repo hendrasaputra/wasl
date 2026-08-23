@@ -54,7 +54,7 @@ def run(work, store, quiet=True):
     added = seen = unresolved = 0
     for ent in entries_with_body(work, text):
         seen += 1
-        ent = re.sub(r"PageV\d{2}P\d{3}[AB]?|\bms\d+\b|[#~]+|\[\d+\]|%~%", " ", ent)
+        ent = re.sub(r"[#~]+", " ", nasab.strip_noise(ent))
         ent = re.sub(r"\s+", " ", ent).strip()
         chain = extract_entry.chain_of(ent)
         if len(chain) < 3:
@@ -75,7 +75,7 @@ def run(work, store, quiet=True):
                 continue
             already.add(k)
             # quote the sentence that states it, so the claim carries its own evidence
-            stem = re.escape(k)[:-0] if not k.startswith("أبو") else \
+            stem = re.escape(k) if not k.startswith("أبو") else \
                    r"أب[اوي]" + re.escape(k[3:])
             m = re.search(r"[^.]{0,80}(?:يكنى|كنيته|ويكنى|وكنيته|تكنى|كنيتها)\s+" + stem, ent)
             q = m.group(0).strip() if m else None

@@ -27,7 +27,6 @@ import nasab
 # last man's entry swallow all 1,351 women. Every `$` heading is depth 1, whatever its
 # length, and terminates and is terminated by any other entry or chapter.
 HEAD = re.compile(r'^###\s+([|$]+)\s*(?:\(\d+\))?\s*(\d+)?\s*-?\s*(.*)$')
-NOISE = re.compile(r'PageV\d{2}P\d+[AB]?|\bms\d+\b|%~%|\[\d+\]')
 _cache = {}
 
 
@@ -44,7 +43,7 @@ def headings(work):
         m = HEAD.match(ln)
         if m and m.group(3).strip():
             depth = 1 if set(m.group(1)) == {'$'} else len(m.group(1))
-            out.append((i, depth, NOISE.sub(' ', m.group(3)).strip()))
+            out.append((i, depth, nasab.strip_noise(m.group(3)).strip()))
     _cache[work] = (lines, out)
     return _cache[work]
 
@@ -129,7 +128,7 @@ def words(raw):
     thousands per page means the page numbers are wrong even though every quote on them
     verifies. test_wasl.py fails anything over 700.
     """
-    return len(NOISE.sub(' ', ' '.join(raw)).replace('#', ' ').replace('~', ' ').split())
+    return len(nasab.strip_noise(' '.join(raw)).replace('#', ' ').replace('~', ' ').split())
 
 
 # Keyed by the Who's who label in tools/directory.py, so the join is one lookup and the two

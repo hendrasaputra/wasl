@@ -32,8 +32,9 @@ KUNYA_TAIL = re.compile(r"\s+(?:أب[اوي]|أم)\s+[ء-ي].*$")
 # clauses that comment on a name rather than name a person
 STOP = re.compile(r"^(?:و?في|و?هو|و?هم|و?هي|و?كان|و?قد|و?قيل|و?ذكر|أم|و?أم|لا |ثم |أ?لهم|"
                   r"و?ليس|و?منهم|و?من\b|و?إلي|و?به|و?لم|درج|و?الله|و?أما|و?قال|و?يقال|"
-                  r"و?هؤلاء|و?هذ|و?بنو|و?بني|و?ولد|و?إخوت|و?سائر|و?جميع|و?رهط|و?عقب|"
-                  r"و?انقرض|و?له|و?لها|و?لهم|و?عدد|و?بطن|و?فيهم)")
+                  r"و?هؤلاء|و?هذ|و?بنو|و?بني|[وف]?ولد|و?إخوت|و?سائر|و?جميع|و?رهط|و?عقب|"
+                  r"و?انقرض|و?له|و?لها|و?لهم|و?عدد|و?بطن|و?فيهم|ابن(?:ه|اه)?\b|بن\b|"
+                  r"بنت\b|ابنة\b|زوج\b|سيف\s+الله|أسلم\b|قتل\b|هاجر\b)")
 ACC = re.compile(r"ا$")
 HUWA = re.compile(r"^\s*و?ه[وي]\s+(?P<alias>[ء-ي][^،؛.]{1,22})")
 
@@ -117,7 +118,7 @@ def children(work, blob):
             if not raw:
                 continue
             if STOP.match(raw):
-                break            # commentary has begun; nothing after it in this clause is a name
+                return out        # commentary has begun; nothing after it is a child name
             s = BN.split(raw)[0].strip()        # a child named "X bn Y" restates the father
             s = re.sub(r"\s*\(.*", "", s).strip()
             kun = None
@@ -126,7 +127,7 @@ def children(work, blob):
                 kun = norm_name(m2.group(0))
                 s = s[:m2.start()].strip()      # 'al-Hasan Aba Muhammad' -> al-Hasan
             if not (2 <= len(s) <= 24 and re.match(r"^[ء-ي]", s) and is_name(work, s)):
-                break
+                return out
             alias = None
             if i + 1 < len(parts):
                 h = HUWA.match(parts[i + 1].strip())

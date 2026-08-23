@@ -67,7 +67,7 @@ def run(work, store, limit=None, quiet=True, min_anchor=2):
     attached = seen = 0
     for ent in entries(work, text):
         seen += 1
-        ent = re.sub(r"PageV\d{2}P\d{3}[AB]?|\bms\d+\b|[#~]+|\[\d+\]|%~%", " ", ent)
+        ent = re.sub(r"[#~]+", " ", nasab.strip_noise(ent))
         ent = re.sub(r"\s+", " ", ent).strip()
         chain, fem = chain_of(ent, want_sex=True)
         if len(chain) < min_anchor + 1:
