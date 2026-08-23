@@ -42,7 +42,11 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
 .ar{font-family:var(--arabic);font-size:34px;color:var(--gold-lt);margin-left:12px}
 .sub{margin:8px 0 0;color:var(--ink-dim);max-width:62ch;font-size:13.5px}
 .stats{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
-.langpick{display:inline-flex;align-items:center;gap:6px;margin-left:10px;vertical-align:middle}
+/* the picker rides on the title line: on a phone it was taking a row of its own, and the
+   chrome budget there is 200px for everything */
+.headtop{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.headtop h1{flex:0 1 auto}
+.langpick{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto}
 .langpick .lbl{color:var(--grn-1);font-size:10.5px;letter-spacing:.9px;text-transform:uppercase}
 #langs{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 #langs button{border:0;border-radius:0;background:transparent;color:var(--ink-dim);
@@ -323,14 +327,20 @@ summary.hit .lat{color:var(--gold-lt)}
    on a phone the panel stops being a second row and becomes a sheet, and the
    header and filters fold away until asked for. */
 @media (max-width: 760px) {
-  header{padding:10px 16px 8px}
+  header{padding:7px 16px 6px}
   header .rose.a{width:190px;top:-58px;right:-52px}
   header .rose.b{display:none}
-  h1{font-size:21px}
-  h1 .ar{font-size:26px;margin-left:8px}
+  h1{font-size:20px}
+  h1 .ar{font-size:24px;margin-left:7px}
+  .headtop{gap:8px;flex-wrap:nowrap}
+  /* the three codes say what they are; the word does not need the width */
+  .langpick .lbl{display:none}
+  /* WCAG 2.2 AA asks 24x24 for a target; the primary controls are at 44 and this secondary
+     one sits at 36, which keeps the title row from dominating a 200px chrome budget */
+  #langs button{padding:8px 11px;font-size:12px;min-height:36px}
   #about{margin-top:10px}
   #about .sub{font-size:13px;margin-top:8px}
-  .stats{margin-top:8px;gap:5px}
+  .stats{margin-top:7px;gap:5px}
   .stats b{font-size:11px;padding:3px 9px}
   #aboutbtn{margin-top:8px;min-height:36px;padding:7px 12px;font-size:12px}
 
@@ -388,14 +398,16 @@ footer b{color:var(--gold-lt);font-weight:600}
 <header>
   <div class="rose a">{{ROSETTE}}</div>
   <div class="rose b">{{ROSETTE}}</div>
-  <h1>Wasl<span class="ar" dir="rtl" lang="ar">وصل</span></h1>
+  <div class="headtop">
+    <h1>Wasl<span class="ar" dir="rtl" lang="ar">وصل</span></h1>
+    <span class="langpick"><span class="lbl" id="langlabel">Language</span><span id="langs"></span></span>
+  </div>
   <div id="about"><p class="sub">The lineage of the Prophet Muḥammad ﷺ, his household, the Ṣaḥāba and the
   Arab tribes — back to Ādam on one side and to Qaḥṭān on the other. Every name, link and second
   name carries a quotation from a named critical edition, machine-checked against the page it
   cites before this file was written. Where the sources disagree, every reading is kept.</p>
   <div class="stats" id="stats"></div>
   <button id="aboutbtn" class="chip" type="button" aria-expanded="false">About this ▾</button>
-  <span class="langpick"><span class="lbl" id="langlabel">Language</span><span id="langs"></span></span>
   <p class="sub" style="margin-top:12px">Search reaches any name in the tree and jumps to it;
   the trail under the toolbar shows where you have landed in up to 54 generations. A number
   beside <b class="tw" style="position:relative;display:inline-block;vertical-align:-1px"></b>
@@ -466,6 +478,9 @@ if (!['en','id','ms'].includes(LANG)) LANG = 'en';
 let T = D.ui[LANG];
 const tr = (k, n) => (T[k] || D.ui.en[k] || k).replace('{n}', n);
 const glossOf = c => c[LANG] || c.en;
+// tribes, notes, verdicts and isnads live in the data, but a reader in Indonesian should not
+// meet them in English either
+const dtr = s => (s && D.dtr[LANG] && D.dtr[LANG][s]) || s;
 const esc = s => String(s??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function paintChrome(){
@@ -528,16 +543,16 @@ function claimHTML(c){
   const pg = c.page_end && c.page_end !== c.page ? `${c.page}–${c.page_end}` : c.page;
   const flags = [];
   if (c.grade === 'dissent') flags.push('variant reading');
-  if (c.author_verdict) flags.push(esc(c.author_verdict));
-  if (c.chain_label) flags.push(esc(c.chain_label));
+  if (c.author_verdict) flags.push(esc(dtr(c.author_verdict)));
+  if (c.chain_label) flags.push(esc(dtr(c.chain_label)));
   if (c.date_basis) flags.push('date basis: ' + esc(c.date_basis).replace(/_/g,' '));
   return `<div class="cl${c.type==='dissent'||c.grade==='dissent'?' dissent':''}">
     ${flags.map(f=>`<span class="flag">${f}</span>`).join(' ')}
     <div class="q" dir="rtl" lang="ar">${esc(c.ar)}</div>
     <div class="en">${esc(glossOf(c))}</div>
-    ${c.isnad_ar?`<div class="isnad">${esc(tr('isnad_label'))} · ${esc(c.isnad_lat||'')}<span class="ara" dir="rtl" lang="ar">${esc(c.isnad_ar)}</span></div>`:''}
-    ${c.note?`<div class="en">${esc(c.note)}</div>`:''}
-    ${c.text_note?`<div class="tn">${esc(tr('ednote'))}: ${esc(c.text_note)}</div>`:''}
+    ${c.isnad_ar?`<div class="isnad">${esc(tr('isnad_label'))} · ${esc(dtr(c.isnad_lat||''))}<span class="ara" dir="rtl" lang="ar">${esc(c.isnad_ar)}</span></div>`:''}
+    ${c.note?`<div class="en">${esc(dtr(c.note))}</div>`:''}
+    ${c.text_note?`<div class="tn">${esc(tr('ednote'))}: ${esc(dtr(c.text_note))}</div>`:''}
     <div class="src">${esc(w.title_lat||c.work)} — ${esc(w.author_lat||'')}, ${esc(tr('vol'))} ${c.vol}, ${esc(tr('p'))} ${pg}
       <i>${esc(w.edition||'')}</i><i>${esc(w.version_uri||'')} · ${esc(tr('claim'))} ${c.cid}</i></div>
   </div>`;
@@ -552,13 +567,13 @@ function show(pid){
   if (p.kunya_lat) kunyas.unshift(p.kunya_lat);
   kunyas.slice(0,4).forEach(k => meta.push(`${esc(tr('m_kunya'))} · ${esc(k)}`));
   if (p.laqab_lat) meta.push(`${esc(tr('m_laqab'))} · ${esc(p.laqab_lat)}`);
-  if (p.tribe) meta.push(esc(p.tribe));
+  if (p.tribe) meta.push(esc(dtr(p.tribe)));
   meta.push(tr(p.sex === 'F' ? 'm_female' : 'm_male'));
   const f = D.father[pid], m = D.mother[pid];
   if (f) meta.push(`${esc(tr('m_father'))} · ${esc(D.people[f].name_lat)}`);
   if (m) meta.push(`${esc(tr('m_mother'))} · ${esc(D.people[m].name_lat)}`);
   const birth = cs.filter(c => c.type === 'birth');
-  meta.push(birth.length ? `${esc(tr('m_born'))} · ${esc(birth[0].event_lat || '—')}`
+  meta.push(birth.length ? `${esc(tr('m_born'))} · ${esc(dtr(birth[0].event_lat) || '—')}`
                          : tr('m_noyear'));
   if (D.below[pid]) meta.push(tr('m_desc', D.below[pid]));
 
@@ -577,10 +592,10 @@ function show(pid){
 
   // eyebrow: what this person IS, from the data - not a placeholder phrase
   const eyebrow = [
-    p.sahabi ? '<em>ṣaḥābī</em>' : null,
-    D.bands[D.band[pid]] ? D.bands[D.band[pid]][0] : null,
-    p.tribe || null,
-    tr('m_gen', pathTo(pid).length),
+    p.sahabi ? `<em>${esc(tr('b_sahabi'))}</em>` : null,
+    D.band_key[D.band[pid]] ? esc(tr(D.band_key[D.band[pid]])) : null,
+    p.tribe ? esc(dtr(p.tribe)) : null,
+    esc(tr('m_gen', pathTo(pid).length)),
   ].filter(Boolean);
 
   $('#paneltop').innerHTML =
@@ -588,7 +603,7 @@ function show(pid){
        <h2>${eyebrow.map(x => `<span>${x}</span>`).join('')}</h2>
        <div class="pname" dir="rtl" lang="ar">${esc(p.name_ar)}</div>
        <div class="plat">${esc(p.name_lat)}</div>
-       ${p.note?`<div class="pnote">${esc(p.note)}</div>`:''}
+       ${p.note?`<div class="pnote">${esc(dtr(p.note))}</div>`:''}
      </div>
      <div class="meta">${meta.map(x=>`<span>${x}</span>`).join('')}</div>
      ${navRow(tr('g_children'), chn)}${navRow(tr('g_siblings'), sibs)}${groups}`;

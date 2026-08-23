@@ -221,6 +221,152 @@ UI = {
 }
 
 
+# ---- data strings ----------------------------------------------------------
+# Tribes, notes and editorial verdicts live in the data rather than the interface, but a reader
+# in Indonesian should not meet them in English. There are few enough to translate by hand.
+DATA = {
+ # tribes
+ "Quraysh": {"id": "Quraisy", "ms": "Quraisy"},
+ "Quraysh / Banū Hāshim": {"id": "Quraisy / Banū Hāsyim", "ms": "Quraisy / Banū Hāsyim"},
+ "Quraysh / Banū Zuhra": {"id": "Quraisy / Banū Zuhrah", "ms": "Quraisy / Banū Zuhrah"},
+ "Kināna": {"id": "Kinānah", "ms": "Kinānah"},
+ "Khazraj / Banū ʿAdī b. al-Najjār": {"id": "Khazraj / Banū ʿAdī bin al-Najjār",
+                                      "ms": "Khazraj / Banū ʿAdī bin al-Najjār"},
+ "Qaḥṭān / the Yemeni Arabs": {"id": "Qaḥṭān / bangsa Arab Yaman",
+                               "ms": "Qaḥṭān / bangsa Arab Yaman"},
+ # person notes
+ "Eponym of Banū Hāshim.": {"id": "Moyang yang menamai Banū Hāsyim.",
+                            "ms": "Moyang yang menamakan Banū Hāsyim."},
+ "Ibn Saʿd: jimāʿ Quraysh - no one above Fihr is called Qurashī.":
+   {"id": "Ibnu Saʿd: jimāʿ Quraisy — tidak ada di atas Fihr yang disebut Qurasyi.",
+    "ms": "Ibnu Saʿd: jimāʿ Quraisy — tiada di atas Fihr yang disebut Qurasyi."},
+ "Ceiling of the attested nasab: several sources stop here.":
+   {"id": "Batas nasab yang tsabit: beberapa sumber berhenti di sini.",
+    "ms": "Had nasab yang sabit: beberapa sumber berhenti di sini."},
+ "Distinct from Nāḥūr father of Tāriḥ.": {"id": "Berbeda dari Nāḥūr ayah Tāriḥ.",
+                                          "ms": "Berbeza daripada Nāḥūr bapa Tāriḥ."},
+ "Distinct from Nāḥūr son of Muqawwam.": {"id": "Berbeda dari Nāḥūr putra Muqawwam.",
+                                          "ms": "Berbeza daripada Nāḥūr putera Muqawwam."},
+ "Identified with the prophet Idrīs.": {"id": "Diidentifikasi dengan Nabi Idrīs.",
+                                        "ms": "Dikenal pasti sebagai Nabi Idrīs."},
+ "First man; the root of the chain.": {"id": "Manusia pertama; pangkal rantai nasab.",
+                                       "ms": "Manusia pertama; pangkal rantaian nasab."},
+ "Mother of the Prophet. Her own line rejoins the spine at Kilāb.":
+   {"id": "Ibu Nabi. Garis nasabnya bertemu kembali dengan tulang punggung pada Kilāb.",
+    "ms": "Ibu Nabi. Salasilahnya bertemu semula dengan tulang belakang pada Kilāb."},
+ "Mother of ʿAbd al-Muṭṭalib.": {"id": "Ibu ʿAbd al-Muṭṭalib.", "ms": "Ibu ʿAbd al-Muṭṭalib."},
+ "Root of the Yemeni (Qaḥṭānī) Arabs. Left unattached on purpose: the sources give incompatible "
+ "origins and Ibn Hazm holds that none of them is sound.":
+   {"id": "Pangkal bangsa Arab Yaman (Qaḥṭānī). Sengaja dibiarkan tidak tersambung: sumber-"
+          "sumber memberi asal-usul yang saling bertentangan dan Ibnu Ḥazm berpendapat tidak "
+          "satu pun sahih.",
+    "ms": "Pangkal bangsa Arab Yaman (Qaḥṭānī). Sengaja dibiarkan tidak bersambung: sumber-"
+          "sumber memberi asal usul yang bercanggah dan Ibnu Ḥazm berpendapat tiada satu pun "
+          "yang sahih."},
+ "Abū Bakr al-Ṣiddīq, first caliph": {"id": "Abū Bakr al-Ṣiddīq, khalifah pertama",
+                                      "ms": "Abū Bakr al-Ṣiddīq, khalifah pertama"},
+ "third caliph": {"id": "khalifah ketiga", "ms": "khalifah ketiga"},
+ "of the ten": {"id": "termasuk sepuluh yang dijamin surga", "ms": "termasuk sepuluh yang dijamin syurga"},
+ "Abū ʿUbayda b. al-Jarrāḥ, of the ten": {"id": "Abū ʿUbayda bin al-Jarrāḥ, termasuk sepuluh",
+                                          "ms": "Abū ʿUbayda bin al-Jarrāḥ, termasuk sepuluh"},
+ "Abū Waqqāṣ, father of Saʿd": {"id": "Abū Waqqāṣ, ayah Saʿd", "ms": "Abū Waqqāṣ, bapa Saʿd"},
+ "Sayf Allāh": {"id": "Sayf Allāh (Pedang Allah)", "ms": "Sayf Allāh (Pedang Allah)"},
+ "chief of al-Aws": {"id": "pemimpin al-Aws", "ms": "ketua al-Aws"},
+ # claim notes and verdicts
+ "The Yemeni counterpart of the ceiling at Adnan on the Northern side.":
+   {"id": "Padanan Yaman bagi batas pada ʿAdnān di sisi utara.",
+    "ms": "Padanan Yaman bagi had pada ʿAdnān di sebelah utara."},
+ "Ibrāhīm left no offspring: he did not reach two years of age.":
+   {"id": "Ibrāhīm tidak meninggalkan keturunan: ia tidak mencapai usia dua tahun.",
+    "ms": "Ibrāhīm tidak meninggalkan keturunan: baginda tidak mencapai usia dua tahun."},
+ "Recorded because a chain parser once hung six descendants on him; the sources leave no room "
+ "for any.":
+   {"id": "Dicatat karena pengurai rantai pernah menggantungkan enam keturunan padanya; "
+          "sumber-sumber tidak menyisakan ruang untuk itu.",
+    "ms": "Dicatat kerana penghurai rantaian pernah menggantungkan enam keturunan padanya; "
+          "sumber-sumber tidak meninggalkan ruang untuk itu."},
+ "rejected by Ibn ʿAbd al-Barr": {"id": "ditolak oleh Ibnu ʿAbd al-Barr",
+                                  "ms": "ditolak oleh Ibnu ʿAbd al-Barr"},
+ "Ibn 'Abd al-Barr declines to give the chain above Adnan":
+   {"id": "Ibnu ʿAbd al-Barr enggan menyebut rantai di atas ʿAdnān",
+    "ms": "Ibnu ʿAbd al-Barr enggan menyebut rantaian di atas ʿAdnān"},
+ "Ibn al-Athir declines to give the chain above Adnan":
+   {"id": "Ibnu al-Athīr enggan menyebut rantai di atas ʿAdnān",
+    "ms": "Ibnu al-Athīr enggan menyebut rantaian di atas ʿAdnān"},
+ "Ibn Sa'd's own conclusion": {"id": "kesimpulan Ibnu Saʿd sendiri",
+                               "ms": "kesimpulan Ibnu Saʿd sendiri"},
+ "Ibn Hazm: the chain above Qahtan is not established":
+   {"id": "Ibnu Ḥazm: rantai di atas Qaḥṭān tidak tsabit",
+    "ms": "Ibnu Ḥazm: rantaian di atas Qaḥṭān tidak sabit"},
+ "Ibn Hazm on the Prophet's male line": {"id": "Ibnu Ḥazm tentang garis laki-laki Nabi",
+                                         "ms": "Ibnu Ḥazm tentang salasilah lelaki Nabi"},
+ "ʿĀm al-Fīl": {"id": "ʿĀm al-Fīl (Tahun Gajah)", "ms": "ʿĀm al-Fīl (Tahun Gajah)"},
+ "ʿĀm al-Fīl (the Year of the Elephant)": {"id": "ʿĀm al-Fīl (Tahun Gajah)",
+                                           "ms": "ʿĀm al-Fīl (Tahun Gajah)"},
+ # chain labels
+ "Ibn Ishaq's chain as Ibn Sa'd received it":
+   {"id": "rantai Ibnu Isḥāq sebagaimana diterima Ibnu Saʿd",
+    "ms": "rantaian Ibnu Isḥāq sebagaimana diterima Ibnu Saʿd"},
+ "Ibn Ishaq's second chain": {"id": "rantai kedua Ibnu Isḥāq", "ms": "rantaian kedua Ibnu Isḥāq"},
+ "Ma'add to A'raq al-Thara": {"id": "Maʿadd hingga Aʿrāq al-Tharā",
+                              "ms": "Maʿadd hingga Aʿrāq al-Tharā"},
+ "Qahtan identified with the biblical Yaqtan":
+   {"id": "Qaḥṭān disamakan dengan Yaqṭān dalam Alkitab",
+    "ms": "Qaḥṭān disamakan dengan Yaqṭān dalam Bible"},
+ "Qahtan traced to Isma'il through Qaydar":
+   {"id": "Qaḥṭān dinasabkan kepada Ismāʿīl melalui Qaydar",
+    "ms": "Qaḥṭān dinasabkan kepada Ismāʿīl melalui Qaydar"},
+ "Qahtan traced to Sam b. Nuh through Hud":
+   {"id": "Qaḥṭān dinasabkan kepada Sām bin Nūḥ melalui Hūd",
+    "ms": "Qaḥṭān dinasabkan kepada Sām bin Nūḥ melalui Hūd"},
+ "Udad son of Zayd": {"id": "Udad putra Zayd", "ms": "Udad putera Zayd"},
+ "al-Kalbi on Udad": {"id": "riwayat al-Kalbī tentang Udad", "ms": "riwayat al-Kalbī tentang Udad"},
+ "the Medinan / al-Zuhri chain from Nuh to Adam":
+   {"id": "rantai penduduk Madinah / al-Zuhrī dari Nūḥ hingga Ādam",
+    "ms": "rantaian penduduk Madinah / al-Zuhrī daripada Nūḥ hingga Ādam"},
+ "the Medinan account of Udad": {"id": "riwayat penduduk Madinah tentang Udad",
+                                 "ms": "riwayat penduduk Madinah tentang Udad"},
+ "the eighteen-generation chain to Ibrahim":
+   {"id": "rantai delapan belas generasi hingga Ibrāhīm",
+    "ms": "rantaian lapan belas generasi hingga Ibrāhīm"},
+ "the forty-generation Kalbi chain to Ibrahim":
+   {"id": "rantai al-Kalbī empat puluh generasi hingga Ibrāhīm",
+    "ms": "rantaian al-Kalbī empat puluh generasi hingga Ibrāhīm"},
+ "the sound account, per al-Jurjani": {"id": "riwayat yang sahih menurut al-Jurjānī",
+                                       "ms": "riwayat yang sahih menurut al-Jurjānī"},
+ "weaker of the two, per al-Baladhuri": {"id": "yang lebih lemah dari keduanya menurut al-Balādhurī",
+                                         "ms": "yang lebih lemah antara keduanya menurut al-Balādhurī"},
+}
+
+
+def data(s, lang):
+    """Translate a data string if we have it; otherwise leave it as written."""
+    if lang == "en" or not s:
+        return s
+    hit = DATA.get(s.strip())
+    if hit:
+        return hit.get(lang, s)
+    # An isnad is a chain of transmitters: the names stay, the joining words move.
+    ISNAD = {
+      "id": [(" from ", " dari "), ("his father", "ayahnya"), ("his grandfather", "kakeknya"),
+             ("and others", "dan lainnya"), ("said it, claiming it", "mengatakannya, menisbatkannya"),
+             ("some of the people of Medina", "sebagian penduduk Madinah"),
+             ("in another transmission from him", "dalam riwayat lain darinya"),
+             ("the genealogist", "sang ahli nasab"), ("per ", "menurut "),
+             ("ten years between each of them", "sepuluh tahun antara masing-masing mereka")],
+      "ms": [(" from ", " daripada "), ("his father", "bapanya"), ("his grandfather", "datuknya"),
+             ("and others", "dan lain-lain"), ("said it, claiming it", "mengatakannya, menisbahkannya"),
+             ("some of the people of Medina", "sebahagian penduduk Madinah"),
+             ("in another transmission from him", "dalam riwayat lain daripadanya"),
+             ("the genealogist", "ahli nasab"), ("per ", "menurut "),
+             ("ten years between each of them", "sepuluh tahun antara setiap seorang mereka")],
+    }
+    out = s
+    for a, b in ISNAD.get(lang, []):
+        out = out.replace(a, b)
+    return out
+
+
 def strings(lang):
     return {k: v.get(lang, v["en"]) for k, v in UI.items()}
 

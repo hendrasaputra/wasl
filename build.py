@@ -267,7 +267,7 @@ def main():
         return hits[0] if len(set(hits)) == 1 else None
 
     from directory import DIRECTORY
-    from i18n import LANGS, UI
+    from i18n import LANGS, UI, DATA
 
     directory = []
     missing = []
@@ -284,6 +284,17 @@ def main():
     data["directory"] = directory
     data["langs"] = LANGS
     data["ui"] = {lang: {k: v.get(lang, v["en"]) for k, v in UI.items()} for lang in LANGS}
+    # every data string the page shows in prose - tribes, notes, verdicts, chain labels, isnads
+    import i18n as _i18n
+    seen = set()
+    for pr in people.values():
+        seen |= {pr.get("tribe"), pr.get("note")}
+    for c in claims:
+        seen |= {c.get(k) for k in ("note", "author_verdict", "chain_label", "text_note",
+                                    "event_lat", "isnad_lat")}
+    seen.discard(None)
+    data["dtr"] = {lang: {s: _i18n.data(s, lang) for s in seen
+                          if _i18n.data(s, lang) != s} for lang in ("id", "ms")}
 
     tpl = open(f"{ROOT}/template.html", encoding="utf-8").read()
     out = (tpl.replace("{{TREE}}", tree)
