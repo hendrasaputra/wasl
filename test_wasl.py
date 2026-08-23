@@ -155,6 +155,35 @@ for son in ("إبراهيم", "القاسم", "عبد الله"):
 check("and the sources say so: mata saghiran, lam yastakmil amayn",
       nasab.locate("IbnHazm", "مات صغيرا، لم يستكمل عامين") is not None)
 
+# A missing 'bn' in a printed edition welds two generations into one name - al-Isti'ab 2:614
+# prints 'b. Nufayl Abd al-Uzza b. Riyah' - which put Sa'id b. Zayd in the tree twice, once at
+# generation 51 and once at 52. Recognisable without guessing: a node 'A B' whose parent has
+# another child B, which in turn has a child A.
+welded = []
+for pid, p in byid.items():
+    par = next((c["subject"] for c in claims
+                if c["type"] == "father_of" and c.get("object") == pid), None)
+    if not par:
+        continue
+    w = p["name_ar"].split()
+    for i in range(1, len(w)):
+        A, B = " ".join(w[:i]), " ".join(w[i:])
+        sib = next((s for s in kids.get(par, ())
+                    if s != pid and nasab.normalise(byid[s]["name_ar"]) == nasab.normalise(B)), None)
+        if sib and any(nasab.normalise(byid[g]["name_ar"]) == nasab.normalise(A)
+                       for g in kids.get(sib, ())):
+            welded.append(p["name_ar"])
+            break
+check("no chain welded by a missing bn", not welded, "; ".join(welded[:4]))
+
+# and the man that bug produced twice is single
+said = [pid for pid, p in byid.items()
+        if nasab.normalise(p["name_ar"]) == nasab.normalise("سعيد")
+        and any(c["type"] == "father_of" and c.get("object") == pid
+                and nasab.normalise(byid[c["subject"]]["name_ar"]) == nasab.normalise("زيد")
+                for c in claims)]
+check("Sa'id b. Zayd appears once", len(said) == 1, f"{len(said)} nodes")
+
 print("\nno honorific or unsplit chain ever became a person")
 HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه السلام", "رضي الله", "أمير المؤمنين")
 bad = [p["name_ar"] for p in byid.values() if any(h in p["name_ar"] for h in HON)]

@@ -40,9 +40,67 @@ def dist1(a, b):
     return False
 
 
+def unweld(people, claims):
+    """Undo a chain welded by a missing 'bn' in the printed edition.
+
+    al-Isti'ab 2:614 prints 'b. Nufayl Abd al-Uzza b. Riyah' where the chain is 'b. Nufayl b.
+    Abd al-Uzza b. Riyah'. The splitter did the right thing with wrong input and made one person
+    called 'Nufayl Abd al-Uzza', a generation short - so Sa'id b. Zayd appeared twice, once at
+    generation 51 and once at 52.
+
+    It is recognisable without guessing: a node X under P whose name is 'A B', where P has
+    ANOTHER child named B, and that child has a child named A. The welded node is then the same
+    man as that grandchild, reached by a defective route. We move X's children onto the real
+    grandchild and drop X - not merge, because merging would keep X's father edge and assert
+    that the grandchild descends directly from P, which is exactly the error being removed.
+    """
+    by = {p["id"]: p for p in people}
+    kids, fa = {}, {}
+    for c in claims:
+        if c["type"] == "father_of":
+            fa.setdefault(c["object"], c["subject"])
+            kids.setdefault(c["subject"], [])
+            if c["object"] not in kids[c["subject"]]:
+                kids[c["subject"]].append(c["object"])
+    N = nasab.normalise
+    redirect, drop = {}, set()
+    for x, par in list(fa.items()):
+        w = by[x]["name_ar"].split()
+        if len(w) < 2:
+            continue
+        for k in range(1, len(w)):
+            A, B = " ".join(w[:k]), " ".join(w[k:])
+            sib = next((s for s in kids.get(par, ()) if s != x and N(by[s]["name_ar"]) == N(B)), None)
+            if not sib:
+                continue
+            g = next((q for q in kids.get(sib, ()) if N(by[q]["name_ar"]) == N(A)), None)
+            if g and g != x:
+                redirect[x] = g
+                drop.add(x)
+                print(f"   unweld '{by[x]['name_ar']}' -> '{by[g]['name_ar']}' under {by[par]['name_lat']}")
+                break
+    if not redirect:
+        return people, claims
+    out = []
+    for c in claims:
+        if c["type"] == "father_of" and c["object"] in redirect:
+            continue                     # the defective edge itself goes
+        if c["subject"] in redirect:     # its children move to the real man
+            c = dict(c, subject=redirect[c["subject"]])
+        if c.get("object") in redirect:
+            c = dict(c, object=redirect[c["object"]])
+        out.append(c)
+    people = [p for p in people if p["id"] not in drop]
+    print(f"   {len(drop)} welded node(s) removed")
+    return people, out
+
+
 def main(write=False):
     people = [json.loads(l) for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip()]
     claims = [json.loads(l) for l in open(f"{ROOT}/claims.jsonl", encoding="utf-8") if l.strip()]
+    print("unwelding chains broken by a missing bn in the edition")
+    people, claims = unweld(people, claims)
+
     by = {p["id"]: p for p in people}
     alias = {}                                # loser -> winner
 

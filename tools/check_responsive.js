@@ -102,8 +102,14 @@ function waslResponsiveCheck() {
   const tl = tre.getBoundingClientRect().left;
   const maxIndent = Math.max(...[...document.querySelectorAll('#tree summary')]
     .map(s => s.getBoundingClientRect().left - tl));
-  const budget = phone ? 240 : 320;
-  t(`deepest indent under ${budget}px`, maxIndent <= budget, Math.round(maxIndent) + 'px');
+  // What matters is not the indent in pixels but whether a name still has room to be read at
+  // the deepest point. A raw px budget was the wrong proxy: it punishes a zoomed-down tree that
+  // is in fact more readable, and it rewards shrinking text that nobody can read.
+  const room = tre.clientWidth - maxIndent;
+  const pct = Math.round(100 * room / tre.clientWidth);
+  t('a name still has half the width at the deepest node', pct >= 45,
+     `${Math.round(room)}px of ${tre.clientWidth}px (${pct}%)`);
+  t('deepest indent is bounded', maxIndent <= (phone ? 300 : 360), Math.round(maxIndent) + 'px');
   document.querySelectorAll('#tree details').forEach((d, i) => d.open = openState[i]);
 
   console.log(`${innerWidth}x${innerHeight}  ${ok.length} ok, ${fail.length} failed`);
