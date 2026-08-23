@@ -22,8 +22,8 @@ jobs:
 
       - name: Fetch the pinned source texts
         run: ./fetch.sh
-      - name: Confirm the fetched texts are the ones pinned
-        run: cd corpus && shasum -a 256 -c SHA256SUMS
+      - name: Confirm fetching did not rewrite the pins
+        run: git diff --exit-code corpus/SHA256SUMS
 
       - name: Prove every quote against the corpus
         run: python3 validate.py
