@@ -100,6 +100,8 @@ people = {json.loads(l)["id"] for l in open(f"{ROOT}/people.jsonl", encoding="ut
 check("every claim references known persons",
       all(c["subject"] in people and (not c.get("object") or c["object"] in people) for c in claims))
 check("no claim carries an empty translation", all(c["en"].strip() for c in claims))
+check("every claim carries Indonesian and Malay",
+      all(c.get("id", "").strip() and c.get("ms", "").strip() for c in claims))
 check("no claim carries an empty quote", all(c["ar"].strip() for c in claims))
 check("claim ids are unique", len({c["cid"] for c in claims}) == len(claims))
 works = set(nasab.sources())

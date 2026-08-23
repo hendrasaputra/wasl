@@ -19,6 +19,21 @@ import i18n
 
 # hand translations for the prose claims, keyed by the English gloss
 PROSE = {
+ "Ibn Hishām: they were nine - and he names them": {
+  "id": "Ibnu Hishām berkata: mereka berjumlah sembilan, lalu ia menyebut nama-nama mereka",
+  "ms": "Ibn Hishām berkata: mereka berjumlah sembilan, lalu beliau menyebut nama mereka"},
+ "all whom the Messenger of God married were thirteen": {
+  "id": "seluruh perempuan yang dinikahi Rasulullah ﷺ berjumlah tiga belas",
+  "ms": "semua wanita yang dikahwini Rasulullah ﷺ berjumlah tiga belas"},
+ "he married thirteen women - the same list as before, but without Rayḥāna bt. Zayd": {
+  "id": "Rasulullah ﷺ menikahi tiga belas perempuan—daftar yang sama seperti sebelumnya, tetapi tanpa Rayḥāna binti Zayd",
+  "ms": "Rasulullah ﷺ mengahwini tiga belas wanita—senarai yang sama seperti sebelumnya, tetapi tanpa Rayḥāna binti Zayd"},
+ "he married fourteen women, six of them Qurashī beyond doubt": {
+  "id": "Rasulullah ﷺ menikahi empat belas perempuan; enam di antaranya jelas berasal dari Quraisy",
+  "ms": "Rasulullah ﷺ mengahwini empat belas wanita; enam daripadanya tanpa ragu berasal daripada Quraisy"},
+ "he married fifteen women": {
+  "id": "Rasulullah ﷺ menikahi lima belas perempuan",
+  "ms": "Rasulullah ﷺ mengahwini lima belas wanita"},
  "the first born to the Messenger of God at Mecca before the prophethood was al-Qāsim, and he was named Abū al-Qāsim after him; then Zaynab was born to him, then Ruqayya, then Fāṭima, then Umm Kulthūm; then in Islam ʿAbd Allāh was born to him, who was called al-Ṭayyib and al-Ṭāhir; and the mother of all of them was Khadīja bt. Khuwaylid b. Asad b. ʿAbd al-ʿUzzā b. Quṣayy": {
   "id": "yang pertama lahir bagi Rasulullah di Makkah sebelum kenabian adalah al-Qāsim, dan beliau dijuluki Abū al-Qāsim karenanya; kemudian lahir Zaynab, lalu Ruqayya, lalu Fāṭima, lalu Umm Kulthūm; kemudian pada masa Islam lahir ʿAbd Allāh yang disebut al-Ṭayyib dan al-Ṭāhir; dan ibu mereka semua adalah Khadīja binti Khuwaylid bin Asad bin ʿAbd al-ʿUzzā bin Quṣayy",
   "ms": "yang pertama lahir bagi Rasulullah di Makkah sebelum kenabian ialah al-Qāsim, dan baginda digelar Abū al-Qāsim kerananya; kemudian lahir Zaynab, lalu Ruqayya, lalu Fāṭima, lalu Umm Kulthūm; kemudian pada zaman Islam lahir ʿAbd Allāh yang disebut al-Ṭayyib dan al-Ṭāhir; dan ibu mereka semua ialah Khadīja binti Khuwaylid bin Asad bin ʿAbd al-ʿUzzā bin Quṣayy"},
@@ -130,8 +145,9 @@ def main(write=False):
     people = {json.loads(l)["id"]: json.loads(l)
               for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip()}
     made = {"id": 0, "ms": 0}
-    missing = 0
     for c in rows:
+        c.pop("id", None)
+        c.pop("ms", None)
         for lang in ("id", "ms"):
             g = None
             subj = people.get(c["subject"], {})
@@ -157,18 +173,20 @@ def main(write=False):
             if g:
                 c[lang] = g
                 made[lang] += 1
-    for c in rows:
-        if "id" not in c:
-            missing += 1
+    missing = [c for c in rows if not c.get("id") or not c.get("ms")]
     print(f"glossed: id={made['id']} ms={made['ms']} of {len(rows)} claims")
-    print(f"still English-only: {missing}"
-          + ("  (prose without a hand translation - they keep the English)" if missing else ""))
+    print(f"still English-only: {len(missing)}")
+    for c in missing:
+        print(f"  x {c['cid']}: {c['en']}")
+    if missing:
+        return 1
     if write:
         with open(path, "w", encoding="utf-8") as f:
             for c in rows:
                 f.write(json.dumps(c, ensure_ascii=False) + "\n")
         print("written")
+    return 0
 
 
 if __name__ == "__main__":
-    main(write="--write" in sys.argv)
+    sys.exit(main(write="--write" in sys.argv))
