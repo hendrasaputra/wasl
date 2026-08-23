@@ -23,6 +23,16 @@ function waslResponsiveCheck() {
   const chrome = H('header') + H('.bar') + H('.bar2') + H('#crumb');
   if (phone) t('chrome above the first name < 200px', chrome < 200, chrome + 'px');
 
+  // 2b. Who's who is the only route to a named person that does not require typing one, so it
+  // must be reachable without opening anything first. It lived in .bar2 - which folds away on
+  // a phone - so on a small screen it sat behind a button labelled 'Filter', which is to say
+  // nowhere. Assert the button itself, not just that the markup contains it.
+  const db = document.querySelector('#dirbtn');
+  const dbr = db && db.getBoundingClientRect();
+  t("Who's who is reachable without opening a panel",
+    !!db && db.offsetParent !== null && dbr.width > 0 && dbr.height >= (phone ? 44 : 24),
+    db ? `${Math.round(dbr.width)}x${Math.round(dbr.height)}, offsetParent=${!!db.offsetParent}` : 'missing');
+
   // 3. the citations must be reachable without scrolling past the tree
   if (sheet) {
     // the sheet animates in over 280ms; measuring mid-transition is a race, not a finding
