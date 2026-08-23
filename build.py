@@ -1,7 +1,27 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Wasl - a verifiable nasab. Copyright (C) 2026 Hendra Saputra.
-"""Wasl - generate index.html from people.jsonl + claims.jsonl. Run validate.py first."""
+"""Wasl - generate index.html from people.jsonl + claims.jsonl. Run validate.py first.
+
+Everything the reader sees is produced here. main() runs eight stages in order, each marked
+with a banner in the body:
+
+    1  load, and index the parent graph
+    2  how many sit below each node
+    3  bands: the four filters, and the spine
+    4  render the tree
+    5  the data the page reads
+    6  Who's who
+    7  biography links and the translation tables
+    8  fill the template and write
+
+The output is committed, and CI fails if it does not match what this produces - so THE BUILD
+MUST BE DETERMINISTIC. Iterating a set once broke that, because Python randomises string
+hashing per process, and index.html was never twice the same. Anything that walks an
+unordered collection needs sorting before it reaches the page.
+
+The palette and the ten-fold girih rosette are generated here too, not stored as assets.
+"""
 import json, math, os, re, sys, html, collections
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools"))
 import nasab
@@ -53,6 +73,13 @@ def main():
     """
     people = {p["id"]: p for p in (json.loads(l) for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip())}
     claims = [json.loads(l) for l in open(f"{ROOT}/claims.jsonl", encoding="utf-8") if l.strip()]
+    # ======================================================================
+    # 1. LOAD, AND INDEX THE PARENT GRAPH
+    # From here on: kids[parent] -> [children], father[child] -> parent, and the same for
+    # mother. by_person[id] gathers every claim naming that person, in either role.
+    # A child whose father these books never name is hung on the mother rather than left
+    # floating at the root, which is what `via_mother` marks.
+    # ======================================================================
     works = nasab.sources()
 
     kids = collections.defaultdict(list)
@@ -79,6 +106,10 @@ def main():
     via_mother = {c for c in mother if c not in father}
 
     # how many sit beneath each node - shown on the [+] so you know what it opens
+    # ======================================================================
+    # 2. HOW MANY SIT BELOW EACH NODE
+    # Shown on the [+] so a reader knows what a node opens before opening it.
+    # ======================================================================
     below = {}
 
     def count(pid):
@@ -92,6 +123,11 @@ def main():
     for r in roots:
         count(r)
 
+    # ======================================================================
+    # 3. BANDS: THE FOUR FILTERS, AND THE SPINE
+    # Each band is something the sources either state or do, so each is defensible in one
+    # sentence. `spine` is the Prophet's own line, which opens by default.
+    # ======================================================================
     # ---- bands. Not centuries: these books give no years, and a band label that looked like
     # a date would read as sourced when it was computed. These four are things the sources
     # either state or do, so each is defensible in one sentence.
@@ -136,6 +172,12 @@ def main():
         spine.add(n)
         n = father.get(n)
 
+    # ======================================================================
+    # 4. RENDER THE TREE
+    # node() emits one person; subtree() emits a set of children and folds any run of
+    # single-child links into a ribbon; run_from() finds those runs. Nothing here is
+    # lossy - a ribboned run has no branching to lose, only rows to save.
+    # ======================================================================
     def node(pid, depth=0, gen=1, ind=0):
         """One <details> element: the person, their badges, and their subtree.
 
@@ -253,6 +295,11 @@ def main():
     prologue = {r: run_from(r) for r in ordered if len(run_from(r)) - 1 >= RUN_MIN}
     starts = [run_from(r)[-1] if r in prologue else r for r in ordered]
 
+    # ======================================================================
+    # 5. THE DATA THE PAGE READS
+    # Everything the browser needs, serialised into the template as one JSON blob:
+    # people, claims, the indexes rebuilt above, and the counts shown in the header.
+    # ======================================================================
     data = {
         "people": people,
         "claims": claims,
@@ -268,6 +315,11 @@ def main():
         "edges": len({(c["subject"], c["object"]) for c in claims if c["type"] in ("father_of", "mother_of")}),
     }
 
+    # ======================================================================
+    # 6. WHO'S WHO
+    # Resolved here, at build time, from the chain that identifies each person, so a link
+    # can never point nowhere. An unresolvable label is reported, never guessed at.
+    # ======================================================================
     # ---- a directory of the people a reader actually comes looking for. Resolved here, at
     # build time, from the chain that identifies each one, so a link can never point nowhere.
     import unicodedata as _u
@@ -330,6 +382,14 @@ def main():
                   ensure_ascii=False, indent=0, sort_keys=True)
     # which people have a biography page, and from how many books. Written from entries.jsonl
     # so a link can never point at a page the build did not make.
+    # ======================================================================
+    # 7. BIOGRAPHY LINKS AND THE TRANSLATION TABLES
+    # Which people have a biography page, and every data string the page prints as prose -
+    # tribes, notes, verdicts, chain labels, isnads - in Indonesian and Malay.
+    # `sorted(seen)`, not set order: Python randomises string hashing per process, so
+    # iterating the set made index.html different on every build and CI could not tell a
+    # stale page from a fresh one.
+    # ======================================================================
     ent = [json.loads(l) for l in open(f"{ROOT}/entries.jsonl", encoding="utf-8") if l.strip()] \
         if os.path.exists(f"{ROOT}/entries.jsonl") else []
     label_pid = {label: pid for _, rows in directory for label, pid in rows}
@@ -358,6 +418,11 @@ def main():
     data["dtr"] = {lang: {s: _i18n.data(s, lang) for s in sorted(seen)
                           if _i18n.data(s, lang) != s} for lang in ("id", "ms")}
 
+    # ======================================================================
+    # 8. FILL THE TEMPLATE AND WRITE
+    # index.html is generated and committed, so the repository is browsable without a
+    # toolchain and CI can prove the published page matches the data it came from.
+    # ======================================================================
     tpl = open(f"{ROOT}/template.html", encoding="utf-8").read()
     out = (tpl.replace("{{TREE}}", tree)
               .replace("{{DATA}}", json.dumps(data, ensure_ascii=False))
