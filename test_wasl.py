@@ -374,6 +374,12 @@ if os.path.exists(spath):
     check("editorial sentences stay under a fifth of each summary", not over, "; ".join(over))
     long = [f'{sr["who"]} {sr["n_words"]}w' for sr in srows if sr["n_words"] > 400]
     check("no summary runs past its word cap", not long, "; ".join(long))
+    # the summaries are the one place English is the original, so id/ms are translated from
+    # it. A gap keeps the English and is counted; here we assert there is no gap.
+    untr = [f'{sr["who"]}: {l["en"][:40]}' for sr in srows for l in sr["lines"]
+            if not (l.get("id") and l.get("ms"))]
+    check("every summary sentence carries Indonesian and Malay", not untr,
+          f"{len(untr)} untranslated, e.g. " + "; ".join(untr[:2]))
     labels = {l for _, items in _D for l, _ in items}
     check("every summary belongs to somebody in the Who's who",
           all(sr["who"] in labels for sr in srows),

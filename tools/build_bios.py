@@ -179,12 +179,18 @@ def main():
         if srow:
             bits = []
             for ln in srow["lines"]:
+                # the sentence carries its own id/ms, swapped in by the picker. The English is
+                # the original here, so these are translated FROM it - see tools/i18n.py for
+                # why that is the exception rather than the rule.
+                tr = "".join(f' data-{k}="{html.escape(ln[k], quote=True)}"'
+                             for k in ("id", "ms") if ln.get(k))
+                txt = f'<i class="t"{tr}>{html.escape(ln["en"])}</i>'
                 if ln["basis"] == "editorial":
-                    bits.append(f'<span class="sl ed" data-k-t="edit">{html.escape(ln["en"])}</span>')
+                    bits.append(f'<span class="sl ed" data-k-t="edit">{txt}</span>')
                 else:
                     pg = ln["page"] if ln["page"] == ln["page_end"] else f'{ln["page"]}–{ln["page_end"]}'
                     bits.append(
-                        f'<span class="sl">{html.escape(ln["en"])}'
+                        f'<span class="sl">{txt}'
                         f'<a class="sp" href="#p{ln["page"]}">{pg}</a>'
                         f'<q dir="rtl" lang="ar">{html.escape(ln["ar"])}</q></span>')
             summary = ('<div id="sum"><h2 data-k="sum"></h2>'

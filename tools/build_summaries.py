@@ -10,11 +10,20 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, ROOT)
 import nasab
 from summaries import SUMMARIES
+from summaries_i18n import TR
 
 MIN_ANCHOR = 25      # normalised characters
 MAX_WORDS = 400
 MAX_LINES = 30
 MAX_EDITORIAL = 0.20
+
+
+def _tr(line):
+    """Attach id/ms where they exist. A gap keeps the English and is counted, never filled."""
+    t = TR.get(line["en"])
+    if t:
+        line["id"], line["ms"] = t[0], t[1]
+    return line
 
 
 def main():
@@ -39,7 +48,7 @@ def main():
                 edit += 1
                 if any(c.isdigit() for c in en):
                     err.append(f"{who}: editorial line carries a number - {en[:60]}")
-                out.append({"en": en, "basis": "editorial"})
+                out.append(_tr({"en": en, "basis": "editorial"}))
                 continue
             if len(nasab.normalise(ar)) < MIN_ANCHOR:
                 err.append(f"{who}: anchor too short to identify a passage - {ar[:40]}")
@@ -57,8 +66,8 @@ def main():
                            + " or ".join(f"{x['vol']}:{x['page']}-{x['page_end']}" for x in es)
                            + f" - {ar[:44]}")
                 continue
-            out.append({"en": en, "ar": ar, "basis": "anchored",
-                        "vol": v, "page": p1, "page_end": p2})
+            out.append(_tr({"en": en, "ar": ar, "basis": "anchored",
+                            "vol": v, "page": p1, "page_end": p2}))
         words = sum(len(l["en"].split()) for l in out)
         if words > MAX_WORDS:
             err.append(f"{who}: {words} words, cap is {MAX_WORDS}")
@@ -75,8 +84,11 @@ def main():
         for x in err:
             print("  x", x, file=sys.stderr)
         return 1
-    print(f"\n{len(rows)} summaries, {sum(r['n_words'] for r in rows)} words, "
-          f"{sum(len(r['lines']) for r in rows)} lines")
+    total = sum(len(r["lines"]) for r in rows)
+    done = sum(1 for r in rows for l in r["lines"] if "id" in l)
+    print(f"\n{len(rows)} summaries, {sum(r['n_words'] for r in rows)} words, {total} lines")
+    print(f"translated: {done}/{total} lines into id and ms"
+          + (f"  ({total-done} keep the English and are counted)" if done < total else ""))
     if "--write" in sys.argv:
         with open(f"{ROOT}/summaries.jsonl", "w", encoding="utf-8") as f:
             for r in rows:

@@ -15,7 +15,7 @@ browser. No server, no build step, no network.
 
 [![verify](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml/badge.svg)](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml)
 
-Every push re-fetches the pinned texts, re-proves all 4,077 quotations against them, runs 68
+Every push re-fetches the pinned texts, re-proves all 4,077 quotations against them, runs 75
 independent checks, and fails if the published page is stale. See [DEPLOY.md](DEPLOY.md).
 
 ---
@@ -306,7 +306,8 @@ OpenITI's markup never opens one for him, though the printed books do.
 
 ## The summaries
 
-Every biography page opens with a brief written from the entry below it — and nowhere else.
+All 44 biography pages open with a brief written from the entry below them — and nowhere else.
+**7,476 words, 412 sentences, 398 of them anchored.**
 It is the only composed prose on the site, so it carries its evidence with it: **every
 sentence but the marked editorial ones is anchored to the Arabic phrase it rests on**, and
 "show what each sentence rests on" puts that phrase under the sentence. `validate.py` re-reads
@@ -318,7 +319,16 @@ renders the Arabic fairly — that is a human judgement, and the anchors are sho
 checked by eye.
 
 Where an entry contradicts itself, the summary says so rather than choosing. Ibn Saʿd gives
-Ṣafiyya's death as the year 50 and, in the closing line of the same chapter, as 52.
+Ṣafiyya's death as the year 50 and, in the closing line of the same chapter, as 52; ʿAlī says
+Abū Bakr was the first to gather the Qurʾān and Ibn Sīrīn says he died without gathering it;
+Anas served the Prophet ten years, nine years, and from the age of eight. Ibn al-Athīr carries
+two readings of ʿUmar's mother's name that turn on one letter — and decide whether she was
+Abū Jahl's sister or his cousin.
+
+The summaries are also the one place where Indonesian and Malay are **translated from the
+English**, because here the English is the original rather than a gloss of Arabic. Everywhere
+else a gloss is generated per language from the structured fields; see
+[CLAUDE.md](CLAUDE.md).
 
 ## Reading these books in English
 
@@ -348,7 +358,7 @@ people.jsonl     source of truth — identity only
 claims.jsonl     source of truth — every relationship, name, kunya and date, each cited
 nasab.py         corpus index: resolves a quote to its true volume and page span
 validate.py      the proof. Must pass before every commit
-test_wasl.py     68 independent checks, sharing no code with the indexer
+test_wasl.py     75 independent checks, sharing no code with the indexer
 build.py         renders index.html
 template.html    the page shell: palette, layout, views, search
 tools/           extraction and maintenance; the replay pipeline is in CLAUDE.md

@@ -222,6 +222,12 @@ named a page a tenth of the true one. Fixed and re-derived; `test_wasl.py` guard
 
 Next: 8b hand-verifies Guillaume page ranges per person; 8c writes the anchored summaries.
 
+## Phase 8c — the summaries
+
+44 briefs, 7,476 words, 412 sentences of which 398 carry the Arabic phrase they rest on.
+Every anchor re-read from its own entry by `validate.py` and again, independently, by
+`test_wasl.py`. Indonesian and Malay complete: 412/412.
+
 ## What remains
 
 Not a Phase 8 so much as more of Phase 6: each hand-seeded trunk unlocks a further tranche of
