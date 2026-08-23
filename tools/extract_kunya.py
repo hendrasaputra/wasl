@@ -46,6 +46,8 @@ def entries_with_body(work, text):
 
 
 def run(work, store, quiet=True):
+    """Read kunyas out of entry bodies - 'and he is given the kunya Abu X' - for people
+    already in the tree. Adds no people, only kunya claims."""
     raw = open(f"{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/corpus/{work}.txt",
                encoding="utf-8").read()
     text = "\n".join(l for l in raw.split("\n") if not l.startswith("#META#"))

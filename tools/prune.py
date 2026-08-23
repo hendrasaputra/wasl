@@ -46,11 +46,24 @@ SHORT = re.compile(r"^.$")
 
 
 def is_junk(name):
+    """Does this "name" look like a clause the splitter cut in the wrong place?
+
+    Two shapes: a phrase carrying a verb or a relationship word (JUNK), and something too
+    short to be a name at all (SHORT). Both are judged on shape alone, because the Arabic is
+    genuinely on the page and validate.py will happily pass it.
+    """
     n = re.sub(r"\s+", " ", name).strip()
     return bool(JUNK.search(n)) or bool(SHORT.match(n))
 
 
 def main(write=False):
+    """Repair names first, then drop what was never a name.
+
+    ORDER MATTERS, AND SO DOES THE ORDER AGAINST merge.py. Repair turns 'Umar ammuhu
+    al-Shayba' into 'Umar', and a repair can turn two differently-named siblings into
+    duplicates - which merge.py must then see. Run prune BEFORE merge; the other way round,
+    Ali ends up with two sons called Umar.
+    """
     people = [json.loads(l) for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip()]
     claims = [json.loads(l) for l in open(f"{ROOT}/claims.jsonl", encoding="utf-8") if l.strip()]
     by_id = {p["id"]: p for p in people}

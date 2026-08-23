@@ -18,11 +18,13 @@ PALETTE = {  # from the project palette: brass golds into deepening greens
 def rosette(n=10, steps=(3, 4), r=100):
     """A 10-fold girih rosette: decagonal frame, interlaced star polygons, central star."""
     def pts(count, radius, phase=0.0):
+        """`count` points evenly around a circle, starting at the top."""
         return [(radius * math.cos(2 * math.pi * i / count - math.pi / 2 + phase),
                  radius * math.sin(2 * math.pi * i / count - math.pi / 2 + phase))
                 for i in range(count)]
 
     def star(count, step, radius, phase=0.0):
+        """A star polygon: visit every `step`-th point of a `count`-gon and close the path."""
         p, order, i = pts(count, radius, phase), [], 0
         for _ in range(count):
             order.append(p[i]); i = (i + step) % count
@@ -41,6 +43,14 @@ def rosette(n=10, steps=(3, 4), r=100):
 
 
 def main():
+    """Read the two JSONL files and write index.html.
+
+    In order: build the parent/child indexes, count what sits below each node, compute the
+    bands, render the tree, resolve the Who's who, gather the translation tables, and fill
+    the template. The page is generated and committed, so CI fails if index.html does not
+    match what this produces - which is why the build must be deterministic. Iterating a set
+    once made it non-deterministic, because Python randomises string hashing per process.
+    """
     people = {p["id"]: p for p in (json.loads(l) for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip())}
     claims = [json.loads(l) for l in open(f"{ROOT}/claims.jsonl", encoding="utf-8") if l.strip()]
     works = nasab.sources()
@@ -72,6 +82,8 @@ def main():
     below = {}
 
     def count(pid):
+        """How many people sit below pid, memoised. Shown on the [+] so a reader knows what a
+        node opens before opening it."""
         if pid not in below:
             below[pid] = sum(1 + count(k) for k in kids.get(pid, ()))
         return below[pid]
@@ -84,6 +96,7 @@ def main():
     # a date would read as sourced when it was computed. These four are things the sources
     # either state or do, so each is defensible in one sentence.
     def ancestors(pid):
+        """Every forefather of pid, up to whichever root the line reaches."""
         out, c = set(), father.get(pid)
         while c:
             out.add(c)
@@ -124,6 +137,13 @@ def main():
         n = father.get(n)
 
     def node(pid, depth=0, gen=1, ind=0):
+        """One <details> element: the person, their badges, and their subtree.
+
+        `depth` is real depth in the tree; `gen` is the generation number shown to the reader,
+        which differs once a ribbon has folded a run of single-child links. `ind` counts
+        indent steps, and drives the kd0-kd3 band that makes each level narrower than the one
+        above without ever letting a child sit left of its parent.
+        """
         p = people[pid]
         cs = by_person[pid]
         srcs = sorted({c["work"] for c in cs})
@@ -165,8 +185,21 @@ def main():
                 al = f'<i class="alias">= {" / ".join(html.escape(u) for u in uniq)}</i>'
         if kun:
             al += f'<i class="kunya">{html.escape(" · ".join(kun[:2]))}</i>'
-        summary = (f'<summary data-id="{pid}" data-gen="{gen}" data-band="{band.get(pid,"")}" data-search="{html.escape((p["name_lat"]+" "+p["name_ar"]+" "+p.get("kunya_lat","")+" "+p.get("kunya_ar","")+" "+" ".join(kun)+" "
-                   +" ".join(c.get("value_ar","") for c in cs if c["type"]=="kunya")+" "+" ".join(a.get("value_lat","")+" "+a.get("value_ar","") for a in alias)).lower())}">'
+        # data-search is everything a reader might type at this person: both spellings of the
+        # name, every kunya (from the row and from the claims) and every alias. It is folded
+        # to lower case here so the search does not have to do it per keystroke.
+        searchable = " ".join([
+            p["name_lat"],
+            p["name_ar"],
+            p.get("kunya_lat", ""),
+            p.get("kunya_ar", ""),
+            " ".join(kun),
+            " ".join(c.get("value_ar", "") for c in cs if c["type"] == "kunya"),
+            " ".join(a.get("value_lat", "") + " " + a.get("value_ar", "") for a in alias),
+        ]).lower()
+        summary = (f'<summary data-id="{pid}" data-gen="{gen}"'
+                   f' data-band="{band.get(pid, "")}"'
+                   f' data-search="{html.escape(searchable)}">'
                    f'<span class="tw{"" if children else " leaf"}" data-n="{below.get(pid,0)}"></span>'
                    f'<span class="gen">{gen}</span>'
                    f'<span class="ar" dir="rtl" lang="ar">{html.escape(p["name_ar"])}</span>'
@@ -240,6 +273,8 @@ def main():
     import unicodedata as _u
 
     def _n(x):
+        """Fold Arabic spelling variants for directory matching - the same folding nasab
+        does, kept local so build.py can resolve names without importing the parser."""
         x = _u.normalize("NFKC", x)
         for a, b in (("أ","ا"),("إ","ا"),("آ","ا"),("ة","ه"),("ى","ي"),("ئ","ي"),("ؤ","و")):
             x = x.replace(a, b)
@@ -250,7 +285,12 @@ def main():
         byname[_n(pr["name_ar"])].append(pid)
 
     def find(chain):
-        """Walk down a name chain given deepest-last; return the id only if it is unambiguous."""
+        """Walk down a name chain given deepest-last; return the id only if it is unambiguous.
+
+        Ambiguity returns None and the caller reports the label as unresolved, so a Who's who
+        row can never point at a person the build merely guessed at. '__root__' as the last
+        element means the chain starts at a root, which has no father to anchor on.
+        """
         if chain[-1] == "__root__":       # a root has no father to anchor on
             c = [p for p in roots if _n(people[p]["name_ar"]) == _n(chain[0])]
             return c[0] if len(c) == 1 else None

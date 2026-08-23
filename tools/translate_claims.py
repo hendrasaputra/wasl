@@ -113,10 +113,18 @@ CHAIN_ONLY = re.compile(rf"^{_SEG}(?: b\. {_SEG})+$")
 
 
 def chain_gloss(en):
+    """A bare chain - 'X b. Y b. Z' and nothing else - needs no translating, only the link
+    word swapped: `b.` is `bin` in both Indonesian and Malay. Returns None if the English is
+    prose rather than a chain."""
     return en.replace(" b. ", " bin ") if CHAIN_ONLY.match(en.strip()) else None
 
 
 def main(write=False):
+    """Write an `id` and `ms` gloss onto every claim, and report what has neither.
+
+    Re-run after ANY change to the data: a claim added without this keeps only its English,
+    which the report counts but the page will still show untranslated.
+    """
     path = f"{ROOT}/claims.jsonl"
     rows = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
     people = {json.loads(l)["id"]: json.loads(l)

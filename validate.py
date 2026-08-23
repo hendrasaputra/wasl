@@ -5,6 +5,20 @@
 
 The load-bearing check is #4: every Arabic quote is re-read out of the pinned corpus file at
 the page the claim cites. A claim whose quote is not there is not a citation, it is a guess.
+
+WHAT THIS PROVES AND WHAT IT DOES NOT. It proves the QUOTE: the Arabic really is on the page
+named. It cannot prove the PLACEMENT - that the man a parser anchored a chain to is the man
+the text meant. Parser-placed claims carry `source_pattern` and are badged `auto` in the page
+for exactly that reason. Never describe an `auto` node as verified without the distinction.
+
+This file shares nasab.py with the extraction code, so it can agree with its own bug. That is
+not hypothetical: it is how the repeated-page-marker bug in Ibn Sa'd survived, and how a page
+milestone truncated to three digits put 286 claims on the wrong page while every quote still
+"verified". test_wasl.py exists to disagree - it re-derives page boundaries from the raw file
+with plain string operations and shares no code with the indexer. Run both.
+
+Exit code 0 means every check passed. Anything else is a failure and the commit must not
+happen.
 """
 import json, os, sys, collections
 import nasab
@@ -17,16 +31,23 @@ DATE_BASIS = {"attested", "attested_relative", "derived_from_age_at_death",
 
 
 def jsonl(name):
+    """Read one JSONL file from the repository root into a list of dicts."""
     with open(os.path.join(ROOT, name), encoding="utf-8") as f:
         return [json.loads(l) for l in f if l.strip()]
 
 
 def main():
+    """Run every check, print a summary, and exit non-zero if anything failed.
+
+    The checks are numbered in the order they run, and each is cheap enough that all of them
+    run every time - nothing is sampled. Errors are collected rather than raised so one bad
+    row does not hide the next fifty.
+    """
     people = {p["id"]: p for p in jsonl("people.jsonl")}
     claims = jsonl("claims.jsonl")
     works = nasab.sources()
     err, warn = [], []
-    E = err.append
+    E = err.append               # errors fail the run; warnings are printed and tolerated
 
     # 1. people well-formed and unique
     if len(people) != len(jsonl("people.jsonl")):
@@ -70,7 +91,9 @@ def main():
         if c["type"] in EDGE:
             edges[(c["subject"], c["object"], c["type"])].append(c)
 
-    # 4. THE check - every quote is really on the cited page of the pinned text
+    # 4. THE check - every quote is really on the cited page of the pinned text.
+    #    locate() returns the page SPAN a quote covers, because quotes routinely straddle a
+    #    page break; a citation is valid when the page it names falls inside that span.
     checked = 0
     for c in claims:
         try:
@@ -86,7 +109,9 @@ def main():
             E(f"{c['cid']}: cites {c['work']} {c['vol']}:{c['page']} but text is at {v}:{p1}-{p2}")
         checked += 1
 
-    # 5. the parent graph is a forest - no cycles, no two fathers for one child
+    # 5. the parent graph is a forest - no cycles, no two fathers for one child. Two fathers
+    #    is nearly always a merge that should have happened or a chain that anchored wrongly;
+    #    where the sources genuinely disagree, model it as a variant_chain claim instead.
     father = {}
     for (par, chi, typ), cs in edges.items():
         if typ == "father_of":
@@ -102,7 +127,8 @@ def main():
         if hops > len(people):
             E(f"cycle in the parent graph at {start}")
 
-    # 6. advisory: single-source edges (true, but not yet corroborated)
+    # 6. advisory only, and never a failure: an edge only one book carries is still an edge.
+    #    The count is printed so the shape of the corroboration is visible at a glance.
     for (par, chi, typ), cs in sorted(edges.items()):
         if len({c["work"] for c in cs}) == 1:
             warn.append(f"{chi} <- {par}: attested by {cs[0]['work']} only")

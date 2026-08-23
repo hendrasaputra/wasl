@@ -394,8 +394,14 @@ def data(s, lang):
 
 
 def strings(lang):
+    """Every interface string in one language, falling back to English per key."""
     return {k: v.get(lang, v["en"]) for k, v in UI.items()}
 
 
 def gloss(kind, lang, **kw):
+    """Fill one gloss template in one language: gloss('son_of', 'id', a=..., b=...).
+
+    GENERATED per language from the structured fields, never translated from the English -
+    see the module docstring for why. The summaries are the one deliberate exception.
+    """
     return GLOSS[kind].get(lang, GLOSS[kind]["en"]).format(**kw)

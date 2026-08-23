@@ -20,6 +20,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def main():
+    """Recompute vol/page/page_end for claims whose stored page was truncated.
+
+    A one-off migration, kept as the record of the fix. It only touches rows where the stored
+    page is a strict PREFIX of the true one, which is what the truncation looked like;
+    anything disagreeing for another reason is reported and left alone.
+    """
     path = os.path.join(ROOT, "claims.jsonl")
     claims = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
     fixed, odd = [], []

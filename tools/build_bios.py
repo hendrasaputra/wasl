@@ -79,6 +79,7 @@ def paragraphs(work, line_no, depth):
     page = entries.page_span(work, line_no, depth)[1]
 
     def flush():
+        """Close the paragraph being accumulated and push it, if it has any text."""
         if buf:
             t = DROP.sub(' ', ' '.join(buf))
             t = re.sub(r'\s+', ' ', PAGE.sub(' ', t)).strip()
@@ -107,6 +108,11 @@ def paragraphs(work, line_no, depth):
 
 
 def block_html(kind, text, page, seen):
+    """One paragraph or subheading of an entry, as HTML.
+
+    `seen` carries the pages already marked, so the margin number appears once per page
+    rather than once per paragraph.
+    """
     if kind == 'h':
         return f'<h3 dir="rtl" lang="ar">{html.escape(text)}</h3>'
     mark = ''
@@ -124,6 +130,12 @@ def block_html(kind, text, page, seen):
 
 
 def main():
+    """Write one page per Who's who person into bio/.
+
+    Joins three things by person: the pinned entries (entries.jsonl), the summary if one
+    exists (summaries.jsonl), and bio/_ids.json, which build.py writes so that the label to
+    id resolution happens once rather than twice.
+    """
     works = nasab.sources()
     people = {p["id"]: p for p in (json.loads(l) for l in
               open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip())}

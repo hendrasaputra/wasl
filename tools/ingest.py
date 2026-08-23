@@ -17,21 +17,39 @@ from translit import translit, slug
 
 
 class Store:
+    """The whole dataset in memory, plus the indexes that make lookups O(1).
+
+    Every extraction pass follows the same shape: build a Store, call person() and add() as
+    the corpus is read, then save(). Nothing is written until save(), so a pass that fails
+    part-way leaves the files untouched.
+
+    The indexes are not an optimisation detail, they are what makes a pass finish at all.
+    `aliases_of` once walked every claim for every person, making chain resolution
+    O(people x claims) - a ten-minute hang that became 0.7s once these were added. Anything
+    called per-statement has to be O(1).
+    """
+
     def __init__(self):
-        self.people = {}
-        self.order = []
+        """Load the dataset from disk and build every index over it."""
+        self.people = {}          # id -> person row
+        self.order = []           # ids in file order, so save() does not reshuffle the file
         self.claims = []
-        self._byfather = {}
-        self._ids = set()
-        self._seen = set()
-        self._byname = {}
+        self._byfather = {}       # (father id, normalised child name) -> child id
+        self._ids = set()         # every id in use, for minting a fresh one
+        self._seen = set()        # claims already recorded, so a re-run adds nothing twice
+        self._byname = {}         # normalised name -> [person]
         self._alias = {}          # person -> set of normalised alias values
         self._byalias = {}        # normalised alias value -> [person]
-        self.rejected = []
+        self.rejected = []        # quotes the corpus did not carry, reported by report()
         self.load()
 
     # ---------------------------------------------------------------- io
     def load(self):
+        """Read people.jsonl and claims.jsonl and build every index from them.
+
+        A pass therefore starts from whatever the previous pass wrote, which is what lets the
+        replay pipeline in CLAUDE.md run phase after phase over one growing tree.
+        """
         for l in open(f"{ROOT}/people.jsonl", encoding="utf-8"):
             if l.strip():
                 p = json.loads(l)
@@ -52,6 +70,7 @@ class Store:
         self._n = max((int(c["cid"][1:]) for c in self.claims), default=0)
 
     def save(self):
+        """Write both files back. Called once, at the end of a pass, and only with --write."""
         with open(f"{ROOT}/people.jsonl", "w", encoding="utf-8") as f:
             for pid in self.order:
                 f.write(json.dumps(self.people[pid], ensure_ascii=False) + "\n")
@@ -85,6 +104,7 @@ class Store:
         return hits[0] if len(set(hits)) == 1 else None
 
     def _note_alias(self, pid, value_ar):
+        """Record an alias in both directions, so child_of can match a man under either name."""
         v = nasab.normalise(value_ar)
         self._alias.setdefault(pid, set()).add(v)
         self._byalias.setdefault(v, []).append(pid)
@@ -95,9 +115,12 @@ class Store:
         return self._alias.get(pid, frozenset())
 
     def child_of(self, fid, names):
-        """names may be raw Arabic or already normalised."""
-        """An existing child of fid answering to any of these names - its own or a recorded
-        alias. 'Amir wa-huwa Mudrika' is one man under two readings, not two men."""
+        """An existing child of `fid` answering to any of these names - its own or a recorded
+        alias. Names may be raw Arabic or already normalised.
+
+        The alias half matters: 'Amir wa-huwa Mudrika' is one man under two readings, and
+        without it the second reading mints a twin brother.
+        """
         keys = {nasab.normalise(n) for n in names if n} | {n for n in names if n}
         for (f, nm), cid in self._byfather.items():
             if f == fid and (nm in keys or self.aliases_of(cid) & keys):
@@ -105,6 +128,12 @@ class Store:
         return None
 
     def descendants(self, root):
+        """Every person below `root`, used to scope a pass - Phase 2 runs under Fihr, which
+        Ibn Hazm defines as exactly the set of people called Qurashi.
+
+        Rebuilds the child map on each call, so hoist it out of a loop if one is ever needed
+        per statement rather than once per pass.
+        """
         seen, stack = {root}, [root]
         kids = {}
         for c in self.claims:
@@ -182,10 +211,13 @@ class Store:
         return cid
 
     def has_edge(self, father, child):
+        """Is this exact parent edge already recorded, from any work?"""
         return any(c["type"] == "father_of" and c["subject"] == father and c["object"] == child
                    for c in self.claims)
 
     def report(self, label):
+        """Print what the pass did, including what it REFUSED. A rejected quote is a finding -
+        the corpus did not carry it - so it is counted and shown, never dropped silently."""
         print(f"{label}: {len(self.people)} people, {len(self.claims)} claims"
               + (f", {len(self.rejected)} quotes rejected" if self.rejected else ""))
         for w, q in self.rejected[:5]:

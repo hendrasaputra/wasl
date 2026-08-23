@@ -27,6 +27,12 @@ def _tr(line):
 
 
 def main():
+    """Check every anchored sentence against its entry and write summaries.jsonl.
+
+    Fails on any anchor that is too short to identify a passage, absent from the work, or
+    present but outside the entry the summary claims to read. Also enforces the caps: word
+    count, line count, and the share of lines allowed to be editorial.
+    """
     # a person can have SEVERAL entries in one work - Ibn Sa'd files a man once per tabaqa,
     # so Sa'id b. Zayd and Anas b. Malik each have two. Keying on (who, work) kept only the
     # last and silently failed every anchor that sat in the other one.

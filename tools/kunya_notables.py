@@ -17,6 +17,7 @@ WORKS = ["IbnAbdAlBarr", "IbnAlAthir", "IbnSad"]
 
 
 def chain_of(store, pid, n=4):
+    """The first n names of a person's line as the corpus would print them, closest first."""
     out, c = [], pid
     while c and len(out) < n:
         out.append(store.people[c]["name_ar"])
@@ -26,6 +27,11 @@ def chain_of(store, pid, n=4):
 
 
 def find_kunya(store, pid, quiet=False):
+    """Look for a kunya attached to this person's chain anywhere in the corpus.
+
+    The chain must have at least two names: a bare name identifies nobody, and attaching a
+    kunya on one is how Fihr b. Malik was briefly given Umar's son's kunya.
+    """
     names = chain_of(store, pid)
     if len(names) < 2:
         return 0

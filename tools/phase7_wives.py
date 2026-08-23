@@ -117,6 +117,13 @@ def anchor(st, names, work):
 
 
 def seed(st, w):
+    """Put one wife into the tree from her quoted paternal chain, and record the marriage.
+
+    Returns her id, or None if the chain is not in the work or her father cannot be resolved.
+    Where the chain anchors on nothing - her tribe is simply not in our tree - its own top
+    name becomes a root, which is the honest outcome: the book states the chain, so the chain
+    is what we record.
+    """
     chain, work = w["chain"], w["work"]
     if nasab.locate(work, chain) is None:
         print(f"  ! chain not in {work}: {chain[:40]}")

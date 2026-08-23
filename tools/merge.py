@@ -80,6 +80,7 @@ def uncopy(people, claims):
     N, RUN = nasab.normalise, 4
 
     def line(pid):
+        """The full ancestor line of pid, closest first."""
         out, cur = [], pid
         while cur:
             out.append(cur)
@@ -179,6 +180,13 @@ def unweld(people, claims):
 
 
 def main(write=False):
+    """Cut copied spines, unweld chains broken by a missing `bn`, then merge near-duplicates.
+
+    In that order, and after prune.py has repaired names - see the note there. Every stage
+    prints what it did, because a cleanup that deletes the real spine is far worse than the
+    duplication it was meant to fix: an early uncopy() was off by one and flagged Kinana,
+    Mudrika and al-Nadr themselves.
+    """
     people = [json.loads(l) for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip()]
     claims = [json.loads(l) for l in open(f"{ROOT}/claims.jsonl", encoding="utf-8") if l.strip()]
     print("cutting spines copied into the wrong place")
@@ -190,6 +198,7 @@ def main(write=False):
     alias = {}                                # loser -> winner
 
     def root(x):
+        """Follow a chain of merges to the id that survived them all."""
         while x in alias:
             x = alias[x]
         return x
@@ -206,6 +215,8 @@ def main(write=False):
         # 'al-Abbas' and 'Abbas' under one father are one man written two ways; the article is
         # not a distinguishing letter, and edit distance alone treats it as two
         def key(x):
+            """A comparison key ignoring the definite article, so al-Harith and Harith are one
+            name rather than two."""
             n = nasab.normalise(by[x]["name_ar"])
             return n[2:] if n.startswith("ال") and len(n) > 3 else n
         nm = {p: key(p) for p in by}

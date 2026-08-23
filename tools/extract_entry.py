@@ -50,6 +50,11 @@ def entries(work, text):
 
 
 def run(work, store, limit=None, quiet=True, min_anchor=2):
+    """Read a sahaba dictionary and attach each entry's opening chain to the tree.
+
+    Returns (people added, claims added). Statements the rules reject are counted and
+    reported, never guessed at - recall is deliberately sacrificed to precision.
+    """
     # The length gate defers to identifies(), which asks the corpus how ambiguous the phrase is.
     # A blunt gate of 4 meant a four-name chain could never anchor - the longest tail excluding
     # the entry's own name is three - so 'Abd Allah b. Umar b. al-Khattab b. Nufayl' was

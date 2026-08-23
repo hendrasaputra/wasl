@@ -87,6 +87,7 @@ def page_span(work, line_no, depth):
     stop = next((i for i, d, _ in heads if i > line_no and d <= depth), len(lines))
     ms = marks(work)
     def at(i):
+        """The first milestone at or after line i - that is, the page line i sits on."""
         return next((m for m in ms if m[0] >= i), ms[-1])
     a, b = at(line_no), at(max(stop - 1, line_no))
     return a[1], a[2], (b[2] if b[1] == a[1] else a[2])
@@ -122,6 +123,12 @@ def find(work, pin):
 
 
 def words(raw):
+    """Word count of an entry body, with the mARkdown scaffolding stripped out.
+
+    Used as a sanity measure: a printed page holds a few hundred words, so an entry claiming
+    thousands per page means the page numbers are wrong even though every quote on them
+    verifies. test_wasl.py fails anything over 700.
+    """
     return len(NOISE.sub(' ', ' '.join(raw)).replace('#', ' ').replace('~', ' ').split())
 
 

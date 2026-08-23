@@ -61,6 +61,14 @@ WALAD_WORKS = ["IbnHazm", "IbnKalbi", "Baladhuri", "IbnSad", "IbnHisham"]
 
 
 def main(write=False):
+    """Seed the Qahtani spine by hand, then grow the tribes off it.
+
+    The spine is hand-quoted because a parser cannot find a backbone, only grow from one: an
+    earlier pass hung al-Aws on a 'al-Harith b. Qahtan' that does not exist. The seed anchors
+    on the deepest suffix that resolves UNIQUELY - anchoring on the chain's last name worked
+    until four men called Mazin existed, after which the whole spine silently failed to seed
+    and al-Aws and al-Khazraj vanished from the tree.
+    """
     st = ingest.Store()
     p0, c0 = len(st.people), len(st.claims)
 

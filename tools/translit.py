@@ -271,6 +271,11 @@ def translit(ar):
 
 
 def slug(latin):
+    """A person id from a transliterated name: lowercase ASCII with hyphens.
+
+    Diacritics fold rather than drop, so Ê¿Abd al-Muá¹­talib becomes abd-al-muttalib and stays
+    readable in a URL. Ids are never reused once minted - see CLAUDE.md.
+    """
     s = latin.lower()
     for a, b in (("ā","a"),("ī","i"),("ū","u"),("ḥ","h"),("ḍ","d"),("ṣ","s"),("ṭ","t"),
                  ("ẓ","z"),("ʿ",""),("ʾ",""),("ġ","gh"),("š","sh"),("ḏ","dh"),("ṯ","th")):

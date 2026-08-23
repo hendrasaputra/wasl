@@ -490,6 +490,8 @@ let LANG = localStorage.getItem('wasl-lang')
         || (navigator.language || '').slice(0,2).replace('in','id');
 if (!['en','id','ms'].includes(LANG)) LANG = 'en';
 let T = D.ui[LANG];
+/* One interface string, in the current language. Falls back to English per key, then to the
+   key itself, so a missing string shows as its name rather than as nothing. */
 const tr = (k, n) => (T[k] || D.ui.en[k] || k).replace('{n}', n);
 const glossOf = c => c[LANG] || c.en;
 // tribes, notes, verdicts and isnads live in the data, but a reader in Indonesian should not
@@ -497,6 +499,8 @@ const glossOf = c => c[LANG] || c.en;
 const dtr = s => (s && D.dtr[LANG] && D.dtr[LANG][s]) || s;
 const esc = s => String(s??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+/* Re-label every part of the interface in the current language, and re-render the two lists
+   whose text comes from the data. Called on load and on every language change. */
 function paintChrome(){
   T = D.ui[LANG];
   $('#q').placeholder = tr('search_ph', S.people.toLocaleString())
@@ -560,6 +564,9 @@ const TYPEKEY = {father_of:'g_father_of', mother_of:'g_mother_of', married_to:'g
   isnad:'g_isnad', birth:'g_birth', age_at_death:'g_age'};
 const ORDER = ['father_of','mother_of','married_to','kunya','alias','birth','age_at_death','chain','variant_chain','dissent','isnad'];
 
+/* One claim as evidence: its flags, the Arabic, the gloss, the isnad if it has one, and the
+   full citation down to the edition and the version URI. Everything a reader needs to open
+   the book at the right page and disagree. */
 function claimHTML(c){
   const w = D.works[c.work] || {};
   const pg = c.page_end && c.page_end !== c.page ? `${c.page}–${c.page_end}` : c.page;
@@ -580,6 +587,9 @@ function claimHTML(c){
   </div>`;
 }
 
+/* Fill the side panel for one person: who they are, who they are attached to, and every
+   claim that names them. This is where the evidence actually reaches the reader, so it shows
+   ALL of it - claims are grouped by type but never truncated. */
 function show(pid){
   const p = D.people[pid];
   const cs = D.claims.filter(c => c.subject === pid || c.object === pid);
@@ -722,10 +732,13 @@ const lineage = (pid, n = 5) => {
   return out.join(' ‹ ');
 };
 
+/* Open every ancestor's <details> so a person reached by search is actually visible. */
 function openTo(pid){
   let c = pid;
   while (c) { const el = document.getElementById(c); if (el) el.open = true; c = D.father[c] || D.mother[c]; }
 }
+/* Go to a person from anywhere - search, breadcrumb, panel link: open the path, show them,
+   and scroll them into view. */
 function jump(pid){
   show(pid);
   if (isSheet()) closeSheet();   // let them see where it landed before the sheet covers it
@@ -753,6 +766,8 @@ function jump(pid){
 const RES = $('#results');
 let hits = [], cursor = -1;
 
+/* The search results list. Capped at 60 rows: past that the list stops being a list and the
+   reader should narrow the query instead. */
 function renderResults(){
   if (!hits.length) { RES.innerHTML = `<div class="none">${esc(tr('noname'))}</div>`; RES.hidden = false; return; }
   RES.innerHTML = hits.slice(0,60).map((pid,i) => {
@@ -817,6 +832,7 @@ const isPhone = () => matchMedia('(max-width: 760px)').matches;
 const isSheet = () => matchMedia('(max-width: 1100px)').matches;
 
 function openSheet(){ if (isSheet()) document.body.classList.add('sheet-open'); }
+/* Drop the mobile bottom sheet back down. */
 function closeSheet(){ document.body.classList.remove('sheet-open'); }
 
 $('#sheetclose').onclick = closeSheet;
@@ -835,6 +851,12 @@ addEventListener('resize', () => { if (!isSheet()) closeSheet(); });
    All of these use the hidden ATTRIBUTE, not a class. A class only works if some rule happens
    to hide the element, and #dir and #bandlegend carry display:grid, so for a while pressing
    their buttons did nothing at all. */
+/* Wire a button to show and hide one element, and return a repaint function for the language
+   picker to call.
+
+   Uses the `hidden` ATTRIBUTE rather than a style, with a global [hidden]{display:none
+   !important} to back it: an element carrying display:grid beats the user-agent rule for
+   [hidden], which is why About and Who's who once had buttons that did nothing at all. */
 function disclose(btnSel, targetSel, label){
   const b = $(btnSel), t = $(targetSel);
   const paint = () => {
@@ -865,6 +887,8 @@ function defaultDisclosures(){
 /* ---------- the picker ---------- */
 $('#langs').innerHTML = Object.entries(D.langs)
   .map(([k, name]) => `<button data-l="${k}" title="${esc(name)}">${k.toUpperCase()}</button>`).join('');
+/* Switch language, remember it, and repaint. The choice is stored in localStorage, which is
+   also how the biography pages know which language to render. */
 function setLang(l){
   LANG = l;
   localStorage.setItem('wasl-lang', l);
@@ -930,6 +954,10 @@ $('#filters').addEventListener('click', e => {
   applyLens();
 });
 
+/* Dim everything outside the current filter rather than removing it.
+
+   Removal would make the tree claim a shape it does not have; dimming keeps every ancestor of
+   a match visible, so a filtered view still shows how a person is attached. */
 function applyLens(){
   if (!active && !bandOn) {
     sums.forEach(s => s.classList.remove('dim'));
@@ -954,6 +982,10 @@ function applyLens(){
 const CRUMB_ENDS = 5;      // first five and last five; a 52-link trail is not a trail
 let crumbFull = false;
 
+/* The line from the root down to this person, as clickable steps.
+
+   Compressed to the first five and the last five with a count between them: the deepest
+   lines here run past fifty names, and a breadcrumb nobody can read is not a breadcrumb. */
 function crumb(pid){
   const line = []; let c = pid;
   while (c) { line.unshift(c); c = D.father[c] || D.mother[c]; }
@@ -993,6 +1025,8 @@ function siblingsAt(level){
 
 const COL_WINDOW = 4;   // one column per generation would be 56 columns for this data
 
+/* The Miller-column view: one column per generation along the selected path, each listing
+   that person's children. Suits a wide screen, where the tree's depth is the problem. */
 function renderCols(){
   const box = $('#cols');
   box.innerHTML = '';
@@ -1032,6 +1066,8 @@ function renderCols(){
   last?.querySelector('.ci.on')?.scrollIntoView({block:'nearest'});
 }
 
+/* Every id from the root down to pid, closest last. Falls back to the mother where these
+   books never name the father. */
 function pathTo(pid){
   const out = []; let c = pid;
   while (c) { out.unshift(c); c = D.father[c] || D.mother[c]; }
@@ -1047,6 +1083,7 @@ $('#cols').addEventListener('click', e => {
 });
 
 let view = 'tree';
+/* Switch between the tree and the columns, and remember which is showing. */
 function setView(v){
   view = v;
   $('#vTree').classList.toggle('on', v === 'tree');

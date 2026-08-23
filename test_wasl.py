@@ -6,6 +6,25 @@ re-derive page boundaries straight from the raw corpus file with plain string op
 and confirm the checker actually rejects bad data rather than waving it through.
 
     python3 test_wasl.py
+
+WHY A SECOND CHECKER. validate.py imports nasab.py, so it can agree with its own bug and
+report a clean run over wrong data. Twice now it has: the repeated page marker in Ibn Sa'd,
+where page_text returned only the first of several disjoint segments; and PAGE_RE reading
+three digits of a four-digit milestone, which put 286 claims on a page a tenth of the true
+one while every quote still "verified". Both were found here, because raw_page() slices the
+file by hand and shares nothing with the indexer.
+
+So a check in this file must not import the thing it is checking. Where that is unavoidable
+- the summaries need entries.py to know where an entry is - the check re-reads the raw pages
+itself and asserts that the check CAN fail, by feeding it a genuine phrase from a different
+entry and requiring rejection.
+
+The assertions on the Prophet's immediate family are named one by one on purpose. Every one
+of them was written because the data broke it: an epithet became a son of the Prophet's
+father, granddaughters were hung on their grandfathers and sexed male, and a man who died in
+infancy acquired six descendants. Totals cannot show that; only naming the family can.
+
+Exits non-zero on the first failure, so the failing line is the last thing printed.
 """
 import json, os, re, sys, collections
 import nasab
@@ -15,6 +34,10 @@ ok = 0
 
 
 def check(label, cond, detail=""):
+    """Assert one thing, print it, and stop the run if it is false.
+
+    `detail` is printed only on failure - it carries the measurement that explains it.
+    """
     global ok
     print(("  ok   " if cond else "  FAIL ") + label + (f"  {detail}" if detail and not cond else ""))
     if not cond:
@@ -105,6 +128,11 @@ byid = {p["id"]: p for p in json.load(open(f"{ROOT}/people.jsonl", encoding="utf
 
 
 def person(chain):
+    """Resolve a name chain (shallowest first) to one person id, or None if ambiguous.
+
+    Deliberately a second implementation of what build.py's find() does. If the two ever
+    disagree, one of them is wrong, and this file exists to be the one that notices.
+    """
     hits = []
     for a in [p for p in byid if nasab.normalise(byid[p]["name_ar"]) == nasab.normalise(chain[-1])]:
         cur = a
@@ -119,6 +147,7 @@ def person(chain):
 
 
 def names_of(chain):
+    """The transliterated names of one person's children, sorted and de-duplicated."""
     pid = person(chain)
     return sorted({byid[k]["name_lat"] for k in dict.fromkeys(kids.get(pid, []))}) if pid else None
 
@@ -201,6 +230,8 @@ check("no two people share a full lineage", not dupsig, "; ".join(dupsig[:4]))
 
 # and no father has two children of the same name, or of the same name in another case
 def fold_case(x):
+    """Fold the case endings a name picks up in running Arabic, so 'Umar and 'Umara are not
+    counted as two sons of the same father when they are one man quoted twice."""
     x = nasab.normalise(x)
     x = re.sub(r"^اب[اوي]\b", "ابو", x)
     return x[:-1] if x.endswith("ا") and len(x) > 3 else x
@@ -278,6 +309,7 @@ while n:
     line.add(n)
     n = fmap.get(n)
 def below(pid):
+    """Every descendant of pid, used to assert that a wife never landed inside the tree."""
     out, stack = set(), [pid]
     while stack:
         for k in kids.get(stack.pop(), ()):

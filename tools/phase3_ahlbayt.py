@@ -82,6 +82,11 @@ SINGLE = [
 
 
 def main(write=False):
+    """Seed the Prophet's household by hand from quoted chains.
+
+    Hand-seeded, like Phase 1, and for the same reason: a parser grows outward from a correct
+    backbone but cannot find one. This is the commit the replay pipeline resets to.
+    """
     st = ingest.Store()
     p0, c0 = len(st.people), len(st.claims)
 
@@ -96,6 +101,7 @@ def main(write=False):
     st.people[kh]["id_alias"] = "p.khadija"
 
     def rid(spec):
+        """Accept either a person id or a name chain, and return the id."""
         return spec if isinstance(spec, str) and spec in st.people else st.find_by_chain(spec)
 
     for father, work, quote, en, kids, extra in FAMILIES:

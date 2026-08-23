@@ -277,6 +277,8 @@ EXTRA_PEOPLE = [
 
 # ---------------------------------------------------------------- emit
 def tokens(chain):
+    """Split a quoted chain into names, keeping each name's offset so the pair that a claim
+    quotes can be cut back out of the original wording."""
     out, last = [], 0
     for m in SEP.finditer(chain):
         out.append((last, m.start()))
@@ -286,6 +288,11 @@ def tokens(chain):
 
 
 def main():
+    """Write the hand-seeded Phase 1 spine: Muhammad up to Adam, every link quoted.
+
+    Kept as the record of how the base was built. The pipeline does not re-run it - phases
+    replay over the committed Phase 3 commit instead. See the replay section of CLAUDE.md.
+    """
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     people, claims, n, fails = [], [], 0, 0
 
@@ -293,6 +300,7 @@ def main():
         people.append({"id": pid, "name_ar": ar, "name_lat": lat, "sex": sex, **extra})
 
     def add(**kw):
+        """Mint the next claim id and append the row."""
         nonlocal n
         n += 1
         claims.append({"cid": f"c{n:05d}", **kw})

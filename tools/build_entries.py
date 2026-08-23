@@ -26,6 +26,12 @@ NO_ENTRY = {
 
 
 def main():
+    """Resolve every pin to exactly one entry and write entries.jsonl.
+
+    Fails, rather than choosing, on any pin that matches no heading or several. CI runs this
+    without --write on every push, so a corpus change that moves an entry breaks the build
+    instead of silently repointing a citation.
+    """
     labels = [l for _, items in DIRECTORY for l, _ in items]
     missing = [l for l in labels if l not in entries.PINS and l not in NO_ENTRY]
     extra = [k for k in entries.PINS if k not in labels]
