@@ -75,8 +75,7 @@ def paragraphs(work, line_no, depth):
     """The entry as (kind, text, page) blocks. mARkdown: '#' opens a paragraph, '~~'
     continues it, '###' is a subheading, and a page milestone CLOSES the page it ends."""
     raw = entries.body(work, line_no, depth)
-    out, buf = [], []
-    page = entries.page_span(work, line_no, depth)[1]
+    out, buf, start = [], [], line_no + 1
 
     def flush():
         """Close the paragraph being accumulated and push it, if it has any text."""
@@ -84,25 +83,26 @@ def paragraphs(work, line_no, depth):
             t = DROP.sub(' ', ' '.join(buf))
             t = re.sub(r'\s+', ' ', PAGE.sub(' ', t)).strip()
             if t:
-                out.append(('p', t, page))
+                out.append(('p', t, entries.page_at(work, start)[1]))
             buf.clear()
 
-    for ln in raw:
+    for source_line, ln in enumerate(raw, line_no + 1):
         if ln.startswith('###'):
             flush()
             h = re.sub(r'^###\s*[|$]*\s*(?:\(\d+\))?\s*\d*\s*-?\s*', '', ln).strip()
             if h:
-                out.append(('h', DROP.sub(' ', PAGE.sub(' ', h)).strip(), page))
+                out.append(('h', DROP.sub(' ', PAGE.sub(' ', h)).strip(),
+                            entries.page_at(work, source_line)[1]))
         else:
             if ln.startswith('~~'):
                 buf.append(ln[2:])
             else:
                 flush()
+                start = source_line
                 buf.append(ln.lstrip('# '))
             m = PAGE.search(ln)
-            if m:                       # this line ends a page; what follows is the next
+            if m:
                 flush()
-                page = int(m.group(2)) + 1
     flush()
     return out
 

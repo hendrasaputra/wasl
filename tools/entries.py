@@ -73,6 +73,12 @@ def marks(work):
     return _marks[work]
 
 
+def page_at(work, line_no):
+    """The volume and page containing a source line; repeated milestones stay on one page."""
+    _, vol, page = next((m for m in marks(work) if m[0] >= line_no), marks(work)[-1])
+    return vol, page
+
+
 def page_span(work, line_no, depth):
     """(vol, first_page, last_page) for the entry opening at line_no.
 
@@ -84,12 +90,8 @@ def page_span(work, line_no, depth):
     the page that line sits on."""
     lines, heads = headings(work)
     stop = next((i for i, d, _ in heads if i > line_no and d <= depth), len(lines))
-    ms = marks(work)
-    def at(i):
-        """The first milestone at or after line i - that is, the page line i sits on."""
-        return next((m for m in ms if m[0] >= i), ms[-1])
-    a, b = at(line_no), at(max(stop - 1, line_no))
-    return a[1], a[2], (b[2] if b[1] == a[1] else a[2])
+    a, b = page_at(work, line_no), page_at(work, max(stop - 1, line_no))
+    return a[0], a[1], (b[1] if b[0] == a[0] else a[1])
 
 
 def find(work, pin):

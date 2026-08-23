@@ -362,6 +362,7 @@ check("no entry implies an impossible number of words per page", not dense, "; "
 
 sys.path.insert(0, f"{ROOT}/tools")
 import entries as _e
+import build_bios as _bio
 from directory import DIRECTORY as _D
 _labels = [l for _, items in _D for l, _ in items]
 check("every Who's who person has an entry or a stated reason for having none",
@@ -370,6 +371,13 @@ check("every Who's who person has an entry or a stated reason for having none",
 check("the heading recorded is the heading in the file",
       all(_e.headings(e["work"])[0][_e.find(e["work"], e["pin"])[0][0]].strip().endswith(
           e["heading_ar"].split()[-1]) for e in entries_rows))
+outside = []
+for e in entries_rows:
+    hit, _ = _e.find(e["work"], e["pin"])
+    pages = {pg for kind, _, pg in _bio.paragraphs(e["work"], hit[0], hit[1]) if kind == "p"}
+    if any(not e["page"] <= pg <= e["page_end"] for pg in pages):
+        outside.append(f'{e["who"]}/{e["work"]}: {sorted(pages)}')
+check("biography page links stay inside their entry span", not outside, "; ".join(outside[:3]))
 
 print("\nthe summaries rest on text that is really there")
 # The one place in this repository where prose is composed rather than quoted, so the one
