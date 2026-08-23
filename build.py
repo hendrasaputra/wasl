@@ -100,6 +100,8 @@ def main():
         else:
             band[pid] = "descendant" if any(people[a].get("sahabi") for a in ancestors(pid)) \
                         else "arabia"
+    BAND_KEY = {"beyond": "band_beyond", "arabia": "band_arabia",
+                "companion": "band_comp", "descendant": "band_desc"}
     BANDS = {
       "beyond":     ("beyond the attested chain",
                      "At or above ʿAdnān and Qaḥṭān — the stretch these books themselves "
@@ -194,7 +196,8 @@ def main():
         there is no branching to lose - only rows to save."""
         links = "".join(
             f'<b data-go="{i}">{html.escape(people[i]["name_lat"])}</b>' for i in run)
-        return (f'<div class="ribbon inline"><span class="rl">{len(run)}&nbsp;gen</span>'
+        return (f'<div class="ribbon inline">'
+                f'<span class="rl" data-n="{len(run)}">{len(run)}&nbsp;gen</span>'
                 f'{links}</div>')
 
     def subtree(children, depth, gen, ind=0):
@@ -224,7 +227,7 @@ def main():
         "father": father, "mother": mother,
         "below": {k: v for k, v in below.items() if v},
         "prologue": prologue, "starts": starts,
-        "band": band, "bands": BANDS, "roots": sorted(roots, key=lambda x: (x != "p.adam", x)),
+        "band": band, "bands": BANDS, "band_key": BAND_KEY, "roots": sorted(roots, key=lambda x: (x != "p.adam", x)),
         "kids": {k: v for k, v in kids.items() if v},
     }
     stats = {
@@ -264,6 +267,7 @@ def main():
         return hits[0] if len(set(hits)) == 1 else None
 
     from directory import DIRECTORY
+    from i18n import LANGS, UI
 
     directory = []
     missing = []
@@ -278,6 +282,8 @@ def main():
         print("  directory entries unresolved: " + ", ".join(missing))
 
     data["directory"] = directory
+    data["langs"] = LANGS
+    data["ui"] = {lang: {k: v.get(lang, v["en"]) for k, v in UI.items()} for lang in LANGS}
 
     tpl = open(f"{ROOT}/template.html", encoding="utf-8").read()
     out = (tpl.replace("{{TREE}}", tree)

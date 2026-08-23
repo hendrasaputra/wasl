@@ -184,6 +184,40 @@ said = [pid for pid, p in byid.items()
                 for c in claims)]
 check("Sa'id b. Zayd appears once", len(said) == 1, f"{len(said)} nodes")
 
+# no two nodes may share a full lineage - that is the definition of the same man twice
+sig = {}
+dupsig = []
+for pid in byid:
+    chain, cur = [], pid
+    while cur:
+        chain.append(nasab.normalise(byid[cur]["name_ar"]))
+        cur = next((c["subject"] for c in claims
+                    if c["type"] == "father_of" and c.get("object") == cur), None)
+    k = " < ".join(chain)
+    if k in sig:
+        dupsig.append(byid[pid]["name_lat"])
+    sig[k] = pid
+check("no two people share a full lineage", not dupsig, "; ".join(dupsig[:4]))
+
+# and no father has two children of the same name, or of the same name in another case
+def fold_case(x):
+    x = nasab.normalise(x)
+    x = re.sub(r"^اب[اوي]\b", "ابو", x)
+    return x[:-1] if x.endswith("ا") and len(x) > 3 else x
+sibs = collections.defaultdict(list)
+for c in claims:
+    if c["type"] == "father_of":
+        sibs[c["subject"]].append(c["object"])
+clash = []
+for f, ch in sibs.items():
+    seen = {}
+    for k in dict.fromkeys(ch):
+        key = fold_case(byid[k]["name_ar"])
+        if key in seen:
+            clash.append(f'{byid[f]["name_lat"]}: {byid[k]["name_ar"]}')
+        seen[key] = k
+check("no father has the same son twice", not clash, "; ".join(clash[:4]))
+
 print("\nno honorific or unsplit chain ever became a person")
 HON = ("رسول الله", "صلى الله", "سيد ولد", "عليه السلام", "رضي الله", "أمير المؤمنين")
 bad = [p["name_ar"] for p in byid.values() if any(h in p["name_ar"] for h in HON)]

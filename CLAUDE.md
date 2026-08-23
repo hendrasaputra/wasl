@@ -146,6 +146,20 @@ amuhu al-Shayba` becomes `Umar` - and a repair can turn two differently-named si
 duplicates. Run the other way round, merge never sees them: Ali ended up with two sons called
 Umar exactly this way. `retranslit` is last because it only relabels.
 
+## Translations
+
+`tools/i18n.py` holds the interface strings and gloss templates; `tools/translate_claims.py`
+writes an `id` and `ms` gloss onto every claim. Regenerate after any data change:
+
+```bash
+python3 tools/translate_claims.py --write
+```
+
+Templated glosses are GENERATED per language from the structured fields, never translated from
+the English - a translation of a translation drifts for no reason when the fact is 'X, son of
+Y'. Only bespoke prose is hand-translated, and from the Arabic. A claim with no translation
+keeps the English and is counted in the report, so a gap is visible rather than silently filled.
+
 ## Corpus gotchas
 - OpenITI mARkdown: `#` starts a paragraph, `~~` continues it, `### |` is a heading,
   `PageV01P002` is a milestone placed at the **end** of the page it closes, `ms0031` is a

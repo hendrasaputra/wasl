@@ -142,7 +142,6 @@
 {"id": "p.al-fadl", "name_ar": "الفضل", "name_lat": "al-Faḍl", "sex": "M"}
 {"id": "p.al-mughira", "name_ar": "المغيرة", "name_lat": "al-Mughīra", "sex": "M"}
 {"id": "p.uthman-2", "name_ar": "عثمان", "name_lat": "ʿUthmān", "sex": "M"}
-{"id": "p.khuilda", "name_ar": "خويلدا", "name_lat": "Khuwaylid", "sex": "M"}
 {"id": "p.abd-manaf-3", "name_ar": "عبد مناف", "name_lat": "ʿAbd Manāf", "sex": "M"}
 {"id": "p.abd-allah-10", "name_ar": "عبد الله", "name_lat": "ʿAbd Allāh", "sex": "M"}
 {"id": "p.al-harith-7", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
@@ -222,7 +221,6 @@
 {"id": "p.al-harith-10", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
 {"id": "p.rawaha", "name_ar": "رواحة", "name_lat": "Rawāḥa", "sex": "M"}
 {"id": "p.al-harith-11", "name_ar": "الحارث", "name_lat": "al-Ḥārith", "sex": "M"}
-{"id": "p.siara", "name_ar": "سيارا", "name_lat": "Sīara", "sex": "M", "translit_provisional": true}
 {"id": "p.judhayma", "name_ar": "جذيمة", "name_lat": "Judhayma", "sex": "M"}
 {"id": "p.jusham", "name_ar": "جشم", "name_lat": "Jusham", "sex": "M"}
 {"id": "p.mazin", "name_ar": "مازن", "name_lat": "Māzin", "sex": "M"}
@@ -230,7 +228,6 @@
 {"id": "p.mudar-2", "name_ar": "مضر", "name_lat": "Muḍar", "sex": "M"}
 {"id": "p.iyad", "name_ar": "إياد", "name_lat": "Iyād", "sex": "M"}
 {"id": "p.amir-4", "name_ar": "عامر", "name_lat": "ʿĀmir", "sex": "M"}
-{"id": "p.abu-al-as", "name_ar": "أبا العاص", "name_lat": "Abū al-ʿĀṣ", "sex": "M"}
 {"id": "p.zuj-zaynab-bt", "name_ar": "زوج زينب بنت", "name_lat": "Zūj Zaynab bt.", "sex": "M", "translit_provisional": true}
 {"id": "p.b-khaltha-hala", "name_ar": "ابن خالتها هالة", "name_lat": "b. Khaltha Hāla", "sex": "M", "translit_provisional": true}
 {"id": "p.kinana-2", "name_ar": "كنانة", "name_lat": "Kināna", "sex": "M"}

@@ -17,10 +17,28 @@ Exact-duplicate siblings merge outright.
 Merging is recursive - once the parents are one, their same-named children are duplicate
 siblings too - and runs to a fixpoint.
 """
-import json, os, sys, collections
+import json, os, re, sys, collections
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [ROOT, os.path.dirname(os.path.abspath(__file__))]
 import nasab
+
+
+def case_variant(a, b):
+    """Same name, different grammatical case - deterministic morphology, not a guess.
+
+    Arabic lists inflect: 'walada Nizar: Sayyaran' is Sayyar in the accusative, and a kunya is
+    Abu / Aba / Abi depending on the sentence. Two siblings differing only that way are one man,
+    so this needs no corroborating evidence the way a one-letter spelling difference does.
+    """
+    if a == b:
+        return True
+    # trailing accusative alif: Khuwaylidan / Khuwaylid
+    if a == b + "ا" or b == a + "ا":
+        return True
+    # kunya case: Abu / Aba / Abi al-As
+    ka = re.sub(r"^اب[اوي]\b", "ابو", a)
+    kb = re.sub(r"^اب[اوي]\b", "ابو", b)
+    return ka == kb and ka.startswith("ابو")
 
 
 def dist1(a, b):
@@ -133,8 +151,8 @@ def main(write=False):
                     if a == b:
                         continue
                     na, nb = nm[a], nm[b]
-                    if na == nb:
-                        pass                                   # same name, same father
+                    if na == nb or case_variant(na, nb):
+                        pass                    # same man, same father - possibly inflected
                     elif dist1(na, nb):
                         ca = {nm[x] for x in kids.get(a, ())}
                         cb = {nm[x] for x in kids.get(b, ())}

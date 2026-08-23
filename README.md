@@ -5,8 +5,8 @@
 *waṣl* — "the link, the joining". Every link in this tree is joined to a page of a printed
 critical edition, and the join is checked by machine, not by trust.
 
-**1,957 persons · 2,986 sourced claims · 1,959 links · 7 primary works** — the lineage of the
-Prophet Muḥammad ﷺ back to Ādam, his household, 219 Ṣaḥāba, and the Arab tribes down to
+**1,941 persons · 2,975 sourced claims · 1,943 links · 7 primary works** — the lineage of the
+Prophet Muḥammad ﷺ back to Ādam, his household, 218 Ṣaḥāba, and the Arab tribes down to
 al-Aws and al-Khazraj on the Qaḥṭānī side. Every Arabic quotation is re-read out of the source
 text at the cited page before the page is written.
 
@@ -15,7 +15,7 @@ browser. No server, no build step, no network.
 
 [![verify](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml/badge.svg)](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml)
 
-Every push re-fetches the pinned texts, re-proves all 2,986 quotations against them, runs 31
+Every push re-fetches the pinned texts, re-proves all 2,975 quotations against them, runs 31
 independent checks, and fails if the published page is stale. See [DEPLOY.md](DEPLOY.md).
 
 ---
@@ -235,6 +235,26 @@ at a time, as they do natively on a phone. Every control clears a 44px target, t
 is 16px so iOS does not zoom on focus, and safe-area insets keep the notch and home indicator off
 the content. `tools/check_responsive.js` asserts all of it rather than trusting the eye.
 
+## Languages
+
+English, **Bahasa Indonesia** and **Bahasa Melayu**, chosen from the header and remembered
+between visits.
+
+Two rules govern the translations:
+
+- **The Arabic is never translated away.** It is the evidence, and it sits beside every gloss in
+  whatever language is chosen. Switching language changes only the reading aids.
+- **Templated glosses are generated from structure, not translated from the English.** 2,725
+  descent glosses and 150 kunyas are of the form "X, son of Y" — a relation between two named
+  people, which every language can state directly. Rendering them through English first would
+  let a translation of a translation drift for no reason. Only the 100 bespoke prose lines — the
+  objections, the competing chains, the birth notices — are hand-translated, and those from the
+  Arabic. Coverage is 2,975 of 2,975; a gap would keep the English and be reported rather than
+  machine-filled.
+
+Indonesian and Malay differ where they genuinely differ (*putra/putri* against *putera/puteri*,
+*Pohon* against *Pokok*, *tsabit* against *sabit*) and coincide where they do.
+
 ## Layout
 
 ```
@@ -245,7 +265,7 @@ people.jsonl     source of truth — identity only
 claims.jsonl     source of truth — every relationship, name, kunya and date, each cited
 nasab.py         corpus index: resolves a quote to its true volume and page span
 validate.py      the proof. Must pass before every commit
-test_wasl.py     35 independent checks, sharing no code with the indexer
+test_wasl.py     39 independent checks, sharing no code with the indexer
 build.py         renders index.html
 template.html    the page shell: palette, layout, views, search
 tools/           extraction and maintenance; the replay pipeline is in CLAUDE.md

@@ -39,6 +39,13 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
 .ar{font-family:var(--arabic);font-size:34px;color:var(--gold-lt);margin-left:12px}
 .sub{margin:8px 0 0;color:var(--ink-dim);max-width:62ch;font-size:13.5px}
 .stats{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.langpick{display:inline-flex;align-items:center;gap:6px;margin-left:10px;vertical-align:middle}
+.langpick .lbl{color:var(--grn-1);font-size:10.5px;letter-spacing:.9px;text-transform:uppercase}
+#langs{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+#langs button{border:0;border-radius:0;background:transparent;color:var(--ink-dim);
+  font:12px var(--sans);padding:5px 10px;cursor:pointer}
+#langs button.on{background:rgba(169,139,66,.24);color:var(--gold-lt)}
+#langs button:hover{color:var(--gold-lt)}
 .stats b{background:rgba(169,139,66,.14);border:1px solid var(--line);color:var(--gold-lt);
   border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600}
 
@@ -375,6 +382,7 @@ footer b{color:var(--gold-lt);font-weight:600}
   cites before this file was written. Where the sources disagree, every reading is kept.</p>
   <div class="stats" id="stats"></div>
   <button id="aboutbtn" class="chip" type="button" aria-expanded="false">About this ▾</button>
+  <span class="langpick"><span class="lbl" id="langlabel">Language</span><span id="langs"></span></span>
   <p class="sub" style="margin-top:12px">Search reaches any name in the tree and jumps to it;
   the trail under the toolbar shows where you have landed in up to 54 generations. A number
   beside <b class="tw" style="position:relative;display:inline-block;vertical-align:-1px"></b>
@@ -430,14 +438,55 @@ footer b{color:var(--gold-lt);font-weight:600}
 const D = JSON.parse(document.getElementById('data').textContent);
 const S = JSON.parse(document.getElementById('stats-data').textContent);
 const $ = s => document.querySelector(s);
+
+/* ---------- language ----------------------------------------------------------
+   The Arabic is never translated away - it is the evidence, and it sits beside every gloss in
+   whatever language is chosen. Only the reading aids move: the interface, and the one-line
+   gloss under each quotation. */
+let LANG = localStorage.getItem('wasl-lang')
+        || (navigator.language || '').slice(0,2).replace('in','id');
+if (!['en','id','ms'].includes(LANG)) LANG = 'en';
+let T = D.ui[LANG];
+const tr = (k, n) => (T[k] || D.ui.en[k] || k).replace('{n}', n);
+const glossOf = c => c[LANG] || c.en;
 const esc = s => String(s??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-$('#q').placeholder = `Search ${S.people.toLocaleString()} names — Arabic or transliteration `
-  + `(ʿUmar · Abū Bakr · قصي · Khazraj)`;
-$('#stats').innerHTML = [
-  `${S.people.toLocaleString()} names`, `${S.claims.toLocaleString()} sourced claims`,
-  `${S.edges.toLocaleString()} links`, `${S.works} primary works`, `54 generations`
-].map(t => `<b>${t}</b>`).join('');
+function paintChrome(){
+  T = D.ui[LANG];
+  $('#q').placeholder = tr('search_ph', S.people.toLocaleString())
+    + ' (ʿUmar · Abū Bakr · قصي · Khazraj)';
+  $('#vTree').textContent = tr('tree');
+  $('#vCols').textContent = tr('columns');
+  $('#none').textContent = tr('collapse');
+  $('#sheetclose').textContent = tr('close');
+  $('#langlabel').textContent = tr('lang_label');
+  $('#dirbtn').textContent = tr('whoswho') + ' ▾';
+  $('#aboutbtn').textContent = tr('about') + ' ▾';
+  $('#filterbtn').textContent = tr('filter');
+  $('#clearlens').textContent = tr('clear');
+  $('#about').querySelector('.sub').textContent = tr('title_sub');
+  $('#panel').setAttribute('lang', LANG);
+  document.documentElement.lang = LANG;
+  $('#stats').innerHTML = [
+    tr('s_names', S.people.toLocaleString()), tr('s_claims', S.claims.toLocaleString()),
+    tr('s_links', S.edges.toLocaleString()), tr('s_works', S.works), tr('s_gens', 56)
+  ].map(t => `<b>${t}</b>`).join('');
+  $('#bands').innerHTML = Object.entries(D.bands)
+    .map(([k]) => `<button class="chip${bandOn===k?' on':''}" data-b="${k}"
+        title="${esc(tr(D.band_key[k]+'_w'))}">${esc(tr(D.band_key[k]))}
+        <u style="color:var(--grn-1);text-decoration:none">${bandCount[k]||0}</u></button>`).join('');
+  $('#bandlegend').innerHTML = Object.entries(D.bands).map(([k]) =>
+    `<div class="bl"><b>${esc(tr(D.band_key[k]))} <u>${bandCount[k]||0}</u></b>${esc(tr(D.band_key[k]+'_w'))}</div>`).join('')
+    + `<div class="note">${esc(tr('band_note'))}</div>`;
+  $('#filters').innerHTML = Object.keys(FILTERS)
+    .map(k => `<button class="chip${active===k?' on':''}" data-f="${k}">${esc(tr(FILTERS[k].key))}</button>`).join('');
+  document.querySelectorAll('#tree .rl').forEach(el => {
+    const n = el.dataset.n; if (n) el.textContent = tr('gen_short', n);
+  });
+  if (curPid) show(curPid);
+}
+let curPid = null;
+
 
 $('#foot').innerHTML = 'Sources — ' + Object.entries(D.works).map(([k,w]) =>
   `<b>${esc(w.title_lat)}</b>, ${esc(w.author_lat)} (d. ${w.death_ah} AH) · ${esc(w.edition)}`
@@ -446,12 +495,9 @@ $('#foot').innerHTML = 'Sources — ' + Object.entries(D.works).map(([k,w]) =>
 'source file at the cited page by <b>validate.py</b> before this file was generated.';
 
 /* ---------- claim panel ---------- */
-const TYPES = {
-  father_of:'Descent', mother_of:'Mother', chain:'Full chain as given', kunya:'Kunya',
-  alias:'Second names and epithets', dissent:'Where the sources object',
-  variant_chain:'Competing chains', isnad:'Transmission', birth:'Birth',
-  age_at_death:'Age at death'
-};
+const TYPEKEY = {father_of:'g_father_of', mother_of:'g_mother_of', chain:'g_chain',
+  kunya:'g_kunya', alias:'g_alias', dissent:'g_dissent', variant_chain:'g_variant',
+  isnad:'g_isnad', birth:'g_birth', age_at_death:'g_age'};
 const ORDER = ['father_of','mother_of','kunya','alias','birth','age_at_death','chain','variant_chain','dissent','isnad'];
 
 function claimHTML(c){
@@ -465,12 +511,12 @@ function claimHTML(c){
   return `<div class="cl${c.type==='dissent'||c.grade==='dissent'?' dissent':''}">
     ${flags.map(f=>`<span class="flag">${f}</span>`).join(' ')}
     <div class="q" dir="rtl" lang="ar">${esc(c.ar)}</div>
-    <div class="en">${esc(c.en)}</div>
-    ${c.isnad_ar?`<div class="isnad">isnād · ${esc(c.isnad_lat||'')}<span class="ara" dir="rtl" lang="ar">${esc(c.isnad_ar)}</span></div>`:''}
+    <div class="en">${esc(glossOf(c))}</div>
+    ${c.isnad_ar?`<div class="isnad">${esc(tr('isnad_label'))} · ${esc(c.isnad_lat||'')}<span class="ara" dir="rtl" lang="ar">${esc(c.isnad_ar)}</span></div>`:''}
     ${c.note?`<div class="en">${esc(c.note)}</div>`:''}
-    ${c.text_note?`<div class="tn">Edition note: ${esc(c.text_note)}</div>`:''}
-    <div class="src">${esc(w.title_lat||c.work)} — ${esc(w.author_lat||'')}, vol. ${c.vol}, p. ${pg}
-      <i>${esc(w.edition||'')}</i><i>${esc(w.version_uri||'')} · claim ${c.cid}</i></div>
+    ${c.text_note?`<div class="tn">${esc(tr('ednote'))}: ${esc(c.text_note)}</div>`:''}
+    <div class="src">${esc(w.title_lat||c.work)} — ${esc(w.author_lat||'')}, ${esc(tr('vol'))} ${c.vol}, ${esc(tr('p'))} ${pg}
+      <i>${esc(w.edition||'')}</i><i>${esc(w.version_uri||'')} · ${esc(tr('claim'))} ${c.cid}</i></div>
   </div>`;
 }
 
@@ -481,20 +527,21 @@ function show(pid){
   const kunyas = [...new Set(cs.filter(c => c.type==='kunya' && c.subject===pid)
                               .map(c => c.value_lat).filter(Boolean))];
   if (p.kunya_lat) kunyas.unshift(p.kunya_lat);
-  kunyas.slice(0,4).forEach(k => meta.push(`kunya · ${esc(k)}`));
-  if (p.laqab_lat) meta.push(`laqab · ${esc(p.laqab_lat)}`);
+  kunyas.slice(0,4).forEach(k => meta.push(`${esc(tr('m_kunya'))} · ${esc(k)}`));
+  if (p.laqab_lat) meta.push(`${esc(tr('m_laqab'))} · ${esc(p.laqab_lat)}`);
   if (p.tribe) meta.push(esc(p.tribe));
-  meta.push(p.sex === 'F' ? 'female' : 'male');
+  meta.push(tr(p.sex === 'F' ? 'm_female' : 'm_male'));
   const f = D.father[pid], m = D.mother[pid];
-  if (f) meta.push(`father · ${esc(D.people[f].name_lat)}`);
-  if (m) meta.push(`mother · ${esc(D.people[m].name_lat)}`);
+  if (f) meta.push(`${esc(tr('m_father'))} · ${esc(D.people[f].name_lat)}`);
+  if (m) meta.push(`${esc(tr('m_mother'))} · ${esc(D.people[m].name_lat)}`);
   const birth = cs.filter(c => c.type === 'birth');
-  meta.push(birth.length ? `born · ${esc(birth[0].event_lat || 'see below')}` : 'born · no year in these sources');
-  if (D.below[pid]) meta.push(`${D.below[pid]} descendants recorded`);
+  meta.push(birth.length ? `${esc(tr('m_born'))} · ${esc(birth[0].event_lat || '—')}`
+                         : tr('m_noyear'));
+  if (D.below[pid]) meta.push(tr('m_desc', D.below[pid]));
 
   const groups = ORDER.filter(t => cs.some(c => c.type === t)).map(t => {
     const own = cs.filter(c => c.type === t && (t === 'mother_of' ? true : c.subject === pid || c.object === pid));
-    return `<div class="grp">${TYPES[t]||t} · ${own.length}</div>` + own.map(claimHTML).join('');
+    return `<div class="grp">${esc(tr(TYPEKEY[t]||t))} · ${own.length}</div>` + own.map(claimHTML).join('');
   }).join('');
 
   const sibs = (D.father[pid] ? (D.kids[D.father[pid]]||[]) : []).filter(x => x !== pid);
@@ -510,7 +557,7 @@ function show(pid){
     p.sahabi ? '<em>ṣaḥābī</em>' : null,
     D.bands[D.band[pid]] ? D.bands[D.band[pid]][0] : null,
     p.tribe || null,
-    `generation ${pathTo(pid).length}`,
+    tr('m_gen', pathTo(pid).length),
   ].filter(Boolean);
 
   $('#paneltop').innerHTML =
@@ -521,7 +568,7 @@ function show(pid){
        ${p.note?`<div class="pnote">${esc(p.note)}</div>`:''}
      </div>
      <div class="meta">${meta.map(x=>`<span>${x}</span>`).join('')}</div>
-     ${navRow('Children', chn)}${navRow('Brothers and sisters', sibs)}${groups}`;
+     ${navRow(tr('g_children'), chn)}${navRow(tr('g_siblings'), sibs)}${groups}`;
   $('#panel').scrollTop = 0;
   openSheet();
   document.querySelectorAll('summary.sel').forEach(s => s.classList.remove('sel'));
@@ -529,6 +576,7 @@ function show(pid){
   if (s) { s.classList.add('sel'); let d = s.parentElement.parentElement;
            while (d) { if (d.tagName === 'DETAILS') d.open = true; d = d.parentElement; } }
   history.replaceState(null, '', '#' + pid);
+  curPid = pid;
   crumb(pid);
 }
 
@@ -627,14 +675,14 @@ const RES = $('#results');
 let hits = [], cursor = -1;
 
 function renderResults(){
-  if (!hits.length) { RES.innerHTML = '<div class="none">No name matches.</div>'; RES.hidden = false; return; }
+  if (!hits.length) { RES.innerHTML = `<div class="none">${esc(tr('noname'))}</div>`; RES.hidden = false; return; }
   RES.innerHTML = hits.slice(0,60).map((pid,i) => {
     const p = D.people[pid];
     return `<div class="rr${i===cursor?' on':''}" data-id="${pid}">
       <span class="ar" dir="rtl" lang="ar">${esc(p.name_ar)}</span>
       <span class="lat">${esc(p.name_lat)}</span>
       <span class="path">${notable.has(pid) ? '★ ' : ''}${esc(lineage(pid))||'—'}</span></div>`;
-  }).join('') + (hits.length>60 ? `<div class="more">${hits.length-60} more — narrow the search</div>` : '');
+  }).join('') + (hits.length>60 ? `<div class="more">${esc(tr('more_narrow', hits.length-60))}</div>` : '');
   RES.hidden = false;
 }
 
@@ -656,7 +704,7 @@ $('#q').addEventListener('input', e => {
     hits.forEach(openTo);
   }
   cursor = -1;
-  $('#hits').textContent = `${hits.length} match${hits.length===1?'':'es'}`;
+  $('#hits').textContent = hits.length === 1 ? tr('match_1') : tr('matches', hits.length);
   renderResults();
 });
 $('#q').addEventListener('keydown', e => {
@@ -706,12 +754,25 @@ function toggle(btnSel, targetSel, labelOpen, labelShut){
   b.onclick = () => {
     const open = t.classList.toggle('open');
     b.setAttribute('aria-expanded', open);
-    b.textContent = open ? labelOpen : labelShut;
+    b.textContent = open ? labelOpen() : labelShut();
     b.classList.toggle('on', open);
   };
 }
-toggle('#aboutbtn', '#about', 'About this ▴', 'About this ▾');
-toggle('#filterbtn', '.bar2', 'Filter ▴', 'Filter');
+toggle('#aboutbtn', '#about', () => tr('about') + ' ▴', () => tr('about') + ' ▾');
+toggle('#filterbtn', '.bar2', () => tr('filter') + ' ▴', () => tr('filter'));
+
+/* ---------- the picker ---------- */
+$('#langs').innerHTML = Object.entries(D.langs)
+  .map(([k, name]) => `<button data-l="${k}" title="${esc(name)}">${k.toUpperCase()}</button>`).join('');
+function setLang(l){
+  LANG = l;
+  localStorage.setItem('wasl-lang', l);
+  [...$('#langs').children].forEach(b => b.classList.toggle('on', b.dataset.l === l));
+  paintChrome();
+}
+$('#langs').addEventListener('click', e => {
+  const b = e.target.closest('[data-l]'); if (b) setLang(b.dataset.l);
+});
 
 /* ---------- who's who: the people a reader arrives looking for ---------- */
 $('#dir').innerHTML = D.directory.map(([g, rows]) =>
@@ -730,19 +791,7 @@ $('#dir').addEventListener('click', e => {
    and would read as sourced. Each of these four is something the sources state or do. */
 const bandCount = {};
 Object.entries(D.band).forEach(([, b]) => bandCount[b] = (bandCount[b] || 0) + 1);
-$('#bands').innerHTML = Object.entries(D.bands)
-  .map(([k, [label, why]]) =>
-    `<button class="chip" data-b="${k}" title="${esc(why)}">${esc(label)}
-      <u style="color:var(--grn-1);text-decoration:none">${bandCount[k]||0}</u></button>`).join('');
 
-$('#bandlegend').innerHTML = Object.entries(D.bands).map(([k, [label, why]]) =>
-  `<div class="bl"><b>${esc(label)} <u>${bandCount[k]||0}</u></b>${esc(why)}</div>`).join('')
-  + `<div class="note">These are not centuries. These books give no birth years above the
-     Prophet, so any date band would be computed by us and would read as though it came from
-     the sources. Each band above is instead something the sources themselves state or do —
-     a filter, not a period. Turning one on dims everything outside it; the tree keeps its
-     shape so you can still see where the matches sit. Combine a band with one of the filters
-     beside it, and use <b>clear</b> to reset both.</div>`;
 $('#bandhelp').onclick = () => {
   const l = $('#bandlegend'); l.hidden = !l.hidden;
   $('#bandhelp').classList.toggle('on', !l.hidden);
@@ -761,15 +810,14 @@ D.claims.forEach(c => { if (c.type==='father_of')
   (nsrc[c.object] = nsrc[c.object] || new Set()).add(c.work); });
 const disputed = new Set(D.claims.filter(c => c.type==='dissent'||c.type==='variant_chain').map(c=>c.subject));
 const FILTERS = {
-  'ṣaḥāba':      p => D.people[p].sahabi,
-  'women':       p => D.people[p].sex === 'F',
-  'ikhtilāf':    p => disputed.has(p),
-  '2+ sources':  p => (nsrc[p]?.size || 0) >= 2,
-  'hand-checked':p => !byId[p]?.querySelector('.ba'),
+  sahaba:  {key:'f_sahaba',   test: p => D.people[p].sahabi},
+  women:   {key:'f_women',    test: p => D.people[p].sex === 'F'},
+  ikhtilaf:{key:'f_ikhtilaf', test: p => disputed.has(p)},
+  twosrc:  {key:'f_2src',     test: p => (nsrc[p]?.size || 0) >= 2},
+  hand:    {key:'f_hand',     test: p => !byId[p]?.querySelector('.ba')},
 };
 let active = null;
-$('#filters').innerHTML = Object.keys(FILTERS)
-  .map(k => `<button class="chip" data-f="${k}">${k}</button>`).join('');
+
 $('#filters').addEventListener('click', e => {
   const b = e.target.closest('[data-f]'); if (!b) return;
   active = (active === b.dataset.f) ? null : b.dataset.f;
@@ -784,14 +832,15 @@ function applyLens(){
     $('#clearlens').hidden = true;
     return;
   }
-  const test = active ? FILTERS[active] : () => true;
+  const test = active ? FILTERS[active].test : () => true;
   let n = 0;
   sums.forEach(s => {
     const keep = test(s.dataset.id) && (!bandOn || s.dataset.band === bandOn);
     s.classList.toggle('dim', !keep);
     if (keep) { n++; openTo(s.dataset.id); }
   });
-  const parts = [bandOn && D.bands[bandOn][0], active].filter(Boolean).join(' · ');
+  const parts = [bandOn && tr(D.band_key[bandOn]), active && tr(FILTERS[active].key)]
+                  .filter(Boolean).join(' · ');
   $('#hits').textContent = `${n} — ${parts}`;
   $('#clearlens').hidden = false;
 }
@@ -860,7 +909,7 @@ function renderCols(){
     const col = document.createElement('div');
     col.className = 'col';
     col.dataset.level = lvl;
-    const head = lvl === 0 ? `roots · ${items.length}`
+    const head = lvl === 0 ? tr('roots', items.length)
       : `${D.people[colPath[lvl-1]].name_lat} · ${items.length}`;
     col.innerHTML = `<div class="ch">${esc(head)}</div>` + items.map(id => {
       const p = D.people[id], n = D.below[id] || 0;
@@ -924,6 +973,7 @@ $('#none').onclick = () => {
   window.scrollTo({top:0, behavior:'smooth'});
 };
 
+setLang(LANG);           // paints all chrome in the chosen language
 if (location.hash && D.people[location.hash.slice(1)]) show(location.hash.slice(1));
 else show('p.muhammad');
 </script>
