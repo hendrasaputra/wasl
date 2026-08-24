@@ -58,20 +58,22 @@ curl -sI https://wasl.hensap.id | head -1
 pushing:
 
 ```bash
-python3 validate.py && python3 test_wasl.py && python3 build.py
+python3 validate.py && python3 test_wasl.py && python3 test_parsers.py
+python3 tools/build_entries.py && python3 tools/build_summaries.py && python3 build.py
 git add -A && git commit -m "..." && git push
 ```
 
 Pages redeploys on push, usually within a minute. The CI workflow in
-`.github/workflows/verify.yml` runs the same three commands on every push: it fetches the
-pinned source texts, re-proves all 2,986 quotations against them, and **fails if `index.html`
-is stale relative to the data** — so a page that no longer matches its own sources cannot sit
-in the repository unnoticed.
+`.github/workflows/verify.yml` fetches the pinned source texts, re-proves all 4,074 quotations,
+runs the independent and parser regression suites, builds the biography pages, and checks
+responsive layouts in Chrome. It **fails if `index.html` is stale relative to the data** — so
+a page that no longer matches its own sources cannot sit in the repository unnoticed.
 
 ## What is and is not in the repository
 
 `corpus/*.txt` is deliberately gitignored — roughly 38 MB of source texts that belong to the
 [OpenITI corpus](https://github.com/OpenITI) and are fetched, not vendored. `corpus/SHA256SUMS`
-is committed, so any drift in those texts is detectable. Anyone cloning runs `./fetch.sh` once. See [LICENSING.md](LICENSING.md): the software is
+is committed, so any drift in those texts is detectable; normal fetches verify but never rewrite
+that pin. Anyone cloning runs `./fetch.sh` once. See [LICENSING.md](LICENSING.md): the software is
 GPL-3.0-or-later, the quotations are public-domain classical Arabic, and the corpus itself is
 OpenITI's and is fetched rather than vendored.

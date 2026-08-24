@@ -37,6 +37,7 @@ generated output. Everything asserted must be traceable to an Arabic primary tex
 ./fetch.sh          # pull pinned corpus into corpus/ (gitignored, checksummed)
 python3 validate.py  # MUST pass before every commit - proves every quote against the corpus
 python3 test_wasl.py # independent checks: re-derives page boundaries without nasab.py
+python3 test_parsers.py # focused parser regression checks
 python3 build.py     # regenerate index.html
 python3 tools/build_entries.py --write   # re-pin the biographical entries
 python3 tools/build_summaries.py --write # check the anchors, write summaries.jsonl
@@ -46,6 +47,9 @@ python3 tools/build_bios.py              # bio/*.html - CI-built, never committe
 `bio/` is gitignored. The biography pages carry a quarter of a million words of
 OpenITI's Arabic, so CI builds them from the fetched corpus and deploys from the artifact;
 the staging step deletes `corpus/` and fails if it survives.
+
+`./fetch.sh` verifies the committed checksum by default. Only
+`./fetch.sh --refresh-checksums` may deliberately replace the pin after a reviewed source update.
 
 ## English references: tried, and dropped
 
@@ -260,7 +264,7 @@ original, not a gloss of Arabic, so `id` and `ms` are translated FROM it. Everyw
 Templated glosses are GENERATED per language from the structured fields, never translated from
 the English - a translation of a translation drifts for no reason when the fact is 'X, son of
 Y'. Only bespoke prose is hand-translated, and from the Arabic. A claim with no translation
-keeps the English and is counted in the report, so a gap is visible rather than silently filled.
+makes the generator exit nonzero and refuse the write, so stale text cannot survive silently.
 
 ## Corpus gotchas
 - OpenITI mARkdown: `#` starts a paragraph, `~~` continues it, `### |` is a heading,

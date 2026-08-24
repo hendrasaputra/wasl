@@ -5,7 +5,7 @@
 *waṣl* — "the link, the joining". Every link in this tree is joined to a page of a printed
 critical edition, and the join is checked by machine, not by trust.
 
-**2,670 persons · 4,077 sourced claims · 2,667 links · 7 primary works** — the lineage of the
+**2,502 persons · 4,074 sourced claims · 2,499 links · 7 primary works** — the lineage of the
 Prophet Muḥammad ﷺ back to Ādam, his household, 443 Ṣaḥāba, and the Arab tribes down to
 al-Aws and al-Khazraj on the Qaḥṭānī side. Every Arabic quotation is re-read out of the source
 text at the cited page before the page is written.
@@ -15,8 +15,9 @@ browser. No server, no build step, no network.
 
 [![verify](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml/badge.svg)](https://github.com/hendrasaputra/wasl/actions/workflows/verify.yml)
 
-Every push re-fetches the pinned texts, re-proves all 4,077 quotations against them, runs 75
-independent checks, and fails if the published page is stale. See [DEPLOY.md](DEPLOY.md).
+Every push re-fetches the pinned texts, re-proves all 4,074 quotations against them, runs 79
+independent checks plus 22 parser regressions, checks four responsive viewports, and fails if
+the published page is stale. See [DEPLOY.md](DEPLOY.md).
 
 ---
 
@@ -111,7 +112,7 @@ indexer, and confirms the checker actually rejects a fabricated quote and a wron
 
 **Not proven:** that a parser-placed node sits under the right man. Its quotation is verified —
 the Arabic really is on that page — but the **placement rests on the anchor**, which the machine
-cannot confirm. 2,663 of 2,986 claims are parser-placed; their nodes are badged **`auto`** in
+cannot confirm. 3,846 of 4,074 claims are parser-placed; their nodes are badged **`auto`** in
 the page itself, not only here. Hand-seeded spines, Phase 1, Phase 3 and the notables carry no
 badge. **Treat the badge as the boundary between proven and inferred.**
 
@@ -196,8 +197,8 @@ So the bands are four things the sources themselves state or do — **a filter, 
 
 ## The interface
 
-The data is **deep and narrow** — 56 generations, only ten nodes with more than eight children.
-A left-to-right dendrogram would be 8,400px wide; a radial layout would need 56 rings. So the
+The data is **deep and narrow** — 53 generations, only ten nodes with more than eight children.
+A full dendrogram or 53-ring radial layout would be impractical. So the
 problem was never seeing breadth, it was **reaching** a name fifty levels down, and the work
 went into navigation.
 
@@ -219,9 +220,9 @@ went into navigation.
 - **Search returns a list, not a count.** Ninety-one men here are called ʿAbd Allāh; each hit
   carries its own line of descent, so they are told apart at a glance. Enter jumps, opening only
   the line to the hit.
-- **Search by kunya.** 257 sourced kunyas on 189 people. `abu hafs` returns ʿUmar b. al-Khaṭṭāb
+- **Search by kunya.** 253 sourced kunyas on 161 people. `abu hafs` returns ʿUmar b. al-Khaṭṭāb
   alone; `أبا حفص`, `أبي حفص` and `أبو حفص` all reach him.
-- **Who's who** — 36 people a reader actually arrives looking for, resolved at build time.
+- **Who's who** — 48 people a reader actually arrives looking for, resolved at build time.
 - **A breadcrumb** showing the full line, compressed to first five and last five with an
   expandable middle.
 - **Counts on the `+`**, so you know whether it opens two names or 1,200.
@@ -245,13 +246,13 @@ Two rules govern the translations:
 
 - **The Arabic is never translated away.** It is the evidence, and it sits beside every gloss in
   whatever language is chosen. Switching language changes only the reading aids.
-- **Templated glosses are generated from structure, not translated from the English.** 2,725
-  descent glosses and 150 kunyas are of the form "X, son of Y" — a relation between two named
+- **Templated glosses are generated from structure, not translated from the English.** 3,718
+  descent glosses and 253 kunyas are of the form "X, son of Y" — a relation between two named
   people, which every language can state directly. Rendering them through English first would
-  let a translation of a translation drift for no reason. Only the 100 bespoke prose lines — the
+  let a translation of a translation drift for no reason. Only the 33 bespoke prose lines — the
   objections, the competing chains, the birth notices — are hand-translated, and those from the
-  Arabic. Coverage is 4,077 of 4,077; a gap would keep the English and be reported rather than
-  machine-filled.
+  Arabic. Coverage is 4,074 of 4,074; the generator exits nonzero and refuses to write if a
+  translation is missing.
 
 Indonesian and Malay differ where they genuinely differ (*putra/putri* against *putera/puteri*,
 *Pohon* against *Pokok*, *tsabit* against *sabit*) and coincide where they do.
@@ -287,7 +288,7 @@ brought together, and those proposed to but never married, are not here.
 The tree gives edges. A life is prose, and these books keep it in a named entry — a numbered
 notice in Usd al-Ghāba and al-Istīʿāb, a `dhikr X` chapter in Ibn Saʿd's first volume for the
 men who died before Islam. [`entries.jsonl`](entries.jsonl) pins **112 entries for 45 of the
-47 Who's who people — 255,221 words**, and each Who's who row opens onto the entry itself at
+48 Who's who people — 255,220 words**, and each Who's who row opens onto the entry itself at
 the pages cited.
 
 Arabic only. Nothing on those pages is translated or summarised; the reading aids are page
@@ -358,13 +359,14 @@ that was made and withdrawn.
 
 ```
 sources.tsv      the eight texts: version URI, URL, author, editor, edition
-fetch.sh         downloads them into corpus/ and writes SHA256SUMS
+fetch.sh         downloads them into corpus/ and verifies the committed SHA256SUMS
 corpus/          the pinned texts (gitignored; SHA256SUMS is committed)
 people.jsonl     source of truth — identity only
 claims.jsonl     source of truth — every relationship, name, kunya and date, each cited
 nasab.py         corpus index: resolves a quote to its true volume and page span
 validate.py      the proof. Must pass before every commit
-test_wasl.py     75 independent checks, sharing no code with the indexer
+test_wasl.py     79 independent checks, sharing no code with the indexer
+test_parsers.py  22 focused parser regressions
 build.py         renders index.html
 template.html    the page shell: palette, layout, views, search
 tools/           extraction and maintenance; the replay pipeline is in CLAUDE.md

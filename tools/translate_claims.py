@@ -137,8 +137,8 @@ def chain_gloss(en):
 def main(write=False):
     """Write an `id` and `ms` gloss onto every claim, and report what has neither.
 
-    Re-run after ANY change to the data: a claim added without this keeps only its English,
-    which the report counts but the page will still show untranslated.
+    Re-run after ANY change to the data. Missing translations make the command fail before a
+    requested write, so stale translated fields cannot survive unnoticed.
     """
     path = f"{ROOT}/claims.jsonl"
     rows = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]

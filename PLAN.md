@@ -19,7 +19,7 @@ Arabic source, and the trace is verified by machine.
 |---|---|---|
 | 1 | Every reference validated to the original Arabic, quoted with translation | ✅ `validate.py` re-reads the cited page; a quote that cannot be found cannot be committed |
 | 2 | Any change or addition must carry full references | ✅ the citation *is* the row; there is no schema position for an uncited assertion |
-| 3 | Expandable to unlimited depth | ✅ 56 generations; bounded by the data, not the renderer |
+| 3 | Expandable to unlimited depth | ✅ 53 generations; bounded by the data, not the renderer |
 | 4 | Easy to explore by search or clicking | ✅ diacritic-folding search over names, kunyas and aliases; results list with lineage; two views |
 | 5 | Node = name, kunya, birth year AD + Hijrī, M/F | ⚠️ name, kunya, laqab, sex, tribe: yes. **Birth year: the sources do not give one** — see *On dates* |
 
@@ -56,7 +56,7 @@ difference would have been wrong.
 | 6 ✅ | The Anṣār clans and the companions that could not anchor | ~260 | parser |
 | — ✅ | Marquee companions introduced by kunya | 13 | hand |
 
-**Current: 1,957 persons · 2,986 claims · 1,959 links · 219 Ṣaḥāba · 7 works.**
+**Current: 2,502 persons · 4,074 claims · 2,499 links · 443 Ṣaḥāba · 7 works.**
 
 ## The bugs worth not relearning
 
@@ -99,8 +99,8 @@ refusal is itself worth displaying.
 
 ## Interface decisions
 
-The data is deep and narrow — 56 generations, only ten nodes with more than eight children. A
-left-to-right dendrogram would be 8,400px wide and a radial layout would need 56 rings, so both
+The data is deep and narrow — 53 generations, only ten nodes with more than eight children. A
+full dendrogram and a 53-ring radial layout would both be impractical, so they
 were rejected **on the shape of the data, not on taste**. The work went into reaching a name,
 not into drawing the whole shape: a results list carrying each hit's lineage, a compressed
 breadcrumb, ribbons for linear runs, Miller columns as a bounded horizontal view, subtree counts,
@@ -108,15 +108,15 @@ a Who's who, and source-grounded bands rather than invented centuries.
 
 ## Ceilings, and when they bind
 
-- `index.html` is ~2 MB at 1,957 nodes and renders in one paint. It holds to roughly 10k. Past
+- `index.html` is ~3 MB at 2,502 nodes and renders in one paint. It holds to roughly 10k. Past
   that, render children on click from the JSONL instead of baking them into the page.
-- Transliteration of unvocalised Arabic cannot be solved, only widened: **175 of 1,957** names
+- Transliteration of unvocalised Arabic cannot be solved, only widened: **196 of 2,502** names
   still fall back to a consonant skeleton, flagged `translit_provisional`. Each reading added to
   `tools/translit.py` reduces the count.
 - `tools/prune.py` recognises misparses by shape, which is a heuristic and always will be. It
   repairs before it prunes and protects hand-seeded spines; an early draft's length rule would
   have deleted Udd and Murr with 203 descendants.
-- Only **17 women** are in the tree. The `bint` fix removed the structural cause; the remaining
+- Only **38 women** are in the tree. The `bint` fix removed the structural cause; the remaining
   limit is that most women in the companion dictionaries have fathers not yet anchored.
 
 ## Responsive: built
@@ -216,14 +216,16 @@ every reading is recorded rather than reconciled.
 
 ## Phase 8a — where the biographies are
 
-112 entries pinned by hand for 45 people, 255,221 words, spans derived from milestone
+112 entries pinned by hand for 45 people, 255,220 words, spans derived from milestone
 positions rather than text search. Bio pages built in CI, deployed from the artifact, never
-committed. `references.tsv` pins Guillaume — fetched to locate a page, never quoted.
+committed. A Guillaume reference index was tried and withdrawn because it could not be checked
+reliably; no `references.tsv` is committed.
 
 Found on the way: `PAGE_RE` read three digits of a page milestone, so 286 published claims
 named a page a tenth of the true one. Fixed and re-derived; `test_wasl.py` guards it.
 
-Next: 8b hand-verifies Guillaume page ranges per person; 8c writes the anchored summaries.
+Phase 8b was withdrawn with the unreliable English-reference experiment; 8c added the anchored
+summaries below.
 
 ## Phase 8c — the summaries
 

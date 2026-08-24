@@ -366,8 +366,9 @@ check("every Who's who person has an entry or a stated reason for having none",
       all(l in _e.PINS or l in __import__("build_entries").NO_ENTRY for l in _labels),
       ", ".join(l for l in _labels if l not in _e.PINS))
 check("the heading recorded is the heading in the file",
-      all(_e.headings(e["work"])[0][_e.find(e["work"], e["pin"])[0][0]].strip().endswith(
-          e["heading_ar"].split()[-1]) for e in entries_rows))
+      all(dict((line, heading) for line, _, heading in _e.headings(e["work"])[1])[
+              _e.find(e["work"], e["pin"])[0][0]] == e["heading_ar"]
+          for e in entries_rows))
 outside = []
 for e in entries_rows:
     hit, _ = _e.find(e["work"], e["pin"])

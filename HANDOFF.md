@@ -18,18 +18,18 @@ check any line against the book is not. If you change nothing else, keep that.
 
 | | |
 |---|---|
-| People | 2,670 |
-| Claims | 4,077 — every one re-read from the corpus |
-| Parent edges | 2,667 |
+| People | 2,502 |
+| Claims | 4,074 — every one re-read from the corpus |
+| Parent edges | 2,499 |
 | Ṣaḥāba | 443 |
-| Biographical entries pinned | 112, for 45 of the 47 Who's who people |
+| Biographical entries pinned | 112, for 45 of the 48 Who's who people |
 | Summaries | 44, 7,476 words, 398 anchored sentences |
 | Languages | English, Indonesian, Malay — complete |
-| Data checks | 75 (`test_wasl.py`) |
-| Responsive checks | 15 tree/phone, 7 tree/desktop, 5 bio/phone, 5 bio/desktop |
+| Data checks | 79 independent + 22 parser regressions |
+| Responsive checks | CI: tree phone/tablet/desktop + biography phone |
 | Sources | 8 OpenITI texts, pinned by version URI |
 
-Phases 1–8c are done. CI is green; `main` deploys itself.
+Phases 1–8c are done. CI gates every push; `main` deploys after verification.
 
 ---
 
@@ -79,8 +79,8 @@ claims.jsonl      every relationship, name, kunya and date, each with work/vol/p
 Everything downstream:
 
 ```
-sources.tsv       the 8 pinned works. A claim may only cite a key that appears here
-fetch.sh          downloads them into corpus/ and writes SHA256SUMS
+sources.tsv       the 8 pinned texts. A claim may only cite a key that appears here
+fetch.sh          downloads into corpus/ and verifies the committed SHA256SUMS
 nasab.py          corpus access: index / clean / locate / page_text. Shared by everything
 validate.py       THE GATE. Re-reads every quote at its cited page
 test_wasl.py      the second opinion. Shares no code with the indexer
@@ -184,12 +184,12 @@ cp index.html /tmp/before.html && python3 build.py && diff /tmp/before.html inde
 That is not ceremony. A comment-only refactor of the search-index line silently changed 5.6KB
 of output; the diff is what caught it.
 
-For the responsive checks, open the page and paste `tools/check_responsive.js` into the
-console, then call `waslResponsiveCheck()`. It runs on both the tree page and the biography
-pages; assertions touching tree furniture are gated on the tree being present.
+For an ad-hoc responsive check, add `?responsive-check=1` to a tree or biography URL. The
+page records the result on `<html>` as `data-responsive-failed`; CI checks phone, tablet and
+desktop tree views plus a phone biography view in headless Chrome.
 
-CI runs all of this on every push, plus a checksum check on the fetched corpus, and refuses to
-deploy if anything fails.
+CI runs all of this on every push, verifies that fetching cannot rewrite the corpus pin, and
+refuses to deploy if any data, parser, generated-page or responsive check fails.
 
 ---
 
@@ -202,15 +202,9 @@ Y…` formulas** against the 8 `mother_of` claims we hold — 3,645 in Ibn Saʿd
 the same one `extract_walad.py` already parses (a name followed by a chain), so the parser
 mostly exists. This would put women into a tree that is male almost by construction.
 
-**Seven women are still sexed male.** `p.hind-2` (Hind bt. ʿUtba), `p.aisha`, `p.fatima-2`,
-`p.maymuna`, `p.arwa-2`, `p.barra-2`, `p.hind-3`. They were minted from `fa-walada` lists where
-the corpus does not say `bint`, and `Store.person` defaults to `M`. **Do not fix this by
-guessing from the name** — search the corpus for `<name> بنت <father>` and set `F` only where
-the text says so. Everything else stays `M` and is reported.
-
-**Two companions still cannot anchor.** `عبادة بن الصامت بن قيس` and `زيد بن ثابت` are
-reported by `phase6b_notables.py`, not guessed at. They need a hand-quoted chain, like the
-other marquee names.
+**One companion still cannot anchor.** `عبادة بن الصامت بن قيس` is reported by
+`phase6b_notables.py`, not guessed at. He needs a hand-quoted chain, like the other marquee
+names. Zayd b. Thābit and the seven incorrectly male women were resolved by the parser replay.
 
 **al-ʿAbbās b. ʿAbd al-Muṭṭalib has no entry heading** in Usd al-Ghāba or al-Istīʿāb — searched
 by name, chain and kunya. The printed books certainly have one; OpenITI's markup never opens
@@ -224,7 +218,7 @@ under ʿayn, and pinning the headword `Husayn` returned *a poet* while every aut
 passed. If English references are added later they go in as **bibliography**, entered from a
 copy in hand and marked unverifiable by script.
 
-**238 transliterations are provisional** — the consonant-skeleton fallback, flagged in the data
+**196 transliterations are provisional** — the consonant-skeleton fallback, flagged in the data
 and badged in the page. Adding readings to `tools/translit.py` and re-running
 `tools/retranslit.py --write` reduces the count.
 

@@ -1,7 +1,7 @@
 {"eid": "e001", "who": "Abū Bakr al-Ṣiddīq", "work": "IbnSad", "pin": "أبو بكر الصديق", "heading_ar": "أبو بكر الصديق، عليه السلام", "vol": 3, "page": 155, "page_end": 195, "n_words": 11906}
 {"eid": "e002", "who": "Abū Bakr al-Ṣiddīq", "work": "IbnAlAthir", "pin": "عبد الله بن عثمان أبو بكر الصديق", "heading_ar": "عبد الله بن عثمان أبو بكر الصديق", "vol": 3, "page": 205, "page_end": 231, "n_words": 7926}
 {"eid": "e003", "who": "Abū Bakr al-Ṣiddīq", "work": "IbnAbdAlBarr", "pin": "عبد الله ب أبي قحافة", "heading_ar": "عبد الله ب أبي قحافة، أبو بكر الصديق رضي الله عنهما.", "vol": 3, "page": 963, "page_end": 978, "n_words": 3195}
-{"eid": "e004", "who": "ʿUmar b. al-Khaṭṭāb", "work": "IbnAlAthir", "pin": "=عمر بن الخطاب", "heading_ar": "عمر بن الخطاب", "vol": 3, "page": 642, "page_end": 678, "n_words": 10748}
+{"eid": "e004", "who": "ʿUmar b. al-Khaṭṭāb", "work": "IbnAlAthir", "pin": "=عمر بن الخطاب", "heading_ar": "عمر بن الخطاب", "vol": 3, "page": 642, "page_end": 678, "n_words": 10747}
 {"eid": "e005", "who": "ʿUmar b. al-Khaṭṭāb", "work": "IbnAbdAlBarr", "pin": "عمر بن الخطاب", "heading_ar": "عمر بن الخطاب- أمير المؤمنين رضى الله عنه- ابن نقيل بن عبد العزى بن رباح بن عبد الله بن قرط بن رزاح بن عدي بن كعب القرشي العدوي، أبو حفص.", "vol": 3, "page": 1144, "page_end": 1159, "n_words": 3257}
 {"eid": "e006", "who": "ʿUthmān b. ʿAffān", "work": "IbnSad", "pin": "عثمان بن عفان", "heading_ar": "عثمان بن عفان رحمه الله بن أبي العاص بن أمية بن عبد شمس بن عبد", "vol": 3, "page": 51, "page_end": 79, "n_words": 7776}
 {"eid": "e007", "who": "ʿUthmān b. ʿAffān", "work": "IbnAlAthir", "pin": "=عثمان بن عفان", "heading_ar": "عثمان بن عفان", "vol": 3, "page": 480, "page_end": 492, "n_words": 3320}
@@ -70,7 +70,7 @@
 {"eid": "e070", "who": "Maymūna bt. al-Ḥārith", "work": "IbnAlAthir", "pin": "ميمونة بنت الحارث", "heading_ar": "ميمونة بنت الحارث الهلالية", "vol": 6, "page": 272, "page_end": 274, "n_words": 513}
 {"eid": "e071", "who": "Maymūna bt. al-Ḥārith", "work": "IbnAbdAlBarr", "pin": "ميمونة بنت الحارث", "heading_ar": "ميمونة بنت الحارث الهلالية، زوج النبي صلى الله عليه وسلم،", "vol": 4, "page": 1914, "page_end": 1918, "n_words": 911}
 {"eid": "e072", "who": "Ṭalḥa b. ʿUbayd Allāh", "work": "IbnSad", "pin": "طلحة بن عبيد الله بن عثمان", "heading_ar": "طلحة بن عبيد الله بن عثمان بن عمرو بن كعب بن سعد بن تيم بن مرة,", "vol": 3, "page": 196, "page_end": 206, "n_words": 3252}
-{"eid": "e073", "who": "Ṭalḥa b. ʿUbayd Allāh", "work": "IbnAlAthir", "pin": "طلحة بن عبيد الله القرشي", "heading_ar": "طلحة بن عبيد الله  القرشي التيمي</span>", "vol": 2, "page": 467, "page_end": 471, "n_words": 1297}
+{"eid": "e073", "who": "Ṭalḥa b. ʿUbayd Allāh", "work": "IbnAlAthir", "pin": "طلحة بن عبيد الله القرشي", "heading_ar": "طلحة بن عبيد الله  القرشي التيمي", "vol": 2, "page": 467, "page_end": 471, "n_words": 1297}
 {"eid": "e074", "who": "Ṭalḥa b. ʿUbayd Allāh", "work": "IbnAbdAlBarr", "pin": "طلحة بن عبيد الله", "heading_ar": "طلحة بن عبيد الله بن عثمان بن عمرو بن كعب بن سعد بن تيم بن مرة ابن كعب بن لؤي بن غالب القرشي التيمي.", "vol": 2, "page": 764, "page_end": 770, "n_words": 1317}
 {"eid": "e075", "who": "al-Zubayr b. al-ʿAwwām", "work": "IbnSad", "pin": "الزبير بن العوام", "heading_ar": "الزبير بن العوام", "vol": 3, "page": 93, "page_end": 106, "n_words": 3564}
 {"eid": "e076", "who": "al-Zubayr b. al-ʿAwwām", "work": "IbnAlAthir", "pin": "الزبير بن العوام", "heading_ar": "الزبير بن العوام", "vol": 2, "page": 97, "page_end": 100, "n_words": 1223}
