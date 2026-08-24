@@ -13,6 +13,7 @@ import ingest
 import nasab
 import phase7_wives
 import validate
+import build
 
 
 assert nasab.strip_noise("أمية </span>بن خلف PageV03P1132") == "أمية  بن خلف  "
@@ -64,5 +65,6 @@ with tempfile.NamedTemporaryFile("w", encoding="utf-8") as f:
     errors = []
     rows = validate.jsonl(f.name, errors)
 assert rows == [{"ok": True}] and len(errors) == 2
+assert "<" not in build.script_json({"text": "</script><script>alert(1)</script>"})
 
-print("21 parser, index, and validation checks passed.")
+print("22 parser, index, validation, and HTML-safety checks passed.")

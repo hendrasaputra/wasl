@@ -199,17 +199,17 @@ UI = {
                         "disimpan."},
  "lang_label":   {"en": "Language", "id": "Bahasa", "ms": "Bahasa"},
  "howto":        {"en": "Search reaches any name in the tree and jumps to it; the trail under "
-                        "the toolbar shows where you have landed in up to 56 generations. A "
+                        "the toolbar shows where you have landed in up to {n} generations. A "
                         "number beside + is how many lie beneath it. Nodes badged auto were "
                         "placed by the chain parser — the quotation is verified, the placement "
                         "rests on the anchor being the right man.",
                   "id": "Pencarian menjangkau setiap nama dalam pohon dan melompat ke sana; "
-                        "jejak di bawah bilah alat menunjukkan posisi Anda dalam hingga 56 "
+                        "jejak di bawah bilah alat menunjukkan posisi Anda dalam hingga {n} "
                         "generasi. Angka di samping + adalah jumlah yang ada di bawahnya. Simpul "
                         "bertanda otomatis ditempatkan oleh pengurai rantai — kutipannya "
                         "terverifikasi, penempatannya bergantung pada ketepatan titik sambung.",
                   "ms": "Carian menjangkau setiap nama dalam pokok dan melompat ke sana; jejak "
-                        "di bawah bar alat menunjukkan kedudukan anda dalam sehingga 56 "
+                        "di bawah bar alat menunjukkan kedudukan anda dalam sehingga {n} "
                         "generasi. Nombor di sebelah + ialah bilangan yang ada di bawahnya. Nod "
                         "bertanda automatik diletakkan oleh penghurai rantaian — petikannya "
                         "disahkan, penempatannya bergantung pada ketepatan titik sauh."},

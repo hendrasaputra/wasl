@@ -129,12 +129,13 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
 .chip.on{background:rgba(169,139,66,.24);border-color:var(--gold);color:var(--gold-lt)}
 #crumb{position:sticky;top:110px;z-index:4;padding:9px 26px;background:rgba(10,58,39,.96);
   backdrop-filter:blur(8px);border-bottom:1px solid var(--line);font-size:12.5px;
-  color:var(--ink-dim);overflow-x:auto;white-space:nowrap}
+  color:var(--ink-dim);overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+#crumb::-webkit-scrollbar{display:none}
 #crumb a{color:var(--gold-lt);text-decoration:none;cursor:pointer}
 #crumb a:hover{text-decoration:underline}
-#crumb a.ell{color:var(--grn-1);border:1px dotted var(--rule);border-radius:6px;padding:1px 8px;
-  font-size:11.5px}
-#crumb a.ell:hover{color:var(--gold-lt);text-decoration:none;background:rgba(169,139,66,.14)}
+#crumb .ell{color:var(--grn-1);border:1px dotted var(--rule);border-radius:6px;padding:1px 8px;
+  font:11.5px var(--sans);background:transparent;cursor:pointer}
+#crumb .ell:hover{color:var(--gold-lt);background:rgba(169,139,66,.14)}
 #crumb i{color:var(--grn-1);font-style:normal;margin:0 6px}
 @keyframes flash{0%,100%{box-shadow:inset 0 0 0 1px var(--gold)}
   50%{box-shadow:inset 0 0 0 2px var(--gold),0 0 0 6px rgba(169,139,66,.28)}}
@@ -145,9 +146,9 @@ summary.dim{opacity:.32}
 details[open]>summary .tw::after{content:"" !important}
 .bc{background:rgba(169,139,66,.3);color:var(--gold-lt)}
 .pnav{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 2px}
-.pnav b{font:500 12px/1.5 var(--sans);background:rgba(8,48,31,.6);border:1px solid var(--line);
-  color:var(--gold-lt);border-radius:6px;padding:3px 9px;cursor:pointer}
-.pnav b:hover{background:rgba(169,139,66,.2)}
+.pnav a,.pnav .m{font:500 12px/1.5 var(--sans);background:rgba(8,48,31,.6);border:1px solid var(--line);
+  color:var(--gold-lt);border-radius:6px;padding:3px 9px;text-decoration:none}
+.pnav a:hover{background:rgba(169,139,66,.2)}
 .pnav .m{color:var(--ink-dim);cursor:default;border-style:dashed}
 
 /* ---------- layout ---------- */
@@ -224,18 +225,18 @@ summary.hit .lat{color:var(--gold-lt)}
 .ribbon.inline{margin:1px 0 1px 6px;padding:3px 9px;border-radius:7px;background:transparent;
   border:0;border-left:1px dotted var(--rule)}
 .ribbon.inline .rl{margin-right:4px;opacity:.75}
-.ribbon.inline b{font-size:12px;padding:0 4px}
+.ribbon.inline a{font-size:12px;padding:0 4px}
 .ribbon .rl{font:600 10px/1 var(--sans);letter-spacing:.9px;text-transform:uppercase;
   color:var(--grn-1);margin-right:6px}
-.ribbon b{font:500 12.5px/1.7 var(--sans);color:var(--gold-lt);cursor:pointer;padding:0 6px;
-  border-radius:5px;border:1px solid transparent}
-.ribbon b:hover{background:rgba(169,139,66,.2);border-color:var(--rule)}
-.ribbon b::after{content:"›";color:var(--grn-1);margin-left:7px}
-.ribbon b:last-of-type::after{content:""}
+.ribbon a{font:500 12.5px/1.7 var(--sans);color:var(--gold-lt);padding:0 6px;
+  border-radius:5px;border:1px solid transparent;text-decoration:none}
+.ribbon a:hover{background:rgba(169,139,66,.2);border-color:var(--rule)}
+.ribbon a::after{content:"›";color:var(--grn-1);margin-left:7px}
+.ribbon a:last-of-type::after{content:""}
 .ribbon i{color:var(--grn-1);font-style:normal}
 
 /* ---------- columns: one generation per column, only the path you are on ----------
-   A left-to-right dendrogram of this data would be 8,400px wide, because it is 56 levels deep.
+   A left-to-right dendrogram of this deep data would be thousands of pixels wide.
    Miller columns are bounded by the viewport instead: you see the branch you are following and
    nothing else, which is what "collapse the unnecessary tree" actually means here. */
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
@@ -251,7 +252,8 @@ summary.hit .lat{color:var(--gold-lt)}
 .col.back .ch{background:transparent;color:var(--gold)}
 .col .ch{font:600 10px/1 var(--sans);letter-spacing:.9px;text-transform:uppercase;
   color:var(--grn-1);padding:4px 10px 9px;position:sticky;top:0;background:var(--grn-4)}
-.ci{display:flex;align-items:baseline;gap:7px;padding:5px 9px;border-radius:7px;cursor:pointer;
+.ci{display:flex;align-items:baseline;gap:7px;padding:5px 9px;border:0;border-radius:7px;
+  width:100%;background:transparent;color:inherit;text-align:left;font:inherit;cursor:pointer;
   white-space:nowrap}
 .ci:hover{background:rgba(59,122,92,.22)}
 .ci.on{background:rgba(169,139,66,.22);box-shadow:inset 0 0 0 1px var(--gold)}
@@ -423,7 +425,7 @@ footer b{color:var(--gold-lt);font-weight:600}
   <div class="stats" id="stats"></div>
   <button id="aboutbtn" class="chip" type="button" aria-expanded="false">About this ▾</button>
   <p class="sub" style="margin-top:12px">Search reaches any name in the tree and jumps to it;
-  the trail under the toolbar shows where you have landed in up to 54 generations. A number
+  the trail under the toolbar shows where you have landed through every recorded generation. A number
   beside <b class="tw" style="position:relative;display:inline-block;vertical-align:-1px"></b>
   is how many lie beneath it. Nodes badged <b class="ba" style="padding:0 7px;border-radius:999px;
   font:600 10.5px/1.6 var(--sans)">auto</b> were placed by the chain parser — the quotation is
@@ -435,7 +437,7 @@ footer b{color:var(--gold-lt);font-weight:600}
     <svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
          stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/>
          <line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>
-    <input id="q" type="search" autocomplete="off" spellcheck="false"
+    <input id="q" type="search" autocomplete="off" spellcheck="false" aria-label="Search names"
       placeholder="Search names — Arabic or transliteration (ʿUmar · Abū Bakr · قصي · Khazraj)">
     <button id="qclear" type="button" aria-label="Clear search">×</button>
     <div id="results" hidden></div>
@@ -517,7 +519,7 @@ function paintChrome(){
   document.documentElement.lang = LANG;
   $('#stats').innerHTML = [
     tr('s_names', S.people.toLocaleString()), tr('s_claims', S.claims.toLocaleString()),
-    tr('s_links', S.edges.toLocaleString()), tr('s_works', S.works), tr('s_gens', 56)
+    tr('s_links', S.edges.toLocaleString()), tr('s_works', S.works), tr('s_gens', S.generations)
   ].map(t => `<b>${t}</b>`).join('');
   $('#bands').innerHTML = Object.entries(D.bands)
     .map(([k]) => `<button class="chip${bandOn===k?' on':''}" data-b="${k}"
@@ -533,7 +535,7 @@ function paintChrome(){
   });
   $('#filterlabel').textContent = tr('filter_to');
   const pick = $('#pickmsg'); if (pick) pick.textContent = tr('pick');
-  $('#about').querySelectorAll('.sub')[1].textContent = tr('howto');
+  $('#about').querySelectorAll('.sub')[1].textContent = tr('howto', S.generations);
   // badges live in generated HTML, so they are relabelled in place
   document.querySelectorAll('[data-k]').forEach(el => {
     const k = el.dataset.k;
@@ -629,8 +631,8 @@ function show(pid){
       return seen[n] > 1 && f ? `${esc(n)} <s>b. ${esc(D.people[f].name_lat)}</s>` : esc(n);
     };
     return `<div class="grp">${label} · ${ids.length}</div><div class="pnav">` +
-      ids.slice(0,40).map(i => `<b data-go="${i}">${lbl(i)}</b>`).join('') +
-      (ids.length>40 ? `<b class="m">+${ids.length-40} more</b>` : '') + '</div>';
+      ids.slice(0,40).map(i => `<a href="#${i}" data-go="${i}">${lbl(i)}</a>`).join('') +
+      (ids.length>40 ? `<span class="m">+${ids.length-40} more</span>` : '') + '</div>';
   };
 
   // eyebrow: what this person IS, from the data - not a placeholder phrase
@@ -671,12 +673,12 @@ function show(pid){
 
 document.addEventListener('click', e => {
   const b = e.target.closest('#panel [data-go]');
-  if (b) jump(b.dataset.go);
+  if (b) { e.preventDefault(); jump(b.dataset.go); }
 });
 
 $('#tree').addEventListener('click', e => {
   const b = e.target.closest('.ribbon [data-go]');
-  if (b) { show(b.dataset.go); return; }
+  if (b) { e.preventDefault(); show(b.dataset.go); return; }
   const s = e.target.closest('summary');
   if (s) show(s.dataset.id);
 });
@@ -724,7 +726,7 @@ notable.forEach((label, id) => {
   if (row) row[1] += ' ' + fold(label);
 });
 
-/* The tree is 54 levels deep, so a match is useless unless you can reach it. Every hit is a
+/* A deep tree match is useless unless you can reach it. Every hit is a
    row carrying its own line of descent, and clicking one opens the ancestors and jumps. */
 const lineage = (pid, n = 5) => {
   const out = []; let c = D.father[pid] || D.mother[pid];
@@ -831,21 +833,55 @@ const isPhone = () => matchMedia('(max-width: 760px)').matches;
 // the sheet exists wherever the panel is not beside the tree, which is the grid breakpoint
 const isSheet = () => matchMedia('(max-width: 1100px)').matches;
 
-function openSheet(){ if (isSheet()) document.body.classList.add('sheet-open'); }
-/* Drop the mobile bottom sheet back down. */
-function closeSheet(){ document.body.classList.remove('sheet-open'); }
+let sheetOpener = null;
+function openSheet(){
+  if (!isSheet()) return;
+  const firstOpen = !document.body.classList.contains('sheet-open');
+  if (firstOpen) sheetOpener = document.activeElement;
+  document.body.classList.add('sheet-open');
+  $('#panel').removeAttribute('aria-hidden');
+  $('#panel').setAttribute('role', 'dialog');
+  $('#panel').setAttribute('aria-modal', 'true');
+  if (firstOpen) requestAnimationFrame(() => $('#sheetclose').focus());
+}
+/* Drop the mobile bottom sheet back down and return keyboard focus to its trigger. */
+function closeSheet(){
+  const wasOpen = document.body.classList.contains('sheet-open');
+  document.body.classList.remove('sheet-open');
+  $('#panel').removeAttribute('role');
+  $('#panel').removeAttribute('aria-modal');
+  if (isSheet()) $('#panel').setAttribute('aria-hidden', 'true');
+  else $('#panel').removeAttribute('aria-hidden');
+  if (wasOpen && sheetOpener?.isConnected) sheetOpener.focus();
+  sheetOpener = null;
+}
 
 $('#sheetclose').onclick = closeSheet;
 $('#backdrop').onclick = closeSheet;
 $('#backdrop').hidden = false;
-addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+addEventListener('keydown', e => {
+  if (!document.body.classList.contains('sheet-open')) return;
+  if (e.key === 'Escape') { e.preventDefault(); closeSheet(); return; }
+  if (e.key !== 'Tab') return;
+  const focusable = [...$('#panel').querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])')]
+    .filter(el => el.offsetParent !== null);
+  if (!focusable.length) return;
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
 // a sheet you cannot flick away is not a sheet
 let touchY = null;
 $('#sheetbar').addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, {passive:true});
 $('#sheetbar').addEventListener('touchmove', e => {
   if (touchY !== null && e.touches[0].clientY - touchY > 60) { closeSheet(); touchY = null; }
 }, {passive:true});
-addEventListener('resize', () => { if (!isSheet()) closeSheet(); });
+addEventListener('resize', () => {
+  if (!isSheet()) closeSheet();
+  else if (!document.body.classList.contains('sheet-open'))
+    $('#panel').setAttribute('aria-hidden', 'true');
+});
+closeSheet();
 
 /* ---------- disclosures ----------------------------------------------------------
    All of these use the hidden ATTRIBUTE, not a class. A class only works if some rule happens
@@ -904,14 +940,14 @@ function renderDir(){
   $('#dir').innerHTML = D.directory.map(([g, rows]) =>
     `<div><h4>${esc(dtr(g))}</h4>` +
     rows.map(([label, id]) =>
-      `<a data-go="${id}">${esc(label)}${(D.bios&&D.bios[id])?'<b class="hasbio" title="'+esc(tr('bio_read'))+'">&#9670;</b>':''}</a>`
+      `<a href="#${id}" data-go="${id}">${esc(label)}${(D.bios&&D.bios[id])?'<b class="hasbio" title="'+esc(tr('bio_read'))+'">&#9670;</b>':''}</a>`
     ).join('') + '</div>').join('');
 }
 renderDir();
 
 $('#dir').addEventListener('click', e => {
   const a = e.target.closest('[data-go]');
-  if (a) { jump(a.dataset.go); $('#dir').hidden = true; paintDir(); }
+  if (a) { e.preventDefault(); jump(a.dataset.go); $('#dir').hidden = true; paintDir(); }
 });
 
 /* ---------- bands ---------- */
@@ -978,7 +1014,7 @@ function applyLens(){
   $('#clearlens').hidden = false;
 }
 
-/* ---------- breadcrumb: where am I in 54 levels ---------- */
+/* ---------- breadcrumb: where am I in a deep tree ---------- */
 const CRUMB_ENDS = 5;      // first five and last five; a 52-link trail is not a trail
 let crumbFull = false;
 
@@ -991,14 +1027,14 @@ function crumb(pid){
   while (c) { line.unshift(c); c = D.father[c] || D.mother[c]; }
   const seg = id => id === pid
     ? `<b style="color:var(--ink)">${esc(D.people[id].name_lat)}</b>`
-    : `<a data-go="${id}">${esc(D.people[id].name_lat)}</a>`;
+    : `<a href="#${id}" data-go="${id}">${esc(D.people[id].name_lat)}</a>`;
   let html;
   if (crumbFull || line.length <= CRUMB_ENDS * 2 + 1) {
     html = line.map(seg).join('<i>›</i>');
   } else {
     const hidden = line.length - CRUMB_ENDS * 2;
     html = line.slice(0, CRUMB_ENDS).map(seg).join('<i>›</i>')
-         + `<i>›</i><a class="ell" data-ell="1" title="show all ${line.length}">… ${hidden} more …</a><i>›</i>`
+         + `<i>›</i><button class="ell" type="button" data-ell="1" title="show all ${line.length}">… ${hidden} more …</button><i>›</i>`
          + line.slice(-CRUMB_ENDS).map(seg).join('<i>›</i>');
   }
   $('#crumb').innerHTML = html;
@@ -1011,7 +1047,7 @@ $('#crumb').addEventListener('click', e => {
     crumb($('#crumb').dataset.for);
     return;
   }
-  const a = e.target.closest('[data-go]'); if (a) jump(a.dataset.go);
+  const a = e.target.closest('[data-go]'); if (a) { e.preventDefault(); jump(a.dataset.go); }
 });
 
 /* ---------- columns view ---------- */
@@ -1023,7 +1059,7 @@ function siblingsAt(level){
   return D.kids[parent] || [];
 }
 
-const COL_WINDOW = 4;   // one column per generation would be 56 columns for this data
+const COL_WINDOW = 4;   // one column per generation would exceed the viewport for this data
 
 /* The Miller-column view: one column per generation along the selected path, each listing
    that person's children. Suits a wide screen, where the tree's depth is the problem. */
@@ -1031,15 +1067,15 @@ function renderCols(){
   const box = $('#cols');
   box.innerHTML = '';
   // show a window ending at the selection; the breadcrumb carries the rest of the line and is
-  // clickable, so nothing is lost by not drawing all 56
+  // clickable, so nothing is lost by not drawing every generation
   const first = Math.max(0, colPath.length - COL_WINDOW);
   if (first > 0) {
     const back = document.createElement('div');
     back.className = 'col back';
     back.innerHTML = `<div class="ch">${first} above</div>` +
       colPath.slice(0, first).map((id, i) =>
-        `<div class="ci" data-id="${id}" data-lvl="${i}">
-           <span class="lat">${esc(D.people[id].name_lat)}</span></div>`).join('');
+        `<button type="button" class="ci" data-id="${id}" data-lvl="${i}">
+           <span class="lat">${esc(D.people[id].name_lat)}</span></button>`).join('');
     box.appendChild(back);
   }
   for (let lvl = first; lvl <= colPath.length; lvl++) {
@@ -1052,10 +1088,10 @@ function renderCols(){
       : `${D.people[colPath[lvl-1]].name_lat} · ${items.length}`;
     col.innerHTML = `<div class="ch">${esc(head)}</div>` + items.map(id => {
       const p = D.people[id], n = D.below[id] || 0;
-      return `<div class="ci${id===colPath[lvl]?' on':''}${n?'':' leafdot'}" data-id="${id}" data-lvl="${lvl}">
+      return `<button type="button" class="ci${id===colPath[lvl]?' on':''}${n?'':' leafdot'}" data-id="${id}" data-lvl="${lvl}">
         <span class="ar" dir="rtl" lang="ar">${esc(p.name_ar)}</span>
         <span class="lat">${esc(p.name_lat)}</span>
-        <span class="more">${n || ''}</span></div>`;
+        <span class="more">${n || ''}</span></button>`;
     }).join('');
     box.appendChild(col);
   }
@@ -1121,5 +1157,6 @@ setLang(LANG);           // paints all chrome in the chosen language
 if (location.hash && D.people[location.hash.slice(1)]) show(location.hash.slice(1));
 else show('p.muhammad');
 </script>
+<script src="tools/check_responsive.js"></script>
 </body>
 </html>

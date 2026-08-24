@@ -22,7 +22,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, ROOT)
 import nasab, entries, i18n
 from directory import DIRECTORY
-from build import PALETTE
+from build import PALETTE, script_json
 
 PAGE = re.compile(r'PageV(\d+)P(\d+)[AB]?')
 DROP = re.compile(r'\bms\d+\b|%~%')
@@ -229,7 +229,7 @@ def main():
                              else " · " + html.escape(who))
                     .replace("{{PID}}", html.escape(pid))
                     .replace("{{BODY}}", "\n".join(secs))
-                    .replace("{{UI}}", json.dumps(UI, ensure_ascii=False))
+                    .replace("{{UI}}", script_json(UI, ensure_ascii=False))
                     .replace("{{PALETTE}}", "\n".join(f"  --{k}: {v};" for k, v in PALETTE.items())))
         open(f"{ROOT}/bio/{pid}.html", "w", encoding="utf-8").write(out)
         made += 1

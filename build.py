@@ -35,6 +35,11 @@ PALETTE = {  # from the project palette: brass golds into deepening greens
 }
 
 
+def script_json(value, **kwargs):
+    """JSON safe inside an HTML script element; a data string cannot close the element."""
+    return json.dumps(value, **kwargs).replace("<", "\\u003c")
+
+
 def rosette(n=10, steps=(3, 4), r=100):
     """A 10-fold girih rosette: decagonal frame, interlaced star polygons, central star."""
     def pts(count, radius, phase=0.0):
@@ -270,7 +275,8 @@ def main():
         """A chain of names on one line. Lossless: every node here has exactly one child, so
         there is no branching to lose - only rows to save."""
         links = "".join(
-            f'<b data-go="{i}">{html.escape(people[i]["name_lat"])}</b>' for i in run)
+            f'<a href="#{i}" data-go="{i}">{html.escape(people[i]["name_lat"])}</a>'
+            for i in run)
         return (f'<div class="ribbon inline">'
                 f'<span class="rl" data-n="{len(run)}">{len(run)}&nbsp;gen</span>'
                 f'{links}</div>')
@@ -310,9 +316,18 @@ def main():
         "band": band, "bands": BANDS, "band_key": BAND_KEY, "roots": sorted(roots, key=lambda x: (x != "p.adam", x)),
         "kids": {k: v for k, v in kids.items() if v},
     }
+    def generation(pid):
+        """One-based depth through the sourced father, or mother where no father is known."""
+        depth = 0
+        while pid:
+            depth += 1
+            pid = father.get(pid) or mother.get(pid)
+        return depth
+
     stats = {
         "people": len(people), "claims": len(claims), "works": len({c["work"] for c in claims}),
         "edges": len({(c["subject"], c["object"]) for c in claims if c["type"] in ("father_of", "mother_of")}),
+        "generations": max(map(generation, people), default=0),
     }
 
     # ======================================================================
@@ -425,9 +440,9 @@ def main():
     # ======================================================================
     tpl = open(f"{ROOT}/template.html", encoding="utf-8").read()
     out = (tpl.replace("{{TREE}}", tree)
-              .replace("{{DATA}}", json.dumps(data, ensure_ascii=False))
+              .replace("{{DATA}}", script_json(data, ensure_ascii=False))
               .replace("{{ROSETTE}}", rosette())
-              .replace("{{STATS}}", json.dumps(stats))
+              .replace("{{STATS}}", script_json(stats))
               .replace("{{CSSVARS}}", "".join(f"--{k}:{v};" for k, v in PALETTE.items())))
     open(f"{ROOT}/index.html", "w", encoding="utf-8").write(out)
     print(f"wrote index.html  {os.path.getsize(f'{ROOT}/index.html')//1024} KB  "

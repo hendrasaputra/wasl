@@ -18,6 +18,12 @@ function waslResponsiveCheck() {
   // missing elements passed.
   const tree = !!document.getElementById('tree');
   const sheet = tree && matchMedia('(max-width: 1100px)').matches;
+  if (tree) {
+    const pseudo = [...document.querySelectorAll('[data-go]')]
+      .filter(el => el.tagName !== 'A' || !el.getAttribute('href'));
+    t('person navigation uses native links', !pseudo.length,
+      pseudo.slice(0, 3).map(el => el.outerHTML.slice(0, 80)).join(' '));
+  }
 
   // 1. nothing may push the page sideways
   const ovf = document.documentElement.scrollWidth - document.documentElement.clientWidth;
@@ -75,11 +81,14 @@ function waslResponsiveCheck() {
     const open = document.body.classList.contains('sheet-open');
     const r = document.querySelector('#panel').getBoundingClientRect();
     t('tapping a name opens the sheet', open);
+    t('sheet exposes modal dialog semantics', panelEl.getAttribute('role') === 'dialog'
+      && panelEl.getAttribute('aria-modal') === 'true');
     t('sheet sits within the viewport', r.bottom <= innerHeight + 2 && r.top < innerHeight,
        `top ${Math.round(r.top)} bottom ${Math.round(r.bottom)} vh ${innerHeight}`);
     t('sheet spans the width', Math.abs(r.width - innerWidth) < 2, Math.round(r.width) + '');
     document.querySelector('#sheetclose').click();
     t('sheet closes', !document.body.classList.contains('sheet-open'));
+    t('closed sheet leaves the accessibility tree', panelEl.getAttribute('aria-hidden') === 'true');
     panelEl.style.transition = prev;
   }
 
@@ -109,7 +118,11 @@ function waslResponsiveCheck() {
   if (phone && tree) {
     document.querySelector('#vCols').click();
     const c = document.querySelector('#cols .col');
-    t('columns fill the width', c && c.getBoundingClientRect().width >= innerWidth - 2);
+    t('columns fill the width', c && c.getBoundingClientRect().width >=
+      document.documentElement.clientWidth - 2,
+      c ? `${Math.round(c.getBoundingClientRect().width)}px of ${document.documentElement.clientWidth}px` : 'missing');
+    t('column rows use native buttons',
+      [...document.querySelectorAll('.ci')].every(el => el.tagName === 'BUTTON'));
     document.querySelector('#vTree').click();
   }
 
@@ -157,6 +170,19 @@ function waslResponsiveCheck() {
 
   console.log(`${innerWidth}x${innerHeight}  ${ok.length} ok, ${fail.length} failed`);
   fail.forEach(f => console.log('  FAIL ' + f));
-  return { w: innerWidth, h: innerHeight, chrome, passed: ok.length, failed: fail };
+  return { w: innerWidth, h: innerHeight, chrome, passed: ok.length,
+           failed: fail.length, errors: fail };
 }
 if (typeof module !== 'undefined') module.exports = { waslResponsiveCheck };
+if (new URLSearchParams(location.search).has('responsive-check')) {
+  try {
+    const result = waslResponsiveCheck();
+    document.documentElement.dataset.responsiveFailed = result.failed;
+    if (result.errors.length)
+      document.documentElement.dataset.responsiveError = result.errors.join(' | ');
+  } catch (error) {
+    document.documentElement.dataset.responsiveFailed = 'runtime-error';
+    document.documentElement.dataset.responsiveError = String(error.message || error);
+    console.error(error);
+  }
+}
