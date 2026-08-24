@@ -26,7 +26,7 @@ infancy acquired six descendants. Totals cannot show that; only naming the famil
 
 Exits non-zero on the first failure, so the failing line is the last thing printed.
 """
-import json, os, re, sys, collections
+import json, os, re, sys, collections, functools
 import nasab
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -45,21 +45,23 @@ def check(label, cond, detail=""):
     ok += 1
 
 
+@functools.cache
+def raw_pages(work):
+    """Map exact milestone numbers to every raw segment that milestone closes."""
+    txt = open(f"{ROOT}/corpus/{work}.txt", encoding="utf-8").read()
+    out, start = collections.defaultdict(list), 0
+    for m in re.finditer(r"PageV(\d+)P(\d+)[AB]?", txt):
+        out[(int(m.group(1)), int(m.group(2)))].append(txt[start:m.start()])
+        start = m.end()
+    return out
+
+
+@functools.cache
 def raw_page(work, vol, page):
     """Slice page N straight out of the file with plain string ops - deliberately sharing no
     code with nasab.py's index. Some editions (Ibn Sa'd) repeat the same page marker once per
     report, so a page is several disjoint segments; take all of them."""
-    txt = open(f"{ROOT}/corpus/{work}.txt", encoding="utf-8").read()
-    mark = f"PageV{int(vol):02d}P{int(page):03d}"
-    any_mark = re.compile(r"PageV\d{2}P\d+")   # \d+: al-Isti'ab pages run past 999
-    out, at = [], 0
-    while True:
-        end = txt.find(mark, at)
-        if end < 0:
-            return " ".join(out)
-        prev = [m.end() for m in any_mark.finditer(txt, 0, end)]
-        out.append(txt[(prev[-1] if prev else 0):end])
-        at = end + len(mark)
+    return " ".join(raw_pages(work).get((int(vol), int(page)), ()))
 
 
 print("page mapping, re-derived from the raw file")
@@ -120,10 +122,11 @@ print("\nthe core family, checked name by name")
 # it exists to get right. Every one of these assertions was written because the data broke it:
 # an epithet became a son of the Prophet's father, granddaughters were hung on their
 # grandfather, and 'bint' was missing from the chain splitter so every woman was mis-attached.
-kids = collections.defaultdict(list)
+kids, father_of = collections.defaultdict(list), {}
 for c in claims:
     if c["type"] == "father_of":
         kids[c["subject"]].append(c["object"])
+        father_of.setdefault(c["object"], c["subject"])
 byid = {p["id"]: p for p in json.load(open(f"{ROOT}/people.jsonl", encoding="utf-8"))} \
        if False else {json.loads(l)["id"]: json.loads(l)
                       for l in open(f"{ROOT}/people.jsonl", encoding="utf-8") if l.strip()}
@@ -192,8 +195,7 @@ check("and the sources say so: mata saghiran, lam yastakmil amayn",
 # another child B, which in turn has a child A.
 welded = []
 for pid, p in byid.items():
-    par = next((c["subject"] for c in claims
-                if c["type"] == "father_of" and c.get("object") == pid), None)
+    par = father_of.get(pid)
     if not par:
         continue
     w = p["name_ar"].split()
@@ -210,9 +212,8 @@ check("no chain welded by a missing bn", not welded, "; ".join(welded[:4]))
 # and the man that bug produced twice is single
 said = [pid for pid, p in byid.items()
         if nasab.normalise(p["name_ar"]) == nasab.normalise("سعيد")
-        and any(c["type"] == "father_of" and c.get("object") == pid
-                and nasab.normalise(byid[c["subject"]]["name_ar"]) == nasab.normalise("زيد")
-                for c in claims)]
+        and father_of.get(pid)
+        and nasab.normalise(byid[father_of[pid]]["name_ar"]) == nasab.normalise("زيد")]
 check("Sa'id b. Zayd appears once", len(said) == 1, f"{len(said)} nodes")
 
 # no two nodes may share a full lineage - that is the definition of the same man twice
@@ -222,8 +223,7 @@ for pid in byid:
     chain, cur = [], pid
     while cur:
         chain.append(nasab.normalise(byid[cur]["name_ar"]))
-        cur = next((c["subject"] for c in claims
-                    if c["type"] == "father_of" and c.get("object") == cur), None)
+        cur = father_of.get(cur)
     k = " < ".join(chain)
     if k in sig:
         dupsig.append(byid[pid]["name_lat"])
@@ -254,10 +254,6 @@ check("no father has the same son twice", not clash, "; ".join(clash[:4]))
 # A run of four CONSECUTIVE names repeating inside one line of descent is not a genealogy, it
 # is a segment the parser copied. Ibn Hazm's real Nizar b. Mu'ays once collected the whole
 # Adnani spine beneath him - 644 duplicate nodes, including a second Fihr and a second Quraysh.
-father_of = {}
-for c in claims:
-    if c["type"] == "father_of":
-        father_of.setdefault(c["object"], c["subject"])
 copied = []
 for pid in byid:
     seq, cur = [], pid
@@ -304,12 +300,11 @@ check("twelve wives, no more and no fewer", len(married) == 12, f"{len(married)}
 
 # A marriage is not descent. If one ever became a father_of, the tree would assert that the
 # Prophet's wives descend from him.
-fmap = {c["object"]: c["subject"] for c in claims if c["type"] == "father_of"}
 line = set()
 n = "p.muhammad"
 while n:
     line.add(n)
-    n = fmap.get(n)
+    n = father_of.get(n)
 def below(pid):
     """Every descendant of pid, used to assert that a wife never landed inside the tree."""
     out, stack = set(), [pid]

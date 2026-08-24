@@ -214,11 +214,8 @@ def run(work, store, limit=None, quiet=False, under=None):
             continue
         # resolve inside the scope: 'fa-walada Khalaf' is unambiguous among Quraysh even
         # when a dozen men named Khalaf exist elsewhere in the book
-        if not identifies(work, chain, store, scope):
-            skipped += 1
-            continue
         fid = store.find_by_chain(chain, scope=scope)
-        if fid is None:
+        if fid is None or not identifies(work, chain, store, scope):
             skipped += 1
             continue
         stmt = m.group(0)

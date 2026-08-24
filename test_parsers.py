@@ -46,11 +46,15 @@ store = ingest.Store()
 assert store.person("لفظاختباري") is None
 pid = store.person("لفظاختباري", force=True)
 assert pid and store.people[pid]["name_ar"] == "لفظاختباري"
+assert (store.child_of("p.kilab", ["زيد"]) == "p.qusayy"
+        and store.has_edge("p.adam", "p.shith")
+        and "p.muhammad" in store.descendants("p.adam"))
 
 fake = type("FakeStore", (), {})()
 fake.people = {str(i): {"name_ar": name} for i, name in enumerate("ابجدابجد", 1)}
 fake.claims = [{"type": "father_of", "subject": str(i + 1), "object": str(i)}
                for i in range(1, 8)]
+fake._father = {c["object"]: c["subject"] for c in fake.claims}
 fake.copied_line = ingest.Store.copied_line.__get__(fake)
 assert fake.copied_line("1")
 
@@ -61,4 +65,4 @@ with tempfile.NamedTemporaryFile("w", encoding="utf-8") as f:
     rows = validate.jsonl(f.name, errors)
 assert rows == [{"ok": True}] and len(errors) == 2
 
-print("20 parser and validation checks passed.")
+print("21 parser, index, and validation checks passed.")

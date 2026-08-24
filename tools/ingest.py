@@ -35,6 +35,8 @@ class Store:
         self.order = []           # ids in file order, so save() does not reshuffle the file
         self.claims = []
         self._byfather = {}       # (father id, normalised child name) -> child id
+        self._father = {}         # child id -> father id
+        self._kids = {}           # father id -> child ids
         self._ids = set()         # every id in use, for minting a fresh one
         self._seen = set()        # claims already recorded, so a re-run adds nothing twice
         self._byname = {}         # normalised name -> [person]
@@ -66,7 +68,10 @@ class Store:
             if c["type"] == "alias" and c.get("value_ar"):
                 self._note_alias(c["subject"], c["value_ar"])
             if c["type"] == "father_of":
-                self._byfather[(c["subject"], nasab.normalise(self.people[c["object"]]["name_ar"]))] = c["object"]
+                father, child = c["subject"], c["object"]
+                self._byfather[(father, nasab.normalise(self.people[child]["name_ar"]))] = child
+                self._father[child] = father
+                self._kids.setdefault(father, set()).add(child)
         self._n = max((int(c["cid"][1:]) for c in self.claims), default=0)
 
     def save(self):
@@ -127,25 +132,24 @@ class Store:
         without it the second reading mints a twin brother.
         """
         keys = {nasab.normalise(n) for n in names if n} | {n for n in names if n}
-        for (f, nm), cid in self._byfather.items():
-            if f == fid and (nm in keys or self.aliases_of(cid) & keys):
+        for name in keys:
+            cid = self._byfather.get((fid, name))
+            if cid:
                 return cid
+            for cid in self._byalias.get(name, ()):
+                if self._father.get(cid) == fid:
+                    return cid
         return None
 
     def descendants(self, root):
         """Every person below `root`, used to scope a pass - Phase 2 runs under Fihr, which
         Ibn Hazm defines as exactly the set of people called Qurashi.
 
-        Rebuilds the child map on each call, so hoist it out of a loop if one is ever needed
-        per statement rather than once per pass.
+        Uses the same child index maintained by person and claim insertion.
         """
         seen, stack = {root}, [root]
-        kids = {}
-        for c in self.claims:
-            if c["type"] == "father_of":
-                kids.setdefault(c["subject"], set()).add(c["object"])
         while stack:
-            for k in kids.get(stack.pop(), ()):
+            for k in self._kids.get(stack.pop(), ()):
                 if k not in seen:
                     seen.add(k)
                     stack.append(k)
@@ -153,11 +157,10 @@ class Store:
 
     def copied_line(self, pid):
         """Whether this person's ancestry repeats a four-name parser-copied run."""
-        father = {c["object"]: c["subject"] for c in self.claims if c["type"] == "father_of"}
         seq = []
         while pid:
             seq.append(nasab.normalise(self.people[pid]["name_ar"]))
-            pid = father.get(pid)
+            pid = self._father.get(pid)
         return any(seq[i:i + 4] == seq[j:j + 4]
                    for i in range(len(seq) - 4) for j in range(i + 4, len(seq) - 3))
 
@@ -212,6 +215,8 @@ class Store:
             if subject == object:
                 return None                  # a self-edge is always a parse error
             self._byfather[(subject, nasab.normalise(self.people[object]["name_ar"]))] = object
+            self._father[object] = subject
+            self._kids.setdefault(subject, set()).add(object)
         self._n += 1
         cid = f"c{self._n:05d}"
         c = {"cid": cid, "type": type, "subject": subject, "object": object, "work": work,
@@ -226,8 +231,7 @@ class Store:
 
     def has_edge(self, father, child):
         """Is this exact parent edge already recorded, from any work?"""
-        return any(c["type"] == "father_of" and c["subject"] == father and c["object"] == child
-                   for c in self.claims)
+        return self._father.get(child) == father
 
     def report(self, label):
         """Print what the pass did, including what it REFUSED. A rejected quote is a finding -

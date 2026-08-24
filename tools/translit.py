@@ -8,7 +8,7 @@ letters alone say only ʿ-m-r-w. So: a dictionary for the names that actually re
 material, and a consonant-skeleton fallback for the rest, flagged so the page can say the
 reading is provisional. The Arabic is always the authority; the Latin is a finding aid.
 """
-import re
+import functools, re
 
 # names that carry the tree - hand-checked readings
 NAMES = {
@@ -221,6 +221,7 @@ DIA = re.compile(r"[ؐ-ًؚ-ٰٟـ]")
 VARIANTS = str.maketrans({"ى":"ي","ٱ":"ا"})
 
 
+@functools.cache
 def _look(w):
     """Dictionary hit tolerant of the spellings that vary between printings."""
     for cand in (w, w.translate(VARIANTS),
