@@ -18,6 +18,38 @@ function waslResponsiveCheck() {
   // missing elements passed.
   const tree = !!document.getElementById('tree');
   const sheet = tree && matchMedia('(max-width: 1100px)').matches;
+  // The front door (index.html) shows one person and their thread. Its assertions are gated
+  // on #thread, the tree explorer's (tree.html) on #tree, so one checker covers both.
+  const thread = !!document.getElementById('thread');
+  if (thread) {
+    // the front page: the people to start from must be reachable within two screens
+    location.hash = ''; render();
+    const first = document.querySelector('#groups .card');
+    t('front page offers a person within two screens', first && first.getBoundingClientRect().top < innerHeight * 2,
+      first ? Math.round(first.getBoundingClientRect().top) + 'px' : 'no cards');
+    t('front page search is the one search', document.querySelectorAll('#q').length === 1
+      && document.querySelector('#hs #q') !== null);
+    // a person: the name, the thread and the first source must all be there
+    location.hash = 'p.muhammad'; render();
+    const name = document.querySelector('.crown .name');
+    t('person name sits in the first screen', name && name.getBoundingClientRect().top < innerHeight);
+    t('thread nodes are native links', [...document.querySelectorAll('.thread .node')]
+      .every(a => a.tagName === 'A' && a.getAttribute('href')));
+    t('the person is the large bead on the thread', !!document.querySelector('.thread li.me .node'));
+    t('every link on the thread carries its sources', document.querySelectorAll('.thread .edge').length >= 5);
+    document.querySelector('.thread .edge').click();
+    t('a link opens its quotations in place', !!document.querySelector('.thread .edgeq .cl .q'));
+    t('the brief is shown for a person who has one', !!document.querySelector('.brief p'));
+    t('the first group of sources is open', !!document.querySelector('.books details[open] .cl'));
+    const small = [...document.querySelectorAll('.thread .node, .pill, .chip, #q, .cta')]
+      .filter(e => e.offsetParent && e.getBoundingClientRect().height < 44)
+      .map(e => (e.id || e.className) + ':' + Math.round(e.getBoundingClientRect().height));
+    if (phone) t('every person control clears 44px', !small.length, small.slice(0, 6).join(' '));
+    if (!phone && innerWidth > 900) {
+      const th = document.querySelector('#thread').getBoundingClientRect(), lf = document.querySelector('#life').getBoundingClientRect();
+      t('thread sits beside the life on a wide screen', lf.left > th.right - 2 && Math.abs(lf.top - th.top) < 40);
+    }
+  }
   if (tree) {
     const pseudo = [...document.querySelectorAll('[data-go]')]
       .filter(el => el.tagName !== 'A' || !el.getAttribute('href'));
@@ -100,7 +132,7 @@ function waslResponsiveCheck() {
   if (phone && tree) t('every control clears 44px', !small.length, small.join(' '));
 
   // 5. iOS zooms the page on focus below 16px and never zooms back
-  if (phone && tree) t('search input is 16px or larger',
+  if (phone && (tree || thread)) t('search input is 16px or larger',
      parseFloat(getComputedStyle(document.querySelector('#q')).fontSize) >= 16);
 
   // 5b. on a wide screen the panel must sit BESIDE the tree, not under it - the bug that

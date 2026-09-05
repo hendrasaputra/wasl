@@ -27,7 +27,7 @@ check any line against the book is not. If you change nothing else, keep that.
 | Languages | English, Indonesian, Malay — complete |
 | Data checks | 79 independent + 22 parser regressions |
 | Responsive checks | CI: tree phone/tablet/desktop + biography phone |
-| Interface | person-first: search + Who's who land first, the person panel carries the lineage, the filter row folds until asked for (Sept 2026) |
+| Interface | index.html is person-first: search, then one person with their thread of descent (sources on every link), brief, family and the books. tree.html keeps the whole-tree explorer (Sept 2026) |
 | Sources | 8 OpenITI texts, pinned by version URI |
 
 Phases 1–8c are done. CI gates every push; `main` deploys after verification.
@@ -41,7 +41,7 @@ git clone https://github.com/hendrasaputra/wasl && cd wasl
 ./fetch.sh              # ~38MB of Arabic into corpus/ (gitignored, checksummed)
 python3 validate.py     # proves every quote. MUST pass before any commit
 python3 test_wasl.py    # independent checks. Also must pass
-python3 build.py        # regenerates index.html
+python3 build.py        # regenerates index.html (front door) and tree.html (whole tree)
 ```
 
 No dependencies beyond Python 3. `python3 -m http.server` and open `index.html` to look at it.
@@ -85,7 +85,10 @@ fetch.sh          downloads into corpus/ and verifies the committed SHA256SUMS
 nasab.py          corpus access: index / clean / locate / page_text. Shared by everything
 validate.py       THE GATE. Re-reads every quote at its cited page
 test_wasl.py      the second opinion. Shares no code with the indexer
-build.py          people + claims -> index.html (committed, so CI can prove it is current)
+build.py          people + claims -> index.html and tree.html (committed, so CI can prove them current)
+template.html     the front door: one person, their line of descent with the sources on every
+                  link, the brief, the family, what the books say. Routes on the hash.
+tools/tree_template.html  the whole tree as an explorer, with columns and filters
 template.html     the page shell: palette, layout, tree, columns, search, i18n
 entries.jsonl     where each Who's who person's biography sits in which book
 summaries.jsonl   the hand-written briefs, each sentence anchored to an Arabic phrase
@@ -172,7 +175,7 @@ CLAUDE.md and takes about ten minutes.
 
 ```bash
 python3 validate.py && python3 test_wasl.py && python3 build.py
-git diff --exit-code index.html     # must be clean, or you forgot to rebuild
+git diff --exit-code index.html tree.html   # must be clean, or you forgot to rebuild
 ```
 
 For anything touching `build.py` or `template.html`, **prove the output is unchanged** when it

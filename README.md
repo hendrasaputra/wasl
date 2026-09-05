@@ -367,10 +367,11 @@ nasab.py         corpus index: resolves a quote to its true volume and page span
 validate.py      the proof. Must pass before every commit
 test_wasl.py     79 independent checks, sharing no code with the indexer
 test_parsers.py  22 focused parser regressions
-build.py         renders index.html
+build.py         renders index.html (front door) and tree.html (whole tree)
 template.html    the page shell: palette, layout, views, search
 tools/           extraction and maintenance; the replay pipeline is in CLAUDE.md
-index.html       generated, committed, self-contained
+index.html       generated, committed, self-contained — one person, their thread, the books
+tree.html        generated, committed — the whole tree as an explorer
 ```
 
 ## Use
@@ -379,7 +380,7 @@ index.html       generated, committed, self-contained
 ./fetch.sh                      # once; needs the network
 python3 validate.py             # the gate
 python3 test_wasl.py            # independent checks
-python3 build.py                # regenerate index.html
+python3 build.py                # regenerate index.html and tree.html
 ```
 
 ## Licence

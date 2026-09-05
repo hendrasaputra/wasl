@@ -414,6 +414,17 @@ def main():
         if pid:
             bios[pid].append([e["work"], e["vol"], e["page"], e["page_end"], e["n_words"]])
     data["bios"] = {k: sorted(v) for k, v in sorted(bios.items())}
+    # The hand-written briefs, keyed by person, so the front door can show who someone was
+    # without a second page load. English is the original there; id and ms are translated
+    # from it (see CLAUDE.md, Translations). The anchors stay on the biography page.
+    sums = [json.loads(l) for l in open(f"{ROOT}/summaries.jsonl", encoding="utf-8") if l.strip()] \
+        if os.path.exists(f"{ROOT}/summaries.jsonl") else []
+    data["summaries"] = {}
+    for sm in sums:
+        pid = label_pid.get(sm["who"])
+        if pid and pid not in data["summaries"]:
+            data["summaries"][pid] = {"work": sm["work"], "lines": [
+                {k: ln.get(k, "") for k in ("en", "id", "ms", "basis")} for ln in sm["lines"]]}
 
     data["langs"] = LANGS
     data["ui"] = {lang: {k: v.get(lang, v["en"]) for k, v in UI.items()} for lang in LANGS}
@@ -438,15 +449,21 @@ def main():
     # index.html is generated and committed, so the repository is browsable without a
     # toolchain and CI can prove the published page matches the data it came from.
     # ======================================================================
-    tpl = open(f"{ROOT}/template.html", encoding="utf-8").read()
-    out = (tpl.replace("{{TREE}}", tree)
-              .replace("{{DATA}}", script_json(data, ensure_ascii=False))
-              .replace("{{ROSETTE}}", rosette())
-              .replace("{{STATS}}", script_json(stats))
-              .replace("{{CSSVARS}}", "".join(f"--{k}:{v};" for k, v in PALETTE.items())))
-    open(f"{ROOT}/index.html", "w", encoding="utf-8").write(out)
-    print(f"wrote index.html  {os.path.getsize(f'{ROOT}/index.html')//1024} KB  "
-          f"{stats['people']} people, {stats['claims']} claims")
+    # Two pages from one dataset. index.html is the front door: one person at a time, their
+    # line of descent and what the books say. tree.html is the whole tree as an explorer, for
+    # the reader who wants all 2,500 names at once. They share the data block byte for byte.
+    def fill(tpl_path, out_name):
+        tpl = open(tpl_path, encoding="utf-8").read()
+        out = (tpl.replace("{{TREE}}", tree)
+                  .replace("{{DATA}}", script_json(data, ensure_ascii=False))
+                  .replace("{{ROSETTE}}", rosette())
+                  .replace("{{STATS}}", script_json(stats))
+                  .replace("{{CSSVARS}}", "".join(f"--{k}:{v};" for k, v in PALETTE.items())))
+        open(f"{ROOT}/{out_name}", "w", encoding="utf-8").write(out)
+        print(f"wrote {out_name}  {os.path.getsize(f'{ROOT}/{out_name}')//1024} KB  "
+              f"{stats['people']} people, {stats['claims']} claims")
+    fill(f"{ROOT}/template.html", "index.html")
+    fill(f"{ROOT}/tools/tree_template.html", "tree.html")
 
 
 if __name__ == "__main__":
