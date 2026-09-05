@@ -36,12 +36,15 @@ header{position:relative;overflow:hidden;padding:34px 26px 26px;
 header .rose{position:absolute;color:var(--gold);opacity:.13;pointer-events:none}
 header .rose.a{width:340px;top:-92px;right:-70px}
 header .rose.b{width:190px;bottom:-96px;left:-46px;opacity:.08}
-h1{margin:0;font-size:26px;font-weight:600;letter-spacing:.2px}
+h1{margin:0;font-size:30px;font-weight:600;letter-spacing:.2px}
 h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--grn-1);
   font-variant-numeric:tabular-nums}
 .ar{font-family:var(--arabic);font-size:34px;color:var(--gold-lt);margin-left:12px}
 .sub{margin:8px 0 0;color:var(--ink-dim);max-width:62ch;font-size:13.5px}
-.stats{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+/* Three levels, no more: the purpose in ink, the how-to dim, the counts smaller still. The
+   counts were pills, which made five decorations compete with the search field for the eye. */
+#lead{color:var(--ink);font-size:15px;line-height:1.55}
+.stats{margin-top:12px;color:var(--grn-1);font-size:12px}
 /* the picker rides on the title line: on a phone it was taking a row of its own, and the
    chrome budget there is 200px for everything */
 .headtop{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
@@ -53,8 +56,8 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
   font:12px var(--sans);padding:5px 10px;cursor:pointer}
 #langs button.on{background:rgba(169,139,66,.24);color:var(--gold-lt)}
 #langs button:hover{color:var(--gold-lt)}
-.stats b{background:rgba(169,139,66,.14);border:1px solid var(--line);color:var(--gold-lt);
-  border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600}
+#aboutbtn{min-height:0;padding:4px 10px;font-size:12px;border-color:transparent;color:var(--grn-1)}
+#aboutbtn:hover,#aboutbtn.on{color:var(--gold-lt);border-color:var(--line)}
 
 /* ---------- toolbar ---------- */
 .bar{position:sticky;top:0;z-index:5;display:flex;gap:10px;flex-wrap:wrap;align-items:center;
@@ -94,7 +97,7 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52%}
 #results .none{padding:12px;color:var(--ink-dim);font-size:13px}
 #results .more{padding:8px 12px;color:var(--grn-1);font-size:11.5px;border-top:1px solid var(--line)}
-.bar2{gap:6px;padding-top:0;padding-bottom:10px;border-bottom:1px solid var(--line);top:57px}
+.bar2{gap:6px;padding-top:0;padding-bottom:10px;border-bottom:1px solid var(--line);top:var(--bar1h,57px)}
 .bar2 .lbl{color:var(--grn-1);font-size:11px;letter-spacing:.8px;text-transform:uppercase}
 .chip.primary{border-color:var(--rule-s);color:var(--gold-lt);background:rgba(169,139,66,.12)}
 .chip.clear{border-style:dashed}
@@ -118,8 +121,12 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
   display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 22px}
 #dir h4{margin:0 0 7px;font:600 11px/1 var(--sans);letter-spacing:1px;text-transform:uppercase;
   color:var(--grn-1)}
-#dir a{display:block;padding:3px 0;color:var(--gold-lt);text-decoration:none;cursor:pointer;
-  font-size:13px;border-bottom:1px solid transparent}
+#dir .intro{grid-column:1/-1;margin:0 0 2px;color:var(--ink);font-size:15px}
+/* a row is a target, not a line of text: 32px on desktop, 44 on a phone */
+#dir a{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;
+  min-height:32px;color:var(--gold-lt);text-decoration:none;cursor:pointer;font-size:13.5px;
+  border-bottom:1px solid transparent}
+#dir a .ar{font-size:16px;color:var(--ink-dim);margin:0;line-height:1.2}
 #dir a:hover{border-bottom-color:var(--rule)}
 #bands .chip[data-b="beyond"].on{border-color:var(--gold);}
 .bandnote{color:var(--ink-dim);font-size:11.5px;padding:2px 26px 10px;background:rgba(10,58,39,.75)}
@@ -127,7 +134,12 @@ h1 .gen{flex:0 0 26px;text-align:right;font:500 11px/2 var(--sans);color:var(--g
   padding:4px 11px;font:12px var(--sans);cursor:pointer}
 .chip:hover{background:rgba(169,139,66,.12);color:var(--gold-lt)}
 .chip.on{background:rgba(169,139,66,.24);border-color:var(--gold);color:var(--gold-lt)}
-#crumb{position:sticky;top:110px;z-index:4;padding:9px 26px;background:rgba(10,58,39,.96);
+/* the one filled control on the page: the route to a named person for a reader who will not
+   type one. Everything else in the bars is a ghost button, so this reads as the next step. */
+.chip.primary,.chip.primary.on{background:var(--gold);border-color:var(--gold);color:#123125;font-weight:600}
+.chip.primary:hover{background:var(--gold-lt)}
+.bar2 .seg button{padding:5px 12px}
+#crumb{position:sticky;top:var(--barh,110px);z-index:4;padding:9px 26px;background:rgba(10,58,39,.96);
   backdrop-filter:blur(8px);border-bottom:1px solid var(--line);font-size:12.5px;
   color:var(--ink-dim);overflow-x:auto;white-space:nowrap;scrollbar-width:none}
 #crumb::-webkit-scrollbar{display:none}
@@ -200,10 +212,21 @@ summary.sel{background:rgba(169,139,66,.2);box-shadow:inset 0 0 0 1px var(--gold
   font-variant-numeric:tabular-nums}
 .ar{font-family:var(--arabic);font-size:21px;line-height:1.25;color:var(--ink)}
 .lat{color:var(--ink-dim);font-size:13.5px}
-.biolink{display:block;margin:12px 0 4px;padding:11px 13px;border:1px solid var(--line);
-  border-radius:7px;color:var(--gold-lt);text-decoration:none;font-size:13.5px;min-height:44px}
-.biolink:hover{background:rgba(169,139,66,.14);border-color:var(--gold)}
-.biolink i{display:block;font-style:normal;font-size:11.5px;color:var(--ink-dim);margin-top:2px}
+/* the primary action of the panel, so it is the one filled block in it */
+.biolink{display:block;margin:14px 0 6px;padding:11px 13px;border:1px solid var(--gold);
+  border-radius:7px;background:var(--gold);color:#123125;text-decoration:none;font-size:14px;
+  font-weight:600;min-height:44px}
+.biolink:hover{background:var(--gold-lt)}
+.biolink i{display:block;font-style:normal;font-size:11.5px;font-weight:400;opacity:.8;margin-top:2px}
+/* the line of descent, nearest first, as running text: a chain reads as a chain */
+.trail{font-size:13.5px;line-height:1.9;color:var(--ink-dim)}
+.trail a{color:var(--gold-lt);text-decoration:none}
+.trail a:hover{text-decoration:underline}
+.trail i{color:var(--grn-1);font-style:normal;margin:0 5px}
+.trail .ell{color:var(--grn-1);border:1px dotted var(--rule);border-radius:6px;padding:1px 8px;
+  font:11.5px var(--sans);background:transparent;cursor:pointer}
+.trail .ell:hover{color:var(--gold-lt)}
+.grp.big{color:var(--ink);font-size:12px;margin-top:28px;border-bottom-color:var(--rule-s)}
 .hasbio{color:var(--gold);font-size:8px;vertical-align:middle;margin-left:6px;opacity:.75}
 .pnav s{text-decoration:none;opacity:.6;font-weight:400;font-size:.9em}
 .alias{color:var(--grn-1);font-style:normal;font-size:12.5px;margin-left:7px}
@@ -266,7 +289,7 @@ summary.hit .lat{color:var(--gold-lt)}
 .col .empty{color:var(--grn-1);font-size:12px;padding:10px}
 
 /* ---------- citation panel ---------- */
-#panel{position:sticky;top:110px;height:calc(100vh - 110px);overflow-y:auto;
+#panel{position:sticky;top:var(--barh,110px);height:calc(100vh - var(--barh,110px));overflow-y:auto;
   padding:22px;background:var(--panel);border-left:1px solid var(--line)}
 .phead{padding-bottom:14px;margin-bottom:4px;border-bottom:1px solid var(--line)}
 #panel h2{margin:0 0 6px;font:600 10.5px/1.4 var(--sans);letter-spacing:1.1px;
@@ -346,6 +369,7 @@ summary.hit .lat{color:var(--gold-lt)}
   /* WCAG 2.2 AA asks 24x24 for a target; the primary controls are at 44 and this secondary
      one sits at 36, which keeps the title row from dominating a 200px chrome budget */
   #langs button{padding:8px 11px;font-size:12px;min-height:36px}
+  #lead{display:none}
   #about{margin-top:10px}
   #about .sub{font-size:13px;margin-top:8px}
   .stats{margin-top:7px;gap:5px}
@@ -355,11 +379,15 @@ summary.hit .lat{color:var(--gold-lt)}
   .bar{padding:5px 12px 6px;gap:7px;top:0}
   .searchwrap{flex:1 1 100%;order:-1}
   /* 16px or iOS Safari zooms the page on focus and never zooms back */
-  .bar input{font-size:16px;padding:12px 13px;min-height:44px}
+  .bar input{font-size:16px;padding:12px 40px 12px 38px;min-height:44px}
   .hits{order:3;font-size:12px}
   .bar2{top:auto;padding:10px 12px 12px}
   #bandlegend{padding:12px 16px 16px;grid-template-columns:1fr}
-  #dir{padding:14px 16px 18px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  #dir{padding:14px 16px 18px;grid-template-columns:1fr;gap:12px}
+  #dir a{min-height:44px;padding:9px 0}
+  #dir .intro{font-size:14.5px}
+  /* the source count on every row is evidence, and evidence lives in the sheet */
+  .badges .bs{display:none}
 
   /* Who's who is the only way to reach a named person without typing, so on a phone it earns
      its place on the always-visible row. Two things pay for it: the hit counter stops
@@ -416,20 +444,19 @@ footer b{color:var(--gold-lt);font-weight:600}
   <div class="rose b">{{ROSETTE}}</div>
   <div class="headtop">
     <h1>Wasl<span class="ar" dir="rtl" lang="ar">وصل</span></h1>
-    <span class="langpick"><span class="lbl" id="langlabel">Language</span><span id="langs"></span></span>
+    <span class="langpick"><button id="aboutbtn" class="chip" type="button" aria-expanded="false">About this ▾</button><span class="lbl" id="langlabel">Language</span><span id="langs"></span></span>
   </div>
-  <div id="about"><p class="sub">The lineage of the Prophet Muḥammad ﷺ, his household, the Ṣaḥāba and the
+  <p class="sub" id="lead">The lineage of the Prophet Muḥammad ﷺ, his household, the Ṣaḥāba and the
   Arab tribes — back to Ādam on one side and to Qaḥṭān on the other. Every name, link and second
   name carries a quotation from a named critical edition, machine-checked against the page it
   cites before this file was written. Where the sources disagree, every reading is kept.</p>
-  <div class="stats" id="stats"></div>
-  <button id="aboutbtn" class="chip" type="button" aria-expanded="false">About this ▾</button>
-  <p class="sub" style="margin-top:12px">Search reaches any name in the tree and jumps to it;
+  <div id="about"><p class="sub">Search reaches any name in the tree and jumps to it;
   the trail under the toolbar shows where you have landed through every recorded generation. A number
   beside <b class="tw" style="position:relative;display:inline-block;vertical-align:-1px"></b>
   is how many lie beneath it. Nodes badged <b class="ba" style="padding:0 7px;border-radius:999px;
   font:600 10.5px/1.6 var(--sans)">auto</b> were placed by the chain parser — the quotation is
-  verified, the placement rests on the anchor being the right man.</p></div>
+  verified, the placement rests on the anchor being the right man.</p>
+  <div class="stats" id="stats"></div></div>
 </header>
 
 <div class="bar">
@@ -443,11 +470,11 @@ footer b{color:var(--gold-lt);font-weight:600}
     <div id="results" hidden></div>
   </div>
   <span class="hits" id="hits"></span>
-  <span class="seg"><button id="vTree" class="on">Tree</button><button id="vCols">Columns</button></span>
   <button id="dirbtn" class="chip primary">Who&#39;s who ▾</button>
-  <button id="filterbtn" type="button" aria-expanded="false">Filter</button>
+  <button id="filterbtn" type="button" aria-expanded="false">View &amp; filter</button>
 </div>
-<div class="bar bar2">
+<div class="bar bar2" hidden>
+  <span class="seg"><button id="vTree" class="on">Tree</button><button id="vCols">Columns</button></span>
   <span class="sep"></span>
   <span class="lbl"><span id="filterlabel">Filter to</span> <button id="bandhelp" class="qm" type="button" aria-expanded="false"
     aria-label="What do these filters do?" title="What do these filters do?">&#9654;</button></span>
@@ -514,13 +541,13 @@ function paintChrome(){
   $('#langlabel').textContent = tr('lang_label');
 
   $('#clearlens').textContent = tr('clear');
-  $('#about').querySelector('.sub').textContent = tr('title_sub');
+  $('#lead').textContent = tr('title_sub');
   $('#panel').setAttribute('lang', LANG);
   document.documentElement.lang = LANG;
-  $('#stats').innerHTML = [
+  $('#stats').textContent = [
     tr('s_names', S.people.toLocaleString()), tr('s_claims', S.claims.toLocaleString()),
     tr('s_links', S.edges.toLocaleString()), tr('s_works', S.works), tr('s_gens', S.generations)
-  ].map(t => `<b>${t}</b>`).join('');
+  ].join(' · ');
   $('#bands').innerHTML = Object.entries(D.bands)
     .map(([k]) => `<button class="chip${bandOn===k?' on':''}" data-b="${k}"
         title="${esc(tr(D.band_key[k]+'_w'))}">${esc(tr(D.band_key[k]))}
@@ -535,7 +562,7 @@ function paintChrome(){
   });
   $('#filterlabel').textContent = tr('filter_to');
   const pick = $('#pickmsg'); if (pick) pick.textContent = tr('pick');
-  $('#about').querySelectorAll('.sub')[1].textContent = tr('howto', S.generations);
+  $('#about .sub').textContent = tr('howto', S.generations);
   // badges live in generated HTML, so they are relabelled in place
   document.querySelectorAll('[data-k]').forEach(el => {
     const k = el.dataset.k;
@@ -547,6 +574,7 @@ function paintChrome(){
        + `(${esc(tr('died_ah', w.death_ah))}) · ${esc(w.edition)}`).join('<br>')
     + `<br><br>${esc(tr('footer_note'))}`;
   if (typeof paintAbout === 'function') { paintAbout(); paintFilter(); paintDir(); renderDir(); }
+  if (typeof measureBars === 'function') measureBars();
   if (curPid) show(curPid);
 }
 let curPid = null;
@@ -592,7 +620,21 @@ function claimHTML(c){
 /* Fill the side panel for one person: who they are, who they are attached to, and every
    claim that names them. This is where the evidence actually reaches the reader, so it shows
    ALL of it - claims are grouped by type but never truncated. */
-function show(pid){
+/* A chain of names as running text, with the middle folded when it runs past what a reader
+   can take in. `line` is in display order; the fold button reveals the whole line in place. */
+function trailHTML(line, cur, ends = 4){
+  const seg = id => id === cur
+    ? `<b style="color:var(--ink)">${esc(D.people[id].name_lat)}</b>`
+    : `<a href="#${id}" data-go="${id}">${esc(D.people[id].name_lat)}</a>`;
+  const join = ids => ids.map(seg).join('<i>‹</i>');
+  if (line.length <= ends * 2 + 1) return join(line);
+  const hidden = line.length - ends * 2;
+  return `<span class="short">${join(line.slice(0, ends))}<i>‹</i><button class="ell" type="button" data-unfold="1">… ${esc(tr('more_n', hidden))} …</button><i>‹</i>${join(line.slice(-ends))}</span>`
+       + `<span class="full" hidden>${join(line)}</span>`;
+}
+
+/* `open` is false only on first paint, so a phone shows the page before the sheet. */
+function show(pid, open = true){
   const p = D.people[pid];
   const cs = D.claims.filter(c => c.subject === pid || c.object === pid);
   const meta = [];
@@ -650,6 +692,12 @@ function show(pid){
     return eseen.has(k) ? false : (eseen.add(k), true);
   });
 
+  // The order is the reader's order: who this is, read about them, then the line they stand
+  // in, then the family around them - and only then the evidence for all of it.
+  const line = pathTo(pid);
+  const lineage = line.length > 1
+    ? `<div class="grp">${esc(tr('g_lineage'))} · ${esc(tr('m_gen', line.length))}</div>
+       <div class="trail">${trailHTML([...line].reverse(), pid)}</div>` : '';
   $('#paneltop').innerHTML =
     `<div class="phead">
        <h2>${eyebrow2.map(x => `<span>${x}</span>`).join('')}</h2>
@@ -659,9 +707,11 @@ function show(pid){
      </div>
      <div class="meta">${meta.map(x=>`<span>${x}</span>`).join('')}</div>
      ${(D.bios&&D.bios[pid])?`<a class="biolink" href="bio/${encodeURIComponent(pid)}.html">${esc(tr('bio_read'))} &#8594;<i>${esc(tr('bio_from', D.bios[pid].length))}</i></a>`:''}
-     ${navRow(tr(p.sex === 'F' ? 'g_husband' : 'g_spouses'), wives)}${navRow(tr('g_children'), chn)}${navRow(tr('g_siblings'), sibs)}${groups}`;
+     ${lineage}
+     ${navRow(tr(p.sex === 'F' ? 'g_husband' : 'g_spouses'), wives)}${navRow(tr('g_children'), chn)}${navRow(tr('g_siblings'), sibs)}
+     <div class="grp big">${esc(tr('evidence'))} · ${cs.length}</div>${groups}`;
   $('#panel').scrollTop = 0;
-  openSheet();
+  if (open) openSheet();
   document.querySelectorAll('summary.sel').forEach(s => s.classList.remove('sel'));
   const s = document.querySelector(`summary[data-id="${pid}"]`);
   if (s) { s.classList.add('sel'); let d = s.parentElement.parentElement;
@@ -672,6 +722,9 @@ function show(pid){
 }
 
 document.addEventListener('click', e => {
+  const u = e.target.closest('#panel [data-unfold]');
+  if (u) { const t = u.closest('.trail'); t.querySelector('.short').hidden = true;
+           t.querySelector('.full').hidden = false; return; }
   const b = e.target.closest('#panel [data-go]');
   if (b) { e.preventDefault(); jump(b.dataset.go); }
 });
@@ -743,7 +796,6 @@ function openTo(pid){
    and scroll them into view. */
 function jump(pid){
   show(pid);
-  if (isSheet()) closeSheet();   // let them see where it landed before the sheet covers it
   if (view === 'cols') {
     colPath = pathTo(pid); renderCols();
     window.scrollTo({top: document.querySelector('.bar').offsetTop, behavior: 'instant'});
@@ -905,7 +957,7 @@ function disclose(btnSel, targetSel, label){
   return paint;
 }
 const paintAbout  = disclose('#aboutbtn', '#about', () => tr('about'));
-const paintFilter = disclose('#filterbtn', '.bar2', () => tr('filter'));
+const paintFilter = disclose('#filterbtn', '.bar2', () => tr('view_filter'));
 const paintDir    = disclose('#dirbtn', '#dir', () => tr('whoswho'));
 $('#dirbtn').addEventListener('click', () => {
   if (!$('#dir').hidden) $('#dir').scrollIntoView({block: 'nearest', behavior: 'smooth'});
@@ -914,9 +966,7 @@ $('#dirbtn').addEventListener('click', () => {
 /* The prose and the filter rows are worth showing outright where there is room, and folded
    away where there is not. Set that once, from the viewport, not from a guess. */
 function defaultDisclosures(){
-  $('#about').hidden = isPhone();
-  $('.bar2').hidden = isPhone();
-  $('#filterbtn').hidden = !isPhone();     // on a wide screen the filters are already visible
+  $('#about').hidden = true;             // the how-to is read once; the purpose line stays
   paintAbout(); paintFilter(); paintDir();
 }
 
@@ -937,10 +987,10 @@ $('#langs').addEventListener('click', e => {
 
 /* ---------- who's who: the people a reader arrives looking for ---------- */
 function renderDir(){
-  $('#dir').innerHTML = D.directory.map(([g, rows]) =>
+  $('#dir').innerHTML = `<p class="intro">${esc(tr('dir_intro'))}</p>` + D.directory.map(([g, rows]) =>
     `<div><h4>${esc(dtr(g))}</h4>` +
     rows.map(([label, id]) =>
-      `<a href="#${id}" data-go="${id}">${esc(label)}${(D.bios&&D.bios[id])?'<b class="hasbio" title="'+esc(tr('bio_read'))+'">&#9670;</b>':''}</a>`
+      `<a href="#${id}" data-go="${id}"><span>${esc(label)}${(D.bios&&D.bios[id])?'<b class="hasbio" title="'+esc(tr('bio_read'))+'">&#9670;</b>':''}</span><span class="ar" dir="rtl" lang="ar">${esc(D.people[id].name_ar)}</span></a>`
     ).join('') + '</div>').join('');
 }
 renderDir();
@@ -1151,11 +1201,22 @@ $('#none').onclick = () => {
   window.scrollTo({top:0, behavior:'smooth'});
 };
 
-defaultDisclosures();
-addEventListener('resize', defaultDisclosures);
+/* The bars wrap at some widths and not others, so the sticky offsets under them are measured,
+   not assumed: a wrong number puts the trail under the filters. */
+function measureBars(){
+  const b1 = $('.bar').offsetHeight, b2 = $('.bar2').hidden ? 0 : $('.bar2').offsetHeight;
+  document.documentElement.style.setProperty('--bar1h', b1 + 'px');
+  document.documentElement.style.setProperty('--barh', (b1 + b2) + 'px');
+}
+defaultDisclosures(); measureBars();
+addEventListener('resize', () => { defaultDisclosures(); measureBars(); });
+$('#filterbtn').addEventListener('click', measureBars);
 setLang(LANG);           // paints all chrome in the chosen language
-if (location.hash && D.people[location.hash.slice(1)]) show(location.hash.slice(1));
-else show('p.muhammad');
+// A link to a person opens on that person. Anyone else lands on the directory: the page is
+// for finding someone first, and the tree is what you follow once you have.
+const start = location.hash && D.people[location.hash.slice(1)] ? location.hash.slice(1) : null;
+$('#dir').hidden = !!start; paintDir();
+show(start || 'p.muhammad', !!start);
 </script>
 <script src="tools/check_responsive.js"></script>
 </body>

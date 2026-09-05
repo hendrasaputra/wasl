@@ -27,6 +27,7 @@ check any line against the book is not. If you change nothing else, keep that.
 | Languages | English, Indonesian, Malay — complete |
 | Data checks | 79 independent + 22 parser regressions |
 | Responsive checks | CI: tree phone/tablet/desktop + biography phone |
+| Interface | person-first: search + Who's who land first, the person panel carries the lineage, the filter row folds until asked for (Sept 2026) |
 | Sources | 8 OpenITI texts, pinned by version URI |
 
 Phases 1–8c are done. CI gates every push; `main` deploys after verification.

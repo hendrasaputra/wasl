@@ -9,11 +9,6 @@ Kept in one place so the two can never drift apart.
 """
 
 DIRECTORY = [
-  ("The four caliphs", [
-    ("Abū Bakr al-Ṣiddīq", ["عبد الله","عثمان","عامر","عمرو","كعب"]),
-    ("ʿUmar b. al-Khaṭṭāb", ["عمر","الخطاب","نفيل"]),
-    ("ʿUthmān b. ʿAffān", ["عثمان","عفان","أبو العاص"]),
-    ("ʿAlī b. Abī Ṭālib", ["علي","أبو طالب","عبد المطلب"])]),
   ("The Prophet's household", [
     ("Muḥammad ﷺ", ["محمد","عبد الله","عبد المطلب"]),
     ("Khadīja", ["خديجة","خويلد","أسد"]),
@@ -38,6 +33,11 @@ DIRECTORY = [
     ("Ṣafiyya bt. Ḥuyayy", ["صفية","حيي","أخطب"]),
     ("Rayḥāna bt. Zayd", ["ريحانة","زيد","عمرو"]),
     ("Maymūna bt. al-Ḥārith", ["ميمونة","الحارث","حزن"])]),
+  ("The four caliphs", [
+    ("Abū Bakr al-Ṣiddīq", ["عبد الله","عثمان","عامر","عمرو","كعب"]),
+    ("ʿUmar b. al-Khaṭṭāb", ["عمر","الخطاب","نفيل"]),
+    ("ʿUthmān b. ʿAffān", ["عثمان","عفان","أبو العاص"]),
+    ("ʿAlī b. Abī Ṭālib", ["علي","أبو طالب","عبد المطلب"])]),
   ("Among the ten", [
     ("Ṭalḥa b. ʿUbayd Allāh", ["طلحة","عبيد الله","عثمان"]),
     ("al-Zubayr b. al-ʿAwwām", ["الزبير","العوام","خويلد"]),
