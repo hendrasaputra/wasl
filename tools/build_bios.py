@@ -29,7 +29,7 @@ DROP = re.compile(r'\bms\d+\b|%~%')
 # Ibn Sa'd and al-Isti'ab open most reports with a chain of transmission. It is a fixed shape,
 # so it can be set apart without parsing it: dim the isnad, leave the report at full weight.
 ISNAD = re.compile(r'^(?:\d+\s*-\s*)?((?:أخبرنا|حدثنا|أنبأنا|أخبرني|حدثني|نا)\b.{0,600}?(?:قال[^:]{0,25}|قالت)\s*:)')
-UI = {"back": {"en": "Back to the tree", "id": "Kembali ke pohon", "ms": "Kembali ke pokok"},
+UI = {"back": {"en": "Back to", "id": "Kembali ke", "ms": "Kembali ke"},
       "sum":  {"en": "In brief", "id": "Ringkasnya", "ms": "Ringkasnya"},
       "show": {"en": "show what each sentence rests on",
                "id": "tampilkan dasar setiap kalimat",
@@ -210,10 +210,12 @@ def main():
                     bits.append(
                         f'<span class="sl">{txt}{mark}'
                         f'<q dir="rtl" lang="ar">{html.escape(ln["ar"])}</q></span>')
+            # heading, then the prose, then what it rests on. The note explains the prose, so
+            # it follows it rather than standing between the heading and the first sentence.
             summary = ('<div id="sum"><h2 data-k="sum"></h2>'
+                       '<div class="prose">' + " ".join(bits) + '</div>'
                        '<p class="sumnote" data-k="sumnote"></p>'
-                       '<button id="anch" data-k="show"></button>'
-                       '<div class="prose">' + " ".join(bits) + "</div></div>")
+                       '<button id="anch" data-k="show"></button></div>')
         else:
             summary = ""
         # the standing note must not claim nothing is summarised on a page that summarises

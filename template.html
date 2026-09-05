@@ -126,8 +126,17 @@ main{max-width:1180px;margin:0 auto;padding:0 24px}
 .crown .who{margin:10px 0 0;font-size:15px;color:var(--ink-2)}
 .crown .who span+span::before{content:"·";margin:0 8px;color:var(--ink-3)}
 .crown .note{margin:12px 0 0;max-width:70ch;font-size:15px;color:var(--ink-2);padding-left:12px;border-left:2px solid var(--rule-2)}
-.grid{display:grid;grid-template-columns:360px minmax(0,1fr);gap:44px;align-items:start;padding:26px 0 60px}
-@media (max-width:900px){.grid{grid-template-columns:1fr;gap:30px}}
+/* Named areas, not source order: on a wide screen the thread runs down the left of both the
+   brief and the books; on a phone the brief comes FIRST, because a reader asks who someone
+   was before asking where they stand, and the thread is a screen and a half tall.
+   min-width:0 on the children or a long name in the thread makes the whole page scroll
+   sideways - a 1fr track is minmax(auto,1fr), and auto means min-content. */
+.grid{display:grid;grid-template-columns:360px minmax(0,1fr);gap:30px 44px;align-items:start;
+  padding:26px 0 60px;grid-template-areas:"thread brief" "thread life"}
+.grid>*{min-width:0}
+#briefslot{grid-area:brief}#thread{grid-area:thread}#life{grid-area:life}
+@media (max-width:900px){.grid{grid-template-columns:1fr;gap:26px 0;
+  grid-template-areas:"brief" "thread" "life"}}
 
 /* the thread: one line, beads for people, and on every link the books that attest it */
 .thread h2{margin:0 0 4px}
@@ -142,6 +151,8 @@ main{max-width:1180px;margin:0 auto;padding:0 24px}
 .node:hover{background:var(--hi)}
 .node .lat{font-size:15.5px;color:var(--act)}
 .node .ar{font-size:19px;color:var(--ink-2);margin-left:auto}
+/* the Arabic wraps to its own right-aligned line when the two names cannot share one */
+.node{flex-wrap:wrap}
 .node .gen{font:11px var(--sans);color:var(--ink-3);min-width:22px;text-align:right;font-variant-numeric:tabular-nums}
 .thread li.me{margin:6px 0}
 .thread li.me::before{width:16px;height:16px;left:-22px;top:12px;background:var(--gold);border-color:var(--gold)}
@@ -231,6 +242,7 @@ footer .inner{max-width:1180px;margin:0 auto;padding:0 24px}
   .card .ar{font-size:21px}
   .crown{padding:22px 0 16px}
   .node{min-height:44px;padding:6px}
+  .brief{padding:16px 16px 18px}
   .pill{min-height:44px;padding:9px 12px}
   .chip{min-height:44px;padding:10px 16px}
   .langs button{min-height:36px;padding:8px 11px}
@@ -286,6 +298,7 @@ body.home .mast .search{display:none}
 <section id="person" hidden>
   <div class="crown" id="crown"></div>
   <div class="grid">
+    <article id="briefslot"></article>
     <aside class="thread" id="thread" aria-label="Line of descent"></aside>
     <article class="life" id="life"></article>
   </div>
@@ -417,16 +430,24 @@ function crownHTML(pid){
     ${p.note ? `<p class="note">${esc(dtr(p.note))}</p>` : ''}`;
 }
 
-function lifeHTML(pid){
-  const p = D.people[pid], cs = BY[pid] || [];
+/* The brief: the hand-written lines for this person, drawn only from their own entry, with
+   the way to the entry itself under them. Its own function because it has its own grid cell -
+   see .grid, where a phone puts it above the thread. */
+function briefHTML(pid){
   const sm = D.summaries[pid], bio = D.bios && D.bios[pid];
   const w = sm && D.works[sm.work];
-  const brief = sm ? `<section class="brief"><h2>${esc(tr('brief'))}</h2>
+  const cta = bio ? `<a class="cta" href="bio/${encodeURIComponent(pid)}.html">${esc(tr('bio_read'))} → <i>${esc(tr('bio_from', bio.length))}</i></a>` : '';
+  if (!sm) return cta;
+  return `<section class="brief"><h2>${esc(tr('brief'))}</h2>
       <p>${sm.lines.map(l => `<span class="${l.basis==='editorial'?'ed':''}">${esc(l[LANG] || l.en)}</span>`).join(' ')}</p>
       <div class="basis">${esc(tr('brief_note').replace('{w}', w ? w.title_lat : sm.work))}</div>
-      ${bio ? `<a class="cta" href="bio/${encodeURIComponent(pid)}.html">${esc(tr('bio_read'))} → <i>${esc(tr('bio_from', bio.length))}</i></a>` : ''}
-    </section>`
-    : (bio ? `<a class="cta" href="bio/${encodeURIComponent(pid)}.html">${esc(tr('bio_read'))} → <i>${esc(tr('bio_from', bio.length))}</i></a>` : '');
+      ${cta}</section>`;
+}
+
+/* Everything after the brief: the family around this person, then every claim that names
+   them, grouped by kind with the first group open. */
+function lifeHTML(pid){
+  const p = D.people[pid], cs = BY[pid] || [];
   const sibs = (D.father[pid] ? (D.kids[D.father[pid]] || []) : []).filter(x => x !== pid);
   const fam = pillRow(esc(tr(p.sex === 'F' ? 'g_husband' : 'g_spouses')), SPOUSE.get(pid) || [])
             + pillRow(esc(tr('g_siblings')), sibs);
@@ -434,8 +455,7 @@ function lifeHTML(pid){
     const own = cs.filter(c => c.type === t);
     return `<details${i === 0 ? ' open' : ''}><summary>${esc(tr(TYPEKEY[t] || t))} <small>· ${own.length}</small></summary>${own.map(claimHTML).join('')}</details>`;
   }).join('');
-  return `${brief}
-    ${fam ? `<section class="fam"><h2>${esc(tr('family'))}</h2>${fam}</section>` : ''}
+  return `${fam ? `<section class="fam"><h2>${esc(tr('family'))}</h2>${fam}</section>` : ''}
     <section class="books"><h2>${esc(tr('books_say'))}<small>${cs.length} ${esc(tr('claim'))}s</small></h2>${groups}</section>`;
 }
 
@@ -467,6 +487,7 @@ function render(){
   if (pid !== cur) unfolded = false;
   cur = pid;
   $('#crown').innerHTML = crownHTML(pid);
+  $('#briefslot').innerHTML = briefHTML(pid);
   $('#thread').innerHTML = threadHTML(pid);
   $('#life').innerHTML = lifeHTML(pid);
   document.title = `${lat(pid)} — Wasl`;

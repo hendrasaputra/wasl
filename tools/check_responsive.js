@@ -40,14 +40,18 @@ function waslResponsiveCheck() {
     document.querySelector('.thread .edge').click();
     t('a link opens its quotations in place', !!document.querySelector('.thread .edgeq .cl .q'));
     t('the brief is shown for a person who has one', !!document.querySelector('.brief p'));
+    // a phone asks who someone was before where they stand: the brief comes first there
+    if (phone) t('on a phone the brief precedes the thread',
+      document.querySelector('.brief').getBoundingClientRect().top
+        < document.querySelector('#thread').getBoundingClientRect().top);
     t('the first group of sources is open', !!document.querySelector('.books details[open] .cl'));
     const small = [...document.querySelectorAll('.thread .node, .pill, .chip, #q, .cta')]
       .filter(e => e.offsetParent && e.getBoundingClientRect().height < 44)
       .map(e => (e.id || e.className) + ':' + Math.round(e.getBoundingClientRect().height));
     if (phone) t('every person control clears 44px', !small.length, small.slice(0, 6).join(' '));
     if (!phone && innerWidth > 900) {
-      const th = document.querySelector('#thread').getBoundingClientRect(), lf = document.querySelector('#life').getBoundingClientRect();
-      t('thread sits beside the life on a wide screen', lf.left > th.right - 2 && Math.abs(lf.top - th.top) < 40);
+      const th = document.querySelector('#thread').getBoundingClientRect(), bf = document.querySelector('#briefslot').getBoundingClientRect();
+      t('thread sits beside the brief on a wide screen', bf.left > th.right - 2 && Math.abs(bf.top - th.top) < 40);
     }
   }
   if (tree) {
